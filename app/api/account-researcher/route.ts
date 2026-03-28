@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const requestLog = new Map<string, number[]>();
 
@@ -15,7 +12,34 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
-// Curated company profiles for consistent, high-quality outputs
+async function callClaude(systemPrompt: string, userMessage: string, maxTokens = 2000) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not configured");
+
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+    },
+    body: JSON.stringify({
+      model: "claude-opus-4-5-20251101",
+      max_tokens: maxTokens,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userMessage }],
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Anthropic API error ${res.status}: ${err}`);
+  }
+
+  const data = await res.json();
+  return data.content[0].text as string;
+}
+
 const COMPANY_PROFILES: Record<string, string> = {
   Salesforce: "Salesforce (CRM) is the world's #1 CRM platform, headquartered in San Francisco. ~$35B annual revenue, ~70,000 employees, publicly traded (NYSE: CRM). Key products: Sales Cloud, Service Cloud, Marketing Cloud, Slack, MuleSoft. CEO: Marc Benioff. Recent focus: AI with Agentforce platform, cost optimization after major acquisitions.",
   HubSpot: "HubSpot (HUBS) is an inbound marketing and CRM platform. ~$2.6B annual revenue, ~7,000 employees. Products: CRM, Marketing Hub, Sales Hub, Service Hub, CMS. CEO: Yamini Rangan. Recent: Strong SMB and mid-market growth, AI features across product suite.",
@@ -74,26 +98,9 @@ Respond in this exact JSON format:
 }`;
 
   try {
-
-
-    const message = await client.messages.create({
-      model: "claude-opus-4-5-20251101",
-      max_tokens: 2000,
-      messages: [
-        {
-          role: "user",
-          content: `Generate a full account research brief for: ${company}\n\nCompany context: ${profile}`,
-        },
-      ],
-      system: systemPrompt,
-    });
-
-    const content = message.content[0];
-    if (content.type !== "text") throw new Error("Unexpected response");
-
-    const jsonMatch = content.text.match(/\{[\s\S]*\}/);
+    const text = await callClaude(systemPrompt, `Generate a full account research brief for: ${company}\n\nCompany context: ${profile}`);
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error("Parse error");
-
     const parsed = JSON.parse(jsonMatch[0]);
     return NextResponse.json({ company, ...parsed });
   } catch (error) {

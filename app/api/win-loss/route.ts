@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const requestLog = new Map<string, number[]>();
 
@@ -13,6 +10,34 @@ function isRateLimited(ip: string): boolean {
   if (requests.length >= maxRequests) return true;
   requestLog.set(ip, [...requests, now]);
   return false;
+}
+
+async function callClaude(systemPrompt: string, userMessage: string, maxTokens = 2000) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not configured");
+
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+    },
+    body: JSON.stringify({
+      model: "claude-opus-4-5-20251101",
+      max_tokens: maxTokens,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userMessage }],
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Anthropic API error ${res.status}: ${err}`);
+  }
+
+  const data = await res.json();
+  return data.content[0].text as string;
 }
 
 export async function POST(req: NextRequest) {
@@ -31,7 +56,7 @@ export async function POST(req: NextRequest) {
 
   const systemPrompt = `You are a revenue intelligence analyst specializing in win/loss pattern analysis. You extract strategic insights from deal data to help sales leaders understand what's working, what isn't, and what to change.
 
-Analyze the win/loss summaries provided and return a strategic analysis in this JSON format:
+Analyze the win/loss summaries provided and return a strategic analysis in this exact JSON format:
 {
   "summary": "2-3 sentence executive summary of what you found",
   "winPatterns": [
@@ -54,30 +79,13 @@ Analyze the win/loss summaries provided and return a strategic analysis in this 
     { "objection": "...", "frequency": "High|Medium|Low", "recommendedResponse": "..." },
     { "objection": "...", "frequency": "High|Medium|Low", "recommendedResponse": "..." }
   ],
-  "strategicRecommendation": "Joe's 2-3 sentence strategic take on the single most important thing to change based on this data"
+  "strategicRecommendation": "2-3 sentence strategic take on the single most important thing to change based on this data"
 }`;
 
   try {
-
-
-    const message = await client.messages.create({
-      model: "claude-opus-4-5-20251101",
-      max_tokens: 2000,
-      messages: [
-        {
-          role: "user",
-          content: `Analyze these win/loss summaries:\n\n${truncated}`,
-        },
-      ],
-      system: systemPrompt,
-    });
-
-    const content = message.content[0];
-    if (content.type !== "text") throw new Error("Unexpected response");
-
-    const jsonMatch = content.text.match(/\{[\s\S]*\}/);
+    const text = await callClaude(systemPrompt, `Analyze these win/loss summaries:\n\n${truncated}`);
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error("Parse error");
-
     const parsed = JSON.parse(jsonMatch[0]);
     return NextResponse.json(parsed);
   } catch (error) {

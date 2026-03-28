@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const requestLog = new Map<string, number[]>();
 
@@ -13,6 +10,34 @@ function isRateLimited(ip: string): boolean {
   if (requests.length >= maxRequests) return true;
   requestLog.set(ip, [...requests, now]);
   return false;
+}
+
+async function callClaude(systemPrompt: string, userMessage: string, maxTokens = 3000) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not configured");
+
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+    },
+    body: JSON.stringify({
+      model: "claude-opus-4-5-20251101",
+      max_tokens: maxTokens,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userMessage }],
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Anthropic API error ${res.status}: ${err}`);
+  }
+
+  const data = await res.json();
+  return data.content[0].text as string;
 }
 
 export async function POST(req: NextRequest) {
@@ -31,7 +56,7 @@ export async function POST(req: NextRequest) {
 
 You are generating a comprehensive Go-To-Market Launch Blueprint based on the inputs provided. This should reflect the hard-won strategic judgment of a seasoned revenue leader — not generic MBA frameworks.
 
-Produce a focused, actionable GTM blueprint in this JSON format:
+Produce a focused, actionable GTM blueprint in this exact JSON format:
 {
   "executiveSummary": "3-4 sentences summarizing the GTM approach and core thesis",
   "icp": {
@@ -75,39 +100,23 @@ Produce a focused, actionable GTM blueprint in this JSON format:
     { "risk": "...", "mitigation": "..." },
     { "risk": "...", "mitigation": "..." }
   ],
-  "joesPOV": "Joe's personal 2-3 sentence take on the most important thing to get right in this specific GTM situation, based on his experience"
+  "joesPOV": "Joe's personal 2-3 sentence take on the most important thing to get right in this specific GTM situation"
 }
 
 Be specific. Use real numbers. Draw on patterns from actual GTM builds, not generic advice.`;
 
   try {
-
-
-    const message = await client.messages.create({
-      model: "claude-opus-4-5-20251101",
-      max_tokens: 3000,
-      messages: [
-        {
-          role: "user",
-          content: `Generate a GTM blueprint for:
+    const text = await callClaude(systemPrompt, `Generate a GTM blueprint for:
 Product/Solution: ${product}
 Target Market: ${market}
 Company Stage: ${stage}
 Current Team Size: ${teamSize || "Not specified"}
 Average Deal Size: ${asp || "Not specified"}
 Typical Sales Cycle: ${salesCycle || "Not specified"}
-Sales Motion: ${motion || "Not specified"}`,
-        },
-      ],
-      system: systemPrompt,
-    });
+Sales Motion: ${motion || "Not specified"}`);
 
-    const content = message.content[0];
-    if (content.type !== "text") throw new Error("Unexpected response");
-
-    const jsonMatch = content.text.match(/\{[\s\S]*\}/);
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error("Parse error");
-
     const parsed = JSON.parse(jsonMatch[0]);
     return NextResponse.json(parsed);
   } catch (error) {
