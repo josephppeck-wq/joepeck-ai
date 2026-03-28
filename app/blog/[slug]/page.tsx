@@ -666,6 +666,20 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
+function renderInline(text: string): React.ReactNode {
+  // Handle **bold** and *italic* inline
+  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+  return parts.map((part, idx) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={idx} className="text-white font-semibold">{part.slice(2, -2)}</strong>;
+    }
+    if (part.startsWith("*") && part.endsWith("*")) {
+      return <em key={idx}>{part.slice(1, -1)}</em>;
+    }
+    return part;
+  });
+}
+
 function renderContent(content: string) {
   const lines = content.split("\n");
   const elements: React.ReactNode[] = [];
@@ -676,28 +690,28 @@ function renderContent(content: string) {
     if (line.startsWith("## ")) {
       elements.push(
         <h2 key={i} className="text-2xl font-bold text-white mt-12 mb-6 leading-snug">
-          {line.slice(3)}
+          {renderInline(line.slice(3))}
         </h2>
       );
     } else if (line.startsWith("### ")) {
       elements.push(
         <h3 key={i} className="text-xl font-semibold text-white mt-8 mb-4 leading-snug">
-          {line.slice(4)}
+          {renderInline(line.slice(4))}
         </h3>
       );
     } else if (line.match(/^- \*\*(.+?)\*\*:/)) {
       const match = line.match(/^- \*\*(.+?)\*\*: (.+)$/);
       if (match) {
         elements.push(
-          <li key={i} className="text-white/65 leading-relaxed mb-3 ml-4">
-            <strong className="text-white/90">{match[1]}</strong>: {match[2]}
+          <li key={i} className="text-white/65 leading-relaxed mb-3 ml-4 list-disc">
+            <strong className="text-white/90">{match[1]}</strong>: {renderInline(match[2])}
           </li>
         );
       }
     } else if (line.startsWith("- ")) {
       elements.push(
         <li key={i} className="text-white/65 leading-relaxed mb-2 ml-4 list-disc">
-          {line.slice(2)}
+          {renderInline(line.slice(2))}
         </li>
       );
     } else if (line.trim() === "") {
@@ -707,7 +721,7 @@ function renderContent(content: string) {
     } else {
       elements.push(
         <p key={i} className="text-white/65 leading-relaxed text-lg mb-0">
-          {line}
+          {renderInline(line)}
         </p>
       );
     }
