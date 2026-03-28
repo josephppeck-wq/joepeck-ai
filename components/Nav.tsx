@@ -35,7 +35,7 @@ export default function Nav() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <a
-            href="#"
+            href="/"
             className="text-white font-bold text-lg tracking-tight hover:opacity-80 transition-opacity"
           >
             Joe<span className="accent-text">Peck</span>
