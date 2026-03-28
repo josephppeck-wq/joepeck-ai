@@ -43,17 +43,17 @@ The output is a structured brief for each account: what changed, what it likely 
 
 **Step 4: Delivery and prioritization.** The briefs land in a structured daily document, sorted by signal strength. I spend about 20 minutes reviewing, deciding which accounts to act on, and occasionally rewriting an opener that sounds too robotic.
 
-The whole thing runs on a Mac Mini in my home office. Monthly cost including API calls is about $40.
+The whole thing runs on a Mac Mini in my home office. (It hasn't asked for a day off or updated its LinkedIn to "open to work.") Monthly cost including API calls is about $40.
 
 ## The Honest Failures
 
 Early versions had two consistent problems that took several weeks to fix.
 
-The first was hallucinated citations. In early builds, the agent would produce a brief citing a "recent article" that didn't exist, or attribute a quote to an executive that was either fabricated or badly paraphrased. This is a real and well-documented problem with AI systems that synthesize information across sources. The fix: I added a verification step that requires the agent to cite a source URL for any specific factual claim. I spot-check 5–10 briefs per week. Hallucination rate dropped by roughly 90% within a month of implementing this.
+The first was hallucinated citations. In early builds, the agent would produce a brief citing a "recent article" that didn't exist, or attribute a quote to an executive that was either fabricated or badly paraphrased. The first version of my AI agent once recommended we prospect a company that had gone bankrupt six months earlier. It cited the bankruptcy announcement as a "relevant business event." Technically accurate. Strategically disastrous. This is a real and well-documented problem with AI systems that synthesize information across sources. The fix: I added a verification step that requires the agent to cite a source URL for any specific factual claim. I spot-check 5–10 briefs per week. Hallucination rate dropped by roughly 90% within a month of implementing this.
 
 The second problem was obvious openers. The agent defaulted to the lazy version of signal-based outreach: "Congrats on the Series B — would love to show you how we could help with your scaling journey." Every sales leader in the world gets 40 of those a week. I refined the prompt to push for non-obvious angles — what does this signal imply that isn't immediately visible? What's the downstream consequence of this news? The quality of suggested openers improved dramatically.
 
-Both failures have a common lesson: the agent is a reflection of the quality of the prompts and the design of the workflow. The first version is always mediocre. You iterate to value. Most people give up at version one.
+Both failures have a common lesson: the agent is a reflection of the quality of the prompts and the design of the workflow. The first version is always mediocre. You iterate to value. Most people give up at version one (which is more than I can say for some teams I've managed).
 
 ## What Changes for SDR Team Structure
 
@@ -66,6 +66,8 @@ The model I recommend: smaller, higher-caliber SDR teams where each rep manages 
 ## The Uncomfortable Truth
 
 Some SDR roles won't survive this. Not the job category — the specific roles defined primarily by research, list building, data entry, and template-based outreach. Those are the activities the agent replaces.
+
+Somewhere right now, a sales manager is asking an AE "what's your plan to close this by end of month?" and the AE is saying "I'm going to follow up" with the same energy as someone telling their dentist they'll start flossing. That conversation is at least still human. The research that preceded it doesn't need to be.
 
 The SDRs who thrive are the ones who can do what the agent cannot. They were always the best SDRs. They're now even more valuable.
 
