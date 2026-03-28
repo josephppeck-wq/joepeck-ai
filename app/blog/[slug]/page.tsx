@@ -382,7 +382,7 @@ The through-line across all five: AI doesn't replace the judgment of a great sal
     date: "February 2025",
     dateISO: "2025-02-01",
     description: "Every CRO has sat in a board meeting defending a forecast they knew was fiction. AI-native pipeline scoring changes this permanently — here's how it works and what to do about it.",
-    content: `I've managed $60M+ in quota across multiple organizations. I can count on one hand the number of times the forecast was actually right.
+    content: `I've managed $20M+ in ARR quota across multiple organizations. I can count on one hand the number of times the forecast was actually right.
 
 That's not a failure of math. It's a structural problem with how we collect and weight forecast inputs — and it's exactly the kind of problem AI is built to solve.
 

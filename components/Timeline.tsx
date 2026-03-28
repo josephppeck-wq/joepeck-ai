@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 const career = [
   { company: "Prokeep", period: "2024 – 2025", title: "Senior Director of Sales", highlights: "Designed GTM strategy · $1M+ new ARR · 3 new verticals", current: false },
   { company: "CloudKitchens", period: "2022 – 2023", title: "Head of Sales, Central U.S.", highlights: "4 regional teams · 15 markets · $20M+ revenue", current: false },
-  { company: "DocuSign", period: "2019 – 2022", title: "AVP & RVP of Sales", highlights: "70+ AEs · $60M+ annual quota · 41% multi-product adoption", current: false },
-  { company: "SpringCM → DocuSign", period: "2018 – 2022", title: "VP Business Development", highlights: "Built BDR org from zero · $10M+ ACV enterprise deals", current: false },
+  { company: "DocuSign", period: "2019 – 2022", title: "AVP & RVP of Sales", highlights: "70+ AEs · $20M+ ARR quota · 41% multi-product adoption", current: false },
+  { company: "SpringCM → DocuSign", period: "2018 – 2022", title: "VP Business Development", highlights: "Founded BD org, $1.5M new revenue in 6 months · Executive sponsor on $10M+ ACV deals", current: false },
   { company: "SimpleRelevance", period: "2013 – 2016", title: "Co-Founder", highlights: "Built ML/predictive analytics SaaS · Acquired by Rise Interactive", current: false },
   { company: "Groupon", period: "2010 – 2012", title: "Regional VP of Sales", highlights: "0 to 400+ sellers · $415M+ revenue · 23 new markets", current: false },
   { company: "CareerBuilder", period: "2004 – 2010", title: "Sales Director", highlights: "Built SMB sales team from 0 to 240 sellers", current: false },
