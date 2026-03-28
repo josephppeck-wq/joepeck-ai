@@ -4,6 +4,14 @@ import Link from "next/link";
 
 const posts = [
   {
+    slug: "ai-agents-will-outnumber-sellers",
+    title: "By 2028, AI Agents Will Outnumber Human Sellers 10 to 1. Here's What That Actually Means.",
+    excerpt: "Gartner, McKinsey, and Forrester just released data that tells a story most revenue leaders aren't ready to hear. Here's the unfiltered version.",
+    category: "AI Strategy",
+    readTime: "10 min read",
+    date: "March 2026",
+  },
+  {
     slug: "what-changed-in-ai-sales-2025",
     title: "What Changed in AI Sales Tools in 2025 — And What's Coming in 2026",
     excerpt: "I've been in the trenches watching this space evolve in real time. Here's an honest assessment of what moved the needle, what was hype, and where I'm placing my bets for 2026.",
