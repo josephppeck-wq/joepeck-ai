@@ -137,7 +137,7 @@ export default function AutonomousSDRPage() {
           <div className="max-w-3xl mx-auto px-6 lg:px-8 py-16 text-center">
             <h3 className="text-2xl font-bold mb-4">Want to bring this to your team?</h3>
             <p className="text-white/55 mb-8">I can design and deploy a custom autonomous prospecting agent for your specific ICP, messaging, and tech stack.</p>
-            <a href="/#contact" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-light text-white font-semibold transition-all hover:shadow-xl hover:shadow-accent/30">Let&apos;s Talk</a>
+            <a href="https://calendly.com/joseph-p-peck" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-light text-white font-semibold transition-all hover:shadow-xl hover:shadow-accent/30">Let&apos;s Talk</a>
           </div>
         </div>
       </div>

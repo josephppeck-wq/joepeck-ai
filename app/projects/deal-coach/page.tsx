@@ -67,7 +67,7 @@ export default function DealCoachPage() {
             <h3 className="text-2xl font-bold mb-4">Want to bring this to your team?</h3>
             <p className="text-white/55 mb-8">This tool can be customized for your specific sales methodology, integrated with your CRM, and scaled to your entire revenue team.</p>
             <a
-              href="/#contact"
+              href="https://calendly.com/joseph-p-peck" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-light text-white font-semibold transition-all hover:shadow-xl hover:shadow-accent/30"
             >
               Let&apos;s Talk

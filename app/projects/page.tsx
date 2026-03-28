@@ -171,7 +171,7 @@ export default function ProjectsPage() {
             Every tool here can be adapted, extended, and integrated into your existing revenue stack. I work with a small number of companies at a time.
           </p>
           <Link
-            href="/#contact"
+            href="https://calendly.com/joseph-p-peck" target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-light text-white font-semibold text-base transition-all hover:shadow-xl hover:shadow-accent/30"
           >
             Let&apos;s Build Together

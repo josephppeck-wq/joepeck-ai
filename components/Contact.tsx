@@ -117,6 +117,18 @@ export default function Contact() {
               </div>
             </a>
 
+            <a href="https://calendly.com/joseph-p-peck" target="_blank" rel="noopener noreferrer" className="card p-6 flex items-center gap-4 group block hover:border-accent/30">
+              <div className="w-10 h-10 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                </svg>
+              </div>
+              <div>
+                <div className="text-white/40 text-xs mb-0.5 uppercase tracking-wide">Schedule a call</div>
+                <div className="text-white/80 text-sm group-hover:text-white transition-colors">Book 30 min →</div>
+              </div>
+            </a>
+
             <div className="card p-6">
               <div className="text-white/40 text-xs uppercase tracking-wide mb-3">Typical response time</div>
               <div className="text-white font-semibold text-sm">Within 24 hours</div>

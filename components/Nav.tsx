@@ -53,7 +53,9 @@ export default function Nav() {
               </a>
             ))}
             <a
-              href="/#contact"
+              href="https://calendly.com/joseph-p-peck"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-accent hover:bg-accent-light text-white text-sm font-medium transition-all duration-200 hover:shadow-lg hover:shadow-accent/25"
             >
               Let&apos;s Talk
@@ -105,7 +107,9 @@ export default function Nav() {
             </a>
           ))}
           <a
-            href="/#contact"
+            href="https://calendly.com/joseph-p-peck"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}
             className="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-accent text-white font-medium transition-all hover:bg-accent-light mt-2"
           >

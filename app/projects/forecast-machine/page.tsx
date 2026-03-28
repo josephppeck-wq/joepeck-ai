@@ -55,7 +55,7 @@ export default function ForecastMachinePage() {
           <div className="max-w-3xl mx-auto px-6 lg:px-8 py-16 text-center">
             <h3 className="text-2xl font-bold mb-4">Want to run this on your real pipeline?</h3>
             <p className="text-white/55 mb-8">I can build this against your actual CRM data — Salesforce, HubSpot, or any platform with an API.</p>
-            <a href="/#contact" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-light text-white font-semibold transition-all hover:shadow-xl hover:shadow-accent/30">Request a Live Demo</a>
+            <a href="https://calendly.com/joseph-p-peck" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-light text-white font-semibold transition-all hover:shadow-xl hover:shadow-accent/30">Request a Live Demo</a>
           </div>
         </div>
       </div>
