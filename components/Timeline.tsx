@@ -3,55 +3,13 @@
 import { motion } from "framer-motion";
 
 const career = [
-  {
-    company: "Prokeep",
-    period: "2024 – Present",
-    title: "Senior Director of Sales",
-    highlights: "Designed GTM strategy from ground up · $1M+ new ARR · Opened 3 new verticals",
-    current: true,
-  },
-  {
-    company: "CloudKitchens",
-    period: "2022 – 2023",
-    title: "Head of Sales, Central U.S.",
-    highlights: "Led 4 regional teams · 15 markets · $20M+ revenue",
-    current: false,
-  },
-  {
-    company: "DocuSign",
-    period: "2019 – 2022",
-    title: "AVP & RVP of Sales",
-    highlights: "70+ AEs · $60M+ annual quota · 41% multi-product adoption",
-    current: false,
-  },
-  {
-    company: "SpringCM → DocuSign",
-    period: "2018 – 2022",
-    title: "VP Business Development",
-    highlights: "Built BDR org from zero · $10M+ ACV enterprise deals",
-    current: false,
-  },
-  {
-    company: "SimpleRelevance",
-    period: "2013 – 2016",
-    title: "Co-Founder",
-    highlights: "Built ML/predictive analytics SaaS · Acquired by Rise Interactive",
-    current: false,
-  },
-  {
-    company: "Groupon",
-    period: "2010 – 2012",
-    title: "Regional VP of Sales",
-    highlights: "0 to 400+ sellers · $415M+ revenue · 23 new markets",
-    current: false,
-  },
-  {
-    company: "CareerBuilder",
-    period: "2004 – 2010",
-    title: "Sales Director",
-    highlights: "Built SMB sales team from 0 to 240 sellers",
-    current: false,
-  },
+  { company: "Prokeep", period: "2024 – Present", title: "Senior Director of Sales", highlights: "Designed GTM strategy · $1M+ new ARR · 3 new verticals", current: true },
+  { company: "CloudKitchens", period: "2022 – 2023", title: "Head of Sales, Central U.S.", highlights: "4 regional teams · 15 markets · $20M+ revenue", current: false },
+  { company: "DocuSign", period: "2019 – 2022", title: "AVP & RVP of Sales", highlights: "70+ AEs · $60M+ annual quota · 41% multi-product adoption", current: false },
+  { company: "SpringCM → DocuSign", period: "2018 – 2022", title: "VP Business Development", highlights: "Built BDR org from zero · $10M+ ACV enterprise deals", current: false },
+  { company: "SimpleRelevance", period: "2013 – 2016", title: "Co-Founder", highlights: "Built ML/predictive analytics SaaS · Acquired by Rise Interactive", current: false },
+  { company: "Groupon", period: "2010 – 2012", title: "Regional VP of Sales", highlights: "0 to 400+ sellers · $415M+ revenue · 23 new markets", current: false },
+  { company: "CareerBuilder", period: "2004 – 2010", title: "Sales Director", highlights: "Built SMB sales team from 0 to 240 sellers", current: false },
 ];
 
 export default function Timeline() {
@@ -59,45 +17,17 @@ export default function Timeline() {
     <section id="track-record" className="section-padding relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
-          {/* Left: Header + Education */}
+          {/* Left */}
           <div className="lg:sticky lg:top-32 lg:self-start">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-4"
-            >
-              <span className="tag">Experience</span>
-            </motion.div>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-8 leading-tight"
-            >
-              The Track<br />
-              <span className="accent-text">Record</span>
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-white/55 leading-relaxed mb-12 text-base lg:text-lg"
-            >
+            <div className="mb-4"><span className="tag">Experience</span></div>
+            <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-8 leading-tight">
+              The Track<br /><span className="accent-text">Record</span>
+            </h2>
+            <p className="text-white/55 leading-relaxed mb-12 text-base lg:text-lg">
               Two decades. Multiple categories. One consistent result: revenue teams that outperform.
-            </motion.p>
+            </p>
 
-            {/* Education */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="card p-6 mb-8"
-            >
+            <div className="card p-6 mb-8">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -109,65 +39,42 @@ export default function Timeline() {
                   <div className="text-white/50 text-sm">BA Political Science · Cum Laude</div>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Download resume */}
-            <motion.a
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              href="/resume.pdf"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-white/12 hover:border-accent/40 text-white/70 hover:text-white text-sm font-medium transition-all duration-300 group"
-            >
+            <a href="/resume.pdf" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-white/12 hover:border-accent/40 text-white/70 hover:text-white text-sm font-medium transition-all duration-300 group">
               <svg className="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
               </svg>
               Download Full Resume
-            </motion.a>
+            </a>
           </div>
 
           {/* Right: Timeline */}
-          <div className="relative">
-            <div className="space-y-0">
-              {career.map((role, i) => (
-                <motion.div
-                  key={`${role.company}-${i}`}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0 }}
-                  transition={{ duration: 0.5, delay: i * 0.08 }}
-                  className="relative pl-12 pb-10"
-                >
-                  {/* Connector line */}
-                  {i < career.length - 1 && (
-                    <div className="timeline-line" />
-                  )}
-
-                  {/* Dot */}
-                  <div className={`absolute left-0 top-1 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    role.current
-                      ? "bg-accent/20 border-2 border-accent"
-                      : "bg-white/05 border border-white/12"
-                  }`}>
-                    <div className={`w-2 h-2 rounded-full ${role.current ? "bg-accent" : "bg-white/30"}`} />
+          <div>
+            {career.map((role, i) => (
+              <motion.div
+                key={`${role.company}-${i}`}
+                initial={{ opacity: 0, x: 16 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0 }}
+                transition={{ duration: 0.45, delay: i * 0.07 }}
+                className="relative pl-12 pb-10"
+              >
+                {i < career.length - 1 && <div className="timeline-line" />}
+                <div className={`absolute left-0 top-1 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${role.current ? "bg-accent/20 border-2 border-accent" : "bg-white/05 border border-white/12"}`}>
+                  <div className={`w-2 h-2 rounded-full ${role.current ? "bg-accent" : "bg-white/30"}`} />
+                </div>
+                <div className="pt-1">
+                  <div className="flex items-center gap-3 mb-1 flex-wrap">
+                    <span className="text-white font-semibold text-base">{role.company}</span>
+                    {role.current && <span className="tag text-xs px-2 py-0.5">Current</span>}
                   </div>
-
-                  {/* Content */}
-                  <div className="pt-1">
-                    <div className="flex items-center gap-3 mb-1 flex-wrap">
-                      <span className="text-white font-semibold text-base">{role.company}</span>
-                      {role.current && (
-                        <span className="tag text-xs px-2 py-0.5">Current</span>
-                      )}
-                    </div>
-                    <div className="text-accent text-sm font-medium mb-1">{role.title}</div>
-                    <div className="text-white/35 text-xs mb-3">{role.period}</div>
-                    <div className="text-white/55 text-sm leading-relaxed">{role.highlights}</div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+                  <div className="text-accent text-sm font-medium mb-1">{role.title}</div>
+                  <div className="text-white/35 text-xs mb-3">{role.period}</div>
+                  <div className="text-white/55 text-sm leading-relaxed">{role.highlights}</div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>

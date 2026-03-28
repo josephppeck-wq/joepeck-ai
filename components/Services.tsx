@@ -10,8 +10,7 @@ const services = [
       </svg>
     ),
     title: "AI-Powered GTM Strategy",
-    description:
-      "I design go-to-market strategies that leverage AI for smarter prospecting, personalized outreach, pipeline forecasting, and deal intelligence. Not theory — executable playbooks your team can run tomorrow.",
+    description: "I design go-to-market strategies that leverage AI for smarter prospecting, personalized outreach, pipeline forecasting, and deal intelligence. Not theory — executable playbooks your team can run tomorrow.",
   },
   {
     icon: (
@@ -20,8 +19,7 @@ const services = [
       </svg>
     ),
     title: "Sales Organization Design & Leadership",
-    description:
-      "From building your first sales team to restructuring a 400-person org, I bring the operating system: hiring profiles, comp plans, territory design, enablement programs, and performance management frameworks.",
+    description: "From building your first sales team to restructuring a 400-person org, I bring the operating system: hiring profiles, comp plans, territory design, enablement programs, and performance management frameworks.",
   },
   {
     icon: (
@@ -30,8 +28,7 @@ const services = [
       </svg>
     ),
     title: "Fractional / Advisory Sales Leadership",
-    description:
-      "Need a senior sales leader without the full-time commitment? I serve as a fractional CRO/VP Sales or board-level advisor to help you hit your next growth milestone.",
+    description: "Need a senior sales leader without the full-time commitment? I serve as a fractional CRO/VP Sales or board-level advisor to help you hit your next growth milestone.",
   },
 ];
 
@@ -39,66 +36,33 @@ export default function Services() {
   return (
     <section id="services" className="section-padding relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Header */}
         <div className="max-w-2xl mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-4"
-          >
-            <span className="tag">Services</span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight leading-tight"
-          >
+          <div className="mb-4"><span className="tag">Services</span></div>
+          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight leading-tight">
             How I Help
-          </motion.h2>
+          </h2>
         </div>
 
-        {/* Cards */}
         <div className="grid md:grid-cols-3 gap-6">
           {services.map((service, i) => (
             <motion.div
               key={service.title}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0 }}
-              transition={{ duration: 0.6, delay: i * 0.12 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
               className="card p-8 flex flex-col"
             >
               <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent mb-6 flex-shrink-0">
                 {service.icon}
               </div>
-              <h3 className="text-xl font-semibold text-white mb-4 leading-snug">
-                {service.title}
-              </h3>
-              <p className="text-white/55 leading-relaxed text-sm flex-1">
-                {service.description}
-              </p>
+              <h3 className="text-xl font-semibold text-white mb-4 leading-snug">{service.title}</h3>
+              <p className="text-white/55 leading-relaxed text-sm flex-1">{service.description}</p>
               <div className="mt-8">
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-1.5 text-accent text-sm font-medium hover:gap-3 transition-all duration-200 group"
-                >
+                <a href="#contact" className="inline-flex items-center gap-1.5 text-accent text-sm font-medium hover:gap-3 transition-all duration-200 group">
                   Let&apos;s discuss
-                  <svg
-                    className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </a>
               </div>
