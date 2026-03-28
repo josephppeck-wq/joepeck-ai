@@ -84,7 +84,7 @@ Be specific. Use real numbers. Draw on patterns from actual GTM builds, not gene
 
   try {
     const message = await client.messages.create({
-      model: "claude-opus-4-5",
+      model: "claude-opus-4-5-20251101",
       max_tokens: 3000,
       messages: [
         {
@@ -112,6 +112,7 @@ Sales Motion: ${motion || "Not specified"}`,
     return NextResponse.json(parsed);
   } catch (error) {
     console.error("GTM blueprint error:", error);
-    return NextResponse.json({ error: "Blueprint generation failed. Please try again." }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: `Blueprint generation failed: ${message}` }, { status: 500 });
   }
 }

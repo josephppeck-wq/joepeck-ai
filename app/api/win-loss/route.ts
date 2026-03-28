@@ -61,7 +61,7 @@ Analyze the win/loss summaries provided and return a strategic analysis in this 
 
   try {
     const message = await client.messages.create({
-      model: "claude-opus-4-5",
+      model: "claude-opus-4-5-20251101",
       max_tokens: 2000,
       messages: [
         {
@@ -82,6 +82,7 @@ Analyze the win/loss summaries provided and return a strategic analysis in this 
     return NextResponse.json(parsed);
   } catch (error) {
     console.error("Win/loss error:", error);
-    return NextResponse.json({ error: "Analysis failed. Please try again." }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: `Analysis failed: ${message}` }, { status: 500 });
   }
 }

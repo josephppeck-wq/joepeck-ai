@@ -192,3 +192,54 @@ body {
   h2 { font-size: clamp(1.5rem, 6vw, 2.5rem) !important; }
   .stat-number { font-size: clamp(2rem, 8vw, 3rem) !important; }
 }
+
+/* ─── Form inputs — force dark styling across all browsers/devices ─── */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+textarea,
+select {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  -webkit-text-fill-color: #ffffff !important;
+  /* Override iOS Safari's default white autofill */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Autofill override — iOS/Chrome fill the background white otherwise */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #1e1e1e inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff;
+}
+
+/* Placeholder text */
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.28) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.28) !important;
+}
+
+/* Select option dropdowns */
+select option {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+/* Focus state */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: rgba(37, 99, 235, 0.6) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}

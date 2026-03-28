@@ -67,7 +67,7 @@ Be direct, specific, and coaching-forward. Don't sugarcoat gaps — a sales lead
 
   try {
     const message = await client.messages.create({
-      model: "claude-opus-4-5",
+      model: "claude-opus-4-5-20251101",
       max_tokens: 1500,
       messages: [
         {
@@ -88,8 +88,9 @@ Be direct, specific, and coaching-forward. Don't sugarcoat gaps — a sales lead
     return NextResponse.json(parsed);
   } catch (error) {
     console.error("Deal coach error:", error);
+    const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { error: "Analysis failed. Please try again." },
+      { error: `Analysis failed: ${message}` },
       { status: 500 }
     );
   }

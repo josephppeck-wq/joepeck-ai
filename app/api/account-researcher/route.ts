@@ -77,7 +77,7 @@ Respond in this exact JSON format:
 
   try {
     const message = await client.messages.create({
-      model: "claude-opus-4-5",
+      model: "claude-opus-4-5-20251101",
       max_tokens: 2000,
       messages: [
         {
@@ -98,7 +98,8 @@ Respond in this exact JSON format:
     return NextResponse.json({ company, ...parsed });
   } catch (error) {
     console.error("Account researcher error:", error);
-    return NextResponse.json({ error: "Research failed. Please try again." }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: `Research failed: ${message}` }, { status: 500 });
   }
 }
 
