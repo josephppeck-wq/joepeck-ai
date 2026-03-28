@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 
 const career = [
-  { company: "Prokeep", period: "2024 – Present", title: "Senior Director of Sales", highlights: "Designed GTM strategy · $1M+ new ARR · 3 new verticals", current: true },
+  { company: "Prokeep", period: "2024 – 2025", title: "Senior Director of Sales", highlights: "Designed GTM strategy · $1M+ new ARR · 3 new verticals", current: false },
   { company: "CloudKitchens", period: "2022 – 2023", title: "Head of Sales, Central U.S.", highlights: "4 regional teams · 15 markets · $20M+ revenue", current: false },
   { company: "DocuSign", period: "2019 – 2022", title: "AVP & RVP of Sales", highlights: "70+ AEs · $60M+ annual quota · 41% multi-product adoption", current: false },
   { company: "SpringCM → DocuSign", period: "2018 – 2022", title: "VP Business Development", highlights: "Built BDR org from zero · $10M+ ACV enterprise deals", current: false },
@@ -24,7 +24,7 @@ export default function Timeline() {
               The Track<br /><span className="accent-text">Record</span>
             </h2>
             <p className="text-white/55 leading-relaxed mb-12 text-base lg:text-lg">
-              Two decades. Multiple categories. One consistent result: revenue teams that outperform.
+              Two decades of building. Now available to build for you.
             </p>
 
             <div className="card p-6 mb-8">

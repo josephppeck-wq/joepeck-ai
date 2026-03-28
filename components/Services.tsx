@@ -32,18 +32,54 @@ const services = [
   },
 ];
 
+const engagements = [
+  {
+    name: "Advisory Sprint",
+    duration: "1–2 weeks",
+    description: "Rapid assessment and strategic recommendation. Ideal for GTM audits, AI readiness evaluations, or a senior second opinion on a major sales decision.",
+    deliverable: "Written strategy brief + 2 working sessions",
+    ideal: "Companies facing a specific, defined challenge",
+    color: "border-blue-500/20",
+    accentBg: "bg-blue-500/10",
+    accentText: "text-blue-400",
+  },
+  {
+    name: "Fractional Leadership",
+    duration: "3–6 months",
+    description: "I embed with your team part-time as a fractional CRO or VP Sales. I attend pipeline reviews, coach your managers, and build the systems that scale.",
+    deliverable: "Ongoing operational leadership + weekly engagement",
+    ideal: "Series A–C companies scaling past $5M ARR",
+    color: "border-accent/30",
+    accentBg: "bg-accent/10",
+    accentText: "text-accent",
+  },
+  {
+    name: "AI Revenue Transformation",
+    duration: "Custom",
+    description: "End-to-end design and deployment of AI-powered sales systems — from agent builds to workflow automation to team enablement. I build the tools, train the team, measure the results.",
+    deliverable: "Custom scope: tools, training, and measurable outcomes",
+    ideal: "Organizations ready to make AI a competitive advantage",
+    color: "border-violet-500/20",
+    accentBg: "bg-violet-500/10",
+    accentText: "text-violet-400",
+  },
+];
+
 export default function Services() {
   return (
     <section id="services" className="section-padding relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Header */}
         <div className="max-w-2xl mb-16">
           <div className="mb-4"><span className="tag">Services</span></div>
-          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight leading-tight">
+          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight leading-tight mb-4">
             How I Help
           </h2>
+          <p className="text-white/50 text-base">Currently accepting 2–3 new engagements per quarter.</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        {/* Service cards */}
+        <div className="grid md:grid-cols-3 gap-6 mb-20">
           {services.map((service, i) => (
             <motion.div
               key={service.title}
@@ -68,6 +104,43 @@ export default function Services() {
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* Engagement models */}
+        <div>
+          <div className="mb-10">
+            <h3 className="text-2xl lg:text-3xl font-bold tracking-tight mb-3">How We Work Together</h3>
+            <p className="text-white/50">Three ways to engage, depending on what you need and where you are.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {engagements.map((eng, i) => (
+              <motion.div
+                key={eng.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className={`card p-8 border ${eng.color}`}
+              >
+                <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${eng.accentBg} ${eng.accentText} border ${eng.color} mb-6`}>
+                  {eng.duration}
+                </div>
+                <h4 className="text-lg font-bold text-white mb-3">{eng.name}</h4>
+                <p className="text-white/55 text-sm leading-relaxed mb-6">{eng.description}</p>
+                <div className="space-y-3 border-t border-white/06 pt-6">
+                  <div>
+                    <div className="text-white/30 text-xs uppercase tracking-wide mb-1">Deliverable</div>
+                    <div className="text-white/65 text-sm">{eng.deliverable}</div>
+                  </div>
+                  <div>
+                    <div className="text-white/30 text-xs uppercase tracking-wide mb-1">Ideal for</div>
+                    <div className="text-white/65 text-sm">{eng.ideal}</div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          <p className="text-white/30 text-sm mt-6 text-center">Investment varies by scope and engagement type. <a href="#contact" className="text-accent hover:text-accent-light transition-colors">Let&apos;s talk about fit →</a></p>
         </div>
       </div>
     </section>

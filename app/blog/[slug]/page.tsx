@@ -13,6 +13,222 @@ const posts: Record<string, {
   description: string;
   content: string;
 }> = {
+  "what-changed-in-ai-sales-2025": {
+    title: "What Changed in AI Sales Tools in 2025 — And What's Coming in 2026",
+    category: "AI Strategy",
+    readTime: "8 min read",
+    date: "March 2026",
+    dateISO: "2026-03-01",
+    description: "An honest assessment of what moved the needle in AI sales tools in 2025, what was pure hype, and where the smart money is going in 2026.",
+    content: `I've spent the last two years building with AI, not just reading about it. Every week I'm testing new tools, shipping new workflows, and watching what actually sticks versus what makes for a good demo.
+
+Here's my honest take on what changed in 2025 — and what I'm watching heading into 2026.
+
+## What Actually Moved the Needle in 2025
+
+### AI-native forecasting became real
+
+This was the year that AI forecasting went from "interesting concept" to "this is clearly better than what we were doing." The gap between rep-submitted pipeline and behavioral signal-based forecasting became undeniable. Teams that adopted signal-based scoring saw forecast accuracy improve 30–50%. The ones still running on gut feel and stage names are losing ground fast.
+
+I built a version of this myself — you can [try it on this site](/projects/forecast-machine) with mock data, or request a session with your real pipeline.
+
+### Claude and GPT-4o became genuinely useful for deal work
+
+In 2024, AI for sales was mostly copy generation. In 2025, it became strategic. Using Claude to analyze deal notes, coach reps through MEDDPICC gaps, and synthesize call transcripts into action items — these are now daily workflows, not experiments.
+
+The quality bar crossed a threshold. The outputs are good enough to act on without heavy editing. That changes the economics of what one rep can handle.
+
+### Autonomous agents went from demos to deployments
+
+This is the one I'm most excited about. In 2025, a meaningful number of sales teams deployed actual autonomous agents — not AI features in existing tools, but purpose-built agents that take actions without human prompting.
+
+I've been running one on a Mac Mini in my home office. It monitors accounts, researches contacts, drafts outreach, and logs everything. The [SDR Agent page](/projects/autonomous-sdr) on this site shows exactly how it's built. In 2026, this moves from early adopter to competitive necessity.
+
+## What Was Mostly Hype
+
+### "AI-powered" CRM features
+
+Every CRM added an AI layer in 2025. Most of it was glorified autocomplete. The forecasting insights were thin, the "recommended actions" were generic, and the ROI was marginal.
+
+The real AI value in 2025 came from external tools and custom workflows — not the AI features your CRM vendor bolted on to justify a price increase.
+
+### AI SDRs that actually convert
+
+The promise of fully autonomous outbound that books meetings without human involvement — not there yet. The AI SDRs in market are good at volume, bad at judgment. They can research and draft. They can't read a relationship or know when to back off.
+
+The winning pattern right now is AI-augmented SDRs, not AI-replaced SDRs. Give your best reps AI research and personalization tools and watch their output triple. Don't replace them yet.
+
+## What I'm Watching in 2026
+
+### Multi-agent sales systems
+
+The next frontier isn't one agent — it's coordinated systems of agents. An account research agent feeds a personalization agent, which feeds an outreach scheduling agent, which logs to a CRM sync agent. Each piece is simple. Together, they replace a function.
+
+I'm actively building in this space. If you want to see where this goes, [try the GTM Blueprint tool](/projects/gtm-blueprint) — it's a primitive version of what multi-agent GTM planning will look like at scale.
+
+### Voice AI in sales calls
+
+This was early-stage in 2025 but it's accelerating fast. Real-time AI coaching during live calls — flagging objections, surfacing relevant case studies, suggesting talk tracks — is going to be table stakes for enterprise sales teams within 18 months.
+
+### The consolidation wave
+
+Right now there are hundreds of AI sales tools. By end of 2026, there will be a handful of survivors and a lot of acqui-hires. The tools that win will be the ones that integrate deeply into existing workflows rather than requiring yet another login.
+
+## The Bottom Line
+
+2025 was the year AI stopped being a sales tool and started being a sales advantage. The gap between teams that are building AI into their workflows and teams that are still "evaluating" is now large enough to be visible in quota attainment.
+
+2026 is the year that gap becomes a chasm.
+
+If you're still in evaluation mode, the window to catch up is closing. The question isn't whether to adopt AI in your revenue organization — it's whether you figure it out before your competition does.`,
+  },
+  "fractional-cro-model": {
+    title: "The Fractional CRO Model: Why More Companies Are Choosing Flexible Leadership",
+    category: "Sales Leadership",
+    readTime: "6 min read",
+    date: "February 2026",
+    dateISO: "2026-02-01",
+    description: "The full-time CRO model made sense when companies scaled linearly. AI-era companies don't. Here's why fractional sales leadership is becoming the default for smart founders.",
+    content: `The traditional CRO hire goes like this: you hit $2–3M ARR, you raise a Series A, you bring in a full-time Chief Revenue Officer at $350K base plus equity, and you pray they can scale you to $20M.
+
+Sometimes it works. More often, it doesn't.
+
+The mismatch isn't about the person. It's about the model. Full-time CRO economics made sense when sales organizations scaled linearly — more reps, more revenue, predictable curve. The AI era doesn't work that way.
+
+## Why the Model Is Breaking
+
+### The expertise gap is real
+
+Most companies raising a Series A need someone who can build a repeatable sales motion from first principles, implement AI-powered prospecting and forecasting tools, design an org structure that scales without massive headcount, and avoid the ten most expensive GTM mistakes.
+
+That's a very specific combination. The full-time CRO market is full of operators who are excellent at scaling from $20M to $100M but have never built from zero. Or they've built from zero but in a different era, before AI changed the unit economics.
+
+### The cost structure doesn't fit
+
+A $350K salary plus equity for a CRO who needs 6–12 months to get up to speed is an enormous commitment for a company at $2–5M ARR. That's often 10–15% of your entire revenue in one leadership salary — before you've proven the motion works.
+
+Most Series A companies would be dramatically better served by investing that money in the actual sales team and bringing in fractional leadership to build the system.
+
+### AI changes the leverage ratio
+
+This is the piece that changes everything. A fractional CRO with the right AI tools can do what used to require a full-time operator plus a team of analysts. Pipeline intelligence, forecast modeling, competitive tracking, enablement development — these used to require headcount. Now they require a Claude subscription and a few well-designed workflows.
+
+## What Fractional Actually Looks Like
+
+People hear "fractional" and picture an advisor who shows up once a month and offers opinions. That's not what I'm describing.
+
+Effective fractional CRO engagement looks like:
+- 2–3 days per week of active operational involvement
+- Attendance at pipeline reviews, deal strategy sessions, and manager 1:1s
+- Ownership of the forecast and revenue reporting
+- Direct coaching of frontline managers and AEs
+- System design: comp plans, territory models, tech stack, AI workflow implementation
+
+The difference from a full-time hire: you're not paying for the 40% of a CRO's time that gets consumed by internal politics, organizational maintenance, and meetings that could have been emails.
+
+## Who It's Right For
+
+The fractional model works best when you're scaling from $2M to $15M ARR and need to establish your first repeatable sales motion; you've had turnover in sales leadership and need experienced stabilization while you find the right long-term hire; you're adding a new product line or entering a new market and need strategic GTM leadership without a full-time headcount commitment; or you want to implement AI-powered sales systems and need someone who has actually built them, not just recommended them.
+
+It's not the right model if you need full-time operational presence, have a large team that requires constant daily management, or are beyond $20M ARR with a mature motion that needs optimization rather than construction.
+
+## The Equity Question
+
+One more piece that founders often get wrong: fractional leaders can still receive equity. A smaller grant, vesting over a shorter period, but enough to create real alignment. The best fractional arrangements feel like a partnership, not a consulting engagement.
+
+If you're working with a fractional CRO who isn't willing to take any equity stake in your outcome, ask yourself why.
+
+## The Bottom Line
+
+The rise of fractional leadership isn't a trend — it's a structural shift driven by AI-era economics. The best operators can now deliver more impact in 20 hours per week than they could have in 40 hours five years ago.
+
+For early-stage founders, the math is increasingly clear: you get more expertise, more flexibility, and better AI leverage from a senior fractional operator than from a full-time hire you can barely afford.
+
+If you're evaluating your sales leadership situation, [I'd be happy to talk through whether a fractional engagement makes sense for where you are](/). No agenda — just a direct conversation about fit.`,
+  },
+  "ai-agent-budget-experiment": {
+    title: "I Gave My AI Agent a Budget. Here's What Happened.",
+    category: "Tools & Workflows",
+    readTime: "7 min read",
+    date: "January 2026",
+    dateISO: "2026-01-01",
+    description: "I gave my autonomous AI agent $50 and told it to generate pipeline. What it did — and what it couldn't do — was more instructive than any conference keynote.",
+    content: `I've been running an autonomous AI agent for several months now. It does research, monitors accounts, drafts outreach, synthesizes intelligence. It's useful, but it's been operating in a controlled environment — defined tasks, defined outputs.
+
+So I ran an experiment. I gave it $50 in API credits and a simple instruction: generate pipeline.
+
+No specific accounts to target. No outreach templates to follow. No defined process. Just: figure out who to reach, figure out what to say, and try to create conversations with potential clients.
+
+Here's what happened.
+
+## What It Did Well
+
+### Research was genuinely impressive
+
+Within 20 minutes of starting, the agent had identified 23 companies that matched my ICP — Series B SaaS companies with 50–200 employees, aggressive growth targets, and signals suggesting they were rebuilding or scaling their sales motion.
+
+The research depth was excellent. For each company, it pulled recent funding announcements, job postings (which signal intent better than almost any other data source), executive LinkedIn activity, and relevant industry news. It synthesized this into a one-paragraph account brief for each target.
+
+This is the [AI Account Researcher](/projects/account-researcher) workflow I've productized on this site — at scale, running autonomously, with no human prompting.
+
+### Personalization was above average
+
+For each account, the agent drafted a first-touch outreach message. The personalization was real — it referenced the specific signals it had found, connected them to relevant pain points, and made a specific ask.
+
+Were they perfect? No. Were they better than the average SDR cold email? Absolutely.
+
+### The volume was legitimately impressive
+
+In 4 hours, the agent produced: 23 researched accounts, 23 personalized outreach drafts, a prioritization ranking by fit score, and a recommended contact for each account with engagement angle.
+
+That's a solid week of SDR work, done while I was doing other things.
+
+## What It Couldn't Do
+
+### It couldn't actually send anything
+
+This is by design — I haven't given my agent email sending credentials, and I won't yet. The liability of an autonomous system sending emails under my name without review is too high at this stage.
+
+But it's worth noting: the last mile of outbound — actually contacting humans — is still a human step. For now.
+
+### It couldn't navigate ambiguity
+
+When I gave it the open-ended "generate pipeline" instruction, it interpreted this narrowly: find accounts, draft messages. It didn't ask clarifying questions. It didn't explore whether there were faster paths to pipeline (like referrals, or activating a dormant relationship) that didn't involve cold outreach.
+
+A human strategist would have started by asking: what's your current network? Who do you know? Where's the fastest path to a conversation?
+
+The agent went to cold outreach because that's what it knows how to do. This is a real limitation — agents optimize for what they're trained to do, not for what the situation actually calls for.
+
+### It couldn't read relationship signals
+
+Two of the companies it identified were ones I'd had prior contact with — one a successful client engagement 18 months ago, one a deal that went cold for reasons worth understanding before re-engaging.
+
+It found them because they fit the ICP. It had no way to know that the approach to re-engaging them should be fundamentally different from a cold approach.
+
+Context that lives in my head — relationship history, why things ended, who trusts me — is invisible to the agent.
+
+## What This Means for Sales Teams
+
+The experiment taught me something important about how to think about AI agents in a sales context.
+
+Agents are exceptional at research, synthesis, and generation at scale. They're weak at judgment, context, and the kind of relationship intelligence that lives in a rep's head.
+
+The right model isn't "replace SDRs with agents." It's "give your best SDRs an agent that handles everything except the judgment calls."
+
+Your rep should be reviewing the 23 accounts the agent found, adding relationship context the agent couldn't know, editing the outreach to reflect things that don't show up in public data, and making the actual send decision.
+
+That version of an SDR can work 3–5× the pipeline of a SDR doing all of this manually. That's the unlock.
+
+## The $50 Result
+
+Total spend: $47.23 in API costs. Time invested by me: about 20 minutes of setup and review.
+
+Output: a prioritized list of 23 accounts with research briefs and personalized outreach ready to go.
+
+Did it generate pipeline? Not directly — that depends on what you do with the output. But the input required to start 23 conversations cost me $47 and 20 minutes. The question every sales leader should be asking: what does that math look like at scale, integrated into your existing motion?
+
+The tools to find out are [already on this site](/projects). The only thing missing is the decision to start.`,
+  },
   "5-ai-tools-every-sales-leader": {
     title: "The 5 AI Tools Every Sales Leader Should Be Using Right Now",
     category: "AI Strategy",

@@ -4,28 +4,28 @@ import { motion } from "framer-motion";
 
 const posts = [
   {
-    slug: "5-ai-tools-every-sales-leader",
-    title: "The 5 AI Tools Every Sales Leader Should Be Using Right Now",
-    excerpt: "Most sales leaders are still treating AI like a novelty. The ones who aren't are pulling away from the pack. Here's what's actually worth your time.",
+    slug: "what-changed-in-ai-sales-2025",
+    title: "What Changed in AI Sales Tools in 2025 — And What's Coming in 2026",
+    excerpt: "I've been in the trenches watching this space evolve in real time. Here's an honest assessment of what moved the needle, what was hype, and where I'm placing my bets.",
     category: "AI Strategy",
-    readTime: "6 min read",
-    date: "Mar 2025",
-  },
-  {
-    slug: "why-your-forecast-is-wrong",
-    title: "Why Your Forecast Is Wrong — And How AI Fixes It",
-    excerpt: "Every CRO has sat in a board meeting defending a number they knew was fiction. It doesn't have to be this way. AI-native forecasting changes everything.",
-    category: "Sales Leadership",
-    readTime: "5 min read",
-    date: "Feb 2025",
-  },
-  {
-    slug: "autonomous-ai-agent-lessons",
-    title: "I Built an Autonomous AI Agent. Here's What It Taught Me About the Future of Work.",
-    excerpt: "I spent a weekend building an agent that runs on a Mac Mini in my home office. It changed how I think about every role on a revenue team.",
-    category: "Tools & Workflows",
     readTime: "8 min read",
-    date: "Jan 2025",
+    date: "Mar 2026",
+  },
+  {
+    slug: "fractional-cro-model",
+    title: "The Fractional CRO Model: Why More Companies Are Choosing Flexible Leadership",
+    excerpt: "The full-time CRO model made sense when companies scaled linearly. AI-era companies don't. Here's why fractional leadership is becoming the default.",
+    category: "Sales Leadership",
+    readTime: "6 min read",
+    date: "Feb 2026",
+  },
+  {
+    slug: "ai-agent-budget-experiment",
+    title: "I Gave My AI Agent a Budget. Here's What Happened.",
+    excerpt: "I gave my autonomous agent $50 and told it to generate pipeline. What it did — and what it couldn't do — taught me more than any conference keynote.",
+    category: "Tools & Workflows",
+    readTime: "7 min read",
+    date: "Jan 2026",
   },
 ];
 

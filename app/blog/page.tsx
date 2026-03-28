@@ -4,6 +4,30 @@ import Link from "next/link";
 
 const posts = [
   {
+    slug: "what-changed-in-ai-sales-2025",
+    title: "What Changed in AI Sales Tools in 2025 — And What's Coming in 2026",
+    excerpt: "I've been in the trenches watching this space evolve in real time. Here's an honest assessment of what moved the needle, what was hype, and where I'm placing my bets for 2026.",
+    category: "AI Strategy",
+    readTime: "8 min read",
+    date: "March 2026",
+  },
+  {
+    slug: "fractional-cro-model",
+    title: "The Fractional CRO Model: Why More Companies Are Choosing Flexible Leadership",
+    excerpt: "The full-time CRO model made sense when companies scaled linearly. AI-era companies don't. Here's why fractional leadership is becoming the default for smart founders.",
+    category: "Sales Leadership",
+    readTime: "6 min read",
+    date: "February 2026",
+  },
+  {
+    slug: "ai-agent-budget-experiment",
+    title: "I Gave My AI Agent a Budget. Here's What Happened.",
+    excerpt: "I gave my autonomous agent $50 and told it to generate pipeline. What it did — and what it couldn't do — taught me more about the future of sales than any conference I've attended.",
+    category: "Tools & Workflows",
+    readTime: "7 min read",
+    date: "January 2026",
+  },
+  {
     slug: "5-ai-tools-every-sales-leader",
     title: "The 5 AI Tools Every Sales Leader Should Be Using Right Now",
     excerpt: "Most sales leaders are still treating AI like a novelty. The ones who aren't are pulling away from the pack. Here's what's actually worth your time.",

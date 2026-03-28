@@ -3,7 +3,9 @@ import Hero from "@/components/Hero";
 import CredibilityBar from "@/components/CredibilityBar";
 import About from "@/components/About";
 import Services from "@/components/Services";
+import Testimonials from "@/components/Testimonials";
 import ProjectsTeaser from "@/components/ProjectsTeaser";
+import LeadMagnet from "@/components/LeadMagnet";
 import Insights from "@/components/Insights";
 import Timeline from "@/components/Timeline";
 import Contact from "@/components/Contact";
@@ -19,7 +21,11 @@ export default function Home() {
       <div className="divider" />
       <Services />
       <div className="divider" />
+      <Testimonials />
+      <div className="divider" />
       <ProjectsTeaser />
+      <div className="divider" />
+      <LeadMagnet />
       <div className="divider" />
       <Insights />
       <div className="divider" />

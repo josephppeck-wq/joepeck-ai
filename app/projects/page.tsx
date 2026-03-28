@@ -59,7 +59,7 @@ const projects = [
     gradient: "from-cyan-600/20 to-blue-600/10",
   },
   {
-    slug: "win-loss-analyzer",
+    slug: "win-loss",
     title: "The Win/Loss Analyzer",
     subtitle: "Your closed-lost deals are a goldmine. Mine them.",
     category: "Revenue Intelligence",
