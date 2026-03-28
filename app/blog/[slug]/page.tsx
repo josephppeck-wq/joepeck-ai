@@ -2,12 +2,15 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 const posts: Record<string, {
   title: string;
   category: string;
   readTime: string;
   date: string;
+  dateISO: string;
+  description: string;
   content: string;
 }> = {
   "5-ai-tools-every-sales-leader": {
@@ -15,6 +18,8 @@ const posts: Record<string, {
     category: "AI Strategy",
     readTime: "6 min read",
     date: "March 2025",
+    dateISO: "2025-03-01",
+    description: "Most sales leaders are still treating AI like a novelty. The ones who aren't are pulling away from the pack. Here are the 5 AI tools that actually move the needle for revenue teams.",
     content: `Most sales leaders are still treating AI like a novelty — something their ops team is "exploring" or something they demo at SKO to get a round of applause. The ones who aren't are pulling away from the pack fast.
 
 I've been building with AI for the past two years, not just talking about it. Here's what's actually worth your time right now.
@@ -58,6 +63,8 @@ The through-line across all five: AI doesn't replace the judgment of a great sal
     category: "Sales Leadership",
     readTime: "5 min read",
     date: "February 2025",
+    dateISO: "2025-02-01",
+    description: "Every CRO has sat in a board meeting defending a forecast they knew was fiction. AI-native pipeline scoring changes this permanently — here's how it works and what to do about it.",
     content: `I've managed $60M+ in quota across multiple organizations. I can count on one hand the number of times the forecast was actually right.
 
 That's not a failure of math. It's a structural problem with how we collect and weight forecast inputs — and it's exactly the kind of problem AI is built to solve.
@@ -74,7 +81,7 @@ So you average these opinions together, apply some gut-feel discount factor, and
 
 The shift isn't about better math on top of the same inputs. It's about changing what the inputs are.
 
-Instead of asking "what does the rep think will close?", AI-native forecasting asks: What is the deal *doing*? 
+Instead of asking "what does the rep think will close?", AI-native forecasting asks: What is the deal *doing*?
 
 - How many days since the last meaningful interaction?
 - Has the economic buyer been engaged in the last 30 days?
@@ -96,7 +103,7 @@ You don't need to rebuild your CRM. Start with the data you have. Run your close
 
 Once you know which signals matter, you can build a lightweight scoring model — even in a spreadsheet — that surfaces deals worth your coaching attention before they slip.
 
-The reps will resist it at first. They always do. Then one of them wins a deal because you flagged a at-risk champion two weeks before the competition moved in, and suddenly everyone wants to know how the model works.
+The reps will resist it at first. They always do. Then one of them wins a deal because you flagged an at-risk champion two weeks before the competition moved in, and suddenly everyone wants to know how the model works.
 
 That's the moment your forecast goes from fiction to intelligence.`,
   },
@@ -105,6 +112,8 @@ That's the moment your forecast goes from fiction to intelligence.`,
     category: "Tools & Workflows",
     readTime: "8 min read",
     date: "January 2025",
+    dateISO: "2025-01-01",
+    description: "I built an autonomous AI agent that runs on a Mac Mini in my home office. What I learned changed how I think about every role on a revenue team — and the future of sales organizations.",
     content: `There's a Mac Mini sitting on a shelf in my home office. It's been running continuously for the past several months, doing work that used to require a team.
 
 It monitors industry news. It researches accounts. It drafts outreach. It synthesizes intelligence and delivers it on a schedule. It doesn't take days off. It doesn't have a bad week. It doesn't need to be managed.
@@ -137,7 +146,7 @@ Building the agent also taught me something I wasn't expecting: how much of our 
 
 An AI agent doesn't have meetings about the work. It doesn't update slides about the work. It doesn't send status updates about the work. It just does the work.
 
-When you remove all the overhead, you realize how much of the modern knowledge worker's day is performance rather than production. That's a uncomfortable thing to reckon with.
+When you remove all the overhead, you realize how much of the modern knowledge worker's day is performance rather than production. That's an uncomfortable thing to reckon with.
 
 I'm not saying meetings are worthless — the strategic conversations, the relationship-building, the coaching moments are irreplaceable. But a lot of what fills calendars is coordination overhead that exists because we don't have better information systems.
 
@@ -156,6 +165,8 @@ I'd rather be first.`,
     category: "Sales Leadership",
     readTime: "7 min read",
     date: "December 2024",
+    dateISO: "2024-12-01",
+    description: "MEDDPICC isn't dead — it's about to get a major upgrade. Here's how AI changes the cost of gathering qualification data without changing the fundamentals of why the framework works.",
     content: `MEDDPICC isn't going anywhere. Let me be clear about that upfront, because I've seen the hot takes suggesting that AI makes deal qualification frameworks obsolete. They're wrong.
 
 What AI does is change the cost of gathering the information MEDDPICC demands — dramatically. And that changes how you should apply it.
@@ -210,6 +221,8 @@ That's not obsolescence. That's leverage.`,
     category: "AI Strategy",
     readTime: "9 min read",
     date: "November 2024",
+    dateISO: "2024-11-01",
+    description: "I built a sales org from zero to $415M at Groupon with 400+ reps. Here's exactly what I'd do differently today with modern AI tools — and why the delta is worth hundreds of millions.",
     content: `In 2010, I walked into Groupon and started building a sales team from nothing. Two years later, we had 400+ sellers generating $415M in revenue across 23 markets.
 
 It was chaotic, fast, and built almost entirely on human intuition, hustle, and luck. We made a lot of money and a lot of mistakes.
@@ -279,12 +292,33 @@ export function generateStaticParams() {
   return Object.keys(posts).map((slug) => ({ slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }) {
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const post = posts[params.slug];
   if (!post) return {};
+
+  const url = `https://joepeck.ai/blog/${params.slug}`;
+  const ogTitle = `${post.title} — Joe Peck`;
+
   return {
-    title: `${post.title} — Joe Peck`,
-    description: post.title,
+    title: ogTitle,
+    description: post.description,
+    authors: [{ name: "Joe Peck", url: "https://joepeck.ai" }],
+    openGraph: {
+      title: ogTitle,
+      description: post.description,
+      url,
+      type: "article",
+      publishedTime: post.dateISO,
+      authors: ["Joe Peck"],
+      tags: [post.category, "Sales Leadership", "AI Strategy", "B2B Sales"],
+      siteName: "Joe Peck",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: ogTitle,
+      description: post.description,
+    },
+    alternates: { canonical: url },
   };
 }
 
@@ -301,18 +335,24 @@ function renderContent(content: string) {
           {line.slice(3)}
         </h2>
       );
-    } else if (line.startsWith("- **")) {
+    } else if (line.startsWith("### ")) {
+      elements.push(
+        <h3 key={i} className="text-xl font-semibold text-white mt-8 mb-4 leading-snug">
+          {line.slice(4)}
+        </h3>
+      );
+    } else if (line.match(/^- \*\*(.+?)\*\*:/)) {
       const match = line.match(/^- \*\*(.+?)\*\*: (.+)$/);
       if (match) {
         elements.push(
-          <li key={i} className="text-white/65 leading-relaxed mb-3">
+          <li key={i} className="text-white/65 leading-relaxed mb-3 ml-4">
             <strong className="text-white/90">{match[1]}</strong>: {match[2]}
           </li>
         );
       }
     } else if (line.startsWith("- ")) {
       elements.push(
-        <li key={i} className="text-white/65 leading-relaxed mb-2 ml-4">
+        <li key={i} className="text-white/65 leading-relaxed mb-2 ml-4 list-disc">
           {line.slice(2)}
         </li>
       );
@@ -342,11 +382,39 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
   const post = posts[params.slug];
   if (!post) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.dateISO,
+    dateModified: post.dateISO,
+    author: {
+      "@type": "Person",
+      name: "Joe Peck",
+      url: "https://joepeck.ai",
+      jobTitle: "Senior Sales Executive & AI Strategist",
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Joe Peck",
+      url: "https://joepeck.ai",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://joepeck.ai/blog/${params.slug}`,
+    },
+    keywords: [post.category, "B2B Sales", "AI Strategy", "Sales Leadership", "Revenue Operations"].join(", "),
+  };
+
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Nav />
       <article className="pt-32 pb-24 max-w-3xl mx-auto px-6 lg:px-8">
-        {/* Breadcrumb */}
         <div className="mb-10">
           <Link href="/blog" className="text-white/35 hover:text-white text-sm transition-colors flex items-center gap-2">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -356,7 +424,6 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
           </Link>
         </div>
 
-        {/* Meta */}
         <div className="flex items-center gap-3 mb-6 flex-wrap">
           <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${categoryColors[post.category] || "bg-white/05 text-white/40 border-white/10"}`}>
             {post.category}
@@ -366,12 +433,10 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
           <span className="text-white/30 text-sm">{post.date}</span>
         </div>
 
-        {/* Title */}
         <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight leading-tight mb-12">
           {post.title}
         </h1>
 
-        {/* Author */}
         <div className="flex items-center gap-4 mb-12 pb-12 border-b border-white/08">
           <div className="w-10 h-10 rounded-full bg-accent/20 border border-accent/30 flex items-center justify-center">
             <span className="text-accent font-bold text-sm">JP</span>
@@ -382,12 +447,10 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
           </div>
         </div>
 
-        {/* Content */}
         <div className="prose-custom">
           {renderContent(post.content)}
         </div>
 
-        {/* CTA */}
         <div className="mt-16 pt-12 border-t border-white/08">
           <div className="card p-8 text-center">
             <h3 className="text-xl font-bold mb-3">Want to talk through your revenue strategy?</h3>
