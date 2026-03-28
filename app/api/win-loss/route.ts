@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { streamText } from "ai";
+import { anthropic } from "@ai-sdk/anthropic";
 
 const requestLog = new Map<string, number[]>();
 
@@ -12,49 +14,7 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
-async function callClaude(systemPrompt: string, userMessage: string, maxTokens = 2000) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not configured");
-
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model: "claude-opus-4-5-20251101",
-      max_tokens: maxTokens,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userMessage }],
-    }),
-  });
-
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Anthropic API error ${res.status}: ${err}`);
-  }
-
-  const data = await res.json();
-  return data.content[0].text as string;
-}
-
-export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for") || "unknown";
-  if (isRateLimited(ip)) {
-    return NextResponse.json({ error: "Rate limit exceeded." }, { status: 429 });
-  }
-
-  const { dealSummaries } = await req.json();
-
-  if (!dealSummaries || dealSummaries.trim().length < 50) {
-    return NextResponse.json({ error: "Please provide at least 3 deal summaries." }, { status: 400 });
-  }
-
-  const truncated = dealSummaries.slice(0, 3000);
-
-  const systemPrompt = `You are a Chief Revenue Officer with 20 years of experience and a pattern-recognition engine. You have reviewed hundreds of win/loss datasets and you know that most companies sit on a goldmine of strategic intelligence in their closed deals — and almost none of them mine it properly.
+const systemPrompt = `You are a Chief Revenue Officer with 20 years of experience and a pattern-recognition engine. You have reviewed hundreds of win/loss datasets and you know that most companies sit on a goldmine of strategic intelligence in their closed deals — and almost none of them mine it properly.
 
 Your standard for this analysis: a CRO should read your strategicRecommendation and immediately know what to change in their sales motion. Not a general observation. Not "improve qualification." A specific, concrete change they can brief their managers on tomorrow morning.
 
@@ -92,15 +52,25 @@ Analyze the win/loss summaries provided and return a strategic analysis in this 
   "strategicRecommendation": "The ONE thing this sales organization should change immediately based on the data. Specific, concrete, and briefable to a frontline manager in 60 seconds. This should be the insight that makes the CRO say 'I needed to hear that.'"
 }`;
 
-  try {
-    const text = await callClaude(systemPrompt, `Analyze these win/loss summaries:\n\n${truncated}`);
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error("Parse error");
-    const parsed = JSON.parse(jsonMatch[0]);
-    return NextResponse.json(parsed);
-  } catch (error) {
-    console.error("Win/loss error:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({ error: `Analysis failed: ${message}` }, { status: 500 });
+export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for") || "unknown";
+  if (isRateLimited(ip)) {
+    return NextResponse.json({ error: "Rate limit exceeded." }, { status: 429 });
   }
+
+  const { dealSummaries } = await req.json();
+
+  if (!dealSummaries || dealSummaries.trim().length < 50) {
+    return NextResponse.json({ error: "Please provide at least 3 deal summaries." }, { status: 400 });
+  }
+
+  const truncated = dealSummaries.slice(0, 3000);
+
+  const result = streamText({
+    model: anthropic("claude-opus-4.5"),
+    system: systemPrompt,
+    messages: [{ role: "user", content: `Analyze these win/loss summaries:\n\n${truncated}` }],
+  });
+
+  return result.toTextStreamResponse();
 }

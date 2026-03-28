@@ -37,27 +37,55 @@ const impactColor: Record<string, string> = {
 
 export default function WinLossClient() {
   const [text, setText] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [streamedText, setStreamedText] = useState("");
   const [result, setResult] = useState<WinLossResult | null>(null);
   const [error, setError] = useState("");
 
   const analyze = async (input: string) => {
-    setLoading(true);
-    setError("");
+    setIsStreaming(true);
+    setStreamedText("");
     setResult(null);
-    try {
-      const res = await fetch("/api/win-loss", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dealSummaries: input }),
-      });
+    setError("");
+
+    const res = await fetch("/api/win-loss", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dealSummaries: input }),
+    });
+
+    if (!res.ok) {
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Analysis failed");
-      setResult(data);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong");
-    } finally {
-      setLoading(false);
+      setError(data.error || "Analysis failed");
+      setIsStreaming(false);
+      return;
+    }
+
+    const reader = res.body!.getReader();
+    const decoder = new TextDecoder();
+    let accumulated = "";
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        accumulated += decoder.decode(value, { stream: true });
+        setStreamedText(accumulated);
+      }
+    } catch {
+      setError("Stream interrupted");
+      setIsStreaming(false);
+      return;
+    }
+
+    setIsStreaming(false);
+
+    try {
+      const jsonMatch = accumulated.match(/\{[\s\S]*\}/);
+      if (jsonMatch) setResult(JSON.parse(jsonMatch[0]));
+      else setError("Failed to parse response");
+    } catch {
+      setError("Failed to parse response");
     }
   };
 
@@ -80,18 +108,40 @@ export default function WinLossClient() {
           <span className="text-white/25 text-xs">{text.length}/3000 characters</span>
           <button
             onClick={() => analyze(text)}
-            disabled={loading || text.trim().length < 50}
+            disabled={isStreaming || text.trim().length < 50}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-accent hover:bg-accent-light disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-accent/25"
           >
-            {loading ? <><svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg> Analyzing...</> : "Analyze Deals"}
+            {isStreaming ? <><svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg> Analyzing...</> : "Analyze Deals"}
           </button>
         </div>
         {error && <p className="mt-3 text-red-400 text-sm">{error}</p>}
       </div>
 
       <AnimatePresence>
+        {isStreaming && (
+          <motion.div
+            key="streaming"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="card p-6 mb-6"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex gap-1">
+                <span className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "0ms" }} />
+                <span className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "150ms" }} />
+                <span className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "300ms" }} />
+              </div>
+              <span className="text-white/40 text-xs uppercase tracking-wide">Analyzing...</span>
+            </div>
+            <pre className="text-white/30 text-xs font-mono leading-relaxed whitespace-pre-wrap overflow-hidden max-h-32">
+              {streamedText}
+            </pre>
+          </motion.div>
+        )}
+
         {result && (
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="space-y-6">
+          <motion.div key="result" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="space-y-6">
             <div className="card p-8">
               <div className="text-accent text-xs uppercase tracking-widest mb-3 font-medium">Executive Summary</div>
               <p className="text-white/75 leading-relaxed">{result.summary}</p>

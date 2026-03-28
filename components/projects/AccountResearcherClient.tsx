@@ -18,7 +18,8 @@ interface AccountBrief {
 export default function AccountResearcherClient() {
   const [companies, setCompanies] = useState<string[]>([]);
   const [selected, setSelected] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [streamedText, setStreamedText] = useState("");
   const [result, setResult] = useState<AccountBrief | null>(null);
   const [error, setError] = useState("");
 
@@ -30,22 +31,52 @@ export default function AccountResearcherClient() {
 
   const research = async () => {
     if (!selected) return;
-    setLoading(true);
-    setError("");
+    setIsStreaming(true);
+    setStreamedText("");
     setResult(null);
-    try {
-      const res = await fetch("/api/account-researcher", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ company: selected }),
-      });
+    setError("");
+
+    const res = await fetch("/api/account-researcher", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ company: selected }),
+    });
+
+    if (!res.ok) {
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Research failed");
-      setResult(data);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong");
-    } finally {
-      setLoading(false);
+      setError(data.error || "Research failed");
+      setIsStreaming(false);
+      return;
+    }
+
+    const reader = res.body!.getReader();
+    const decoder = new TextDecoder();
+    let accumulated = "";
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        accumulated += decoder.decode(value, { stream: true });
+        setStreamedText(accumulated);
+      }
+    } catch {
+      setError("Stream interrupted");
+      setIsStreaming(false);
+      return;
+    }
+
+    setIsStreaming(false);
+
+    try {
+      // Strip the __COMPANY__ header line prepended by the route
+      const body = accumulated.replace(/^__COMPANY__:[^\n]*\n/, "");
+      const company = accumulated.match(/^__COMPANY__:([^\n]*)/)?.[1] || selected;
+      const jsonMatch = body.match(/\{[\s\S]*\}/);
+      if (jsonMatch) setResult({ company, ...JSON.parse(jsonMatch[0]) });
+      else setError("Failed to parse response");
+    } catch {
+      setError("Failed to parse response");
     }
   };
 
@@ -72,10 +103,10 @@ export default function AccountResearcherClient() {
         </div>
         <button
           onClick={research}
-          disabled={!selected || loading}
+          disabled={!selected || isStreaming}
           className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-accent hover:bg-accent-light disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-accent/25"
         >
-          {loading ? (
+          {isStreaming ? (
             <>
               <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -91,8 +122,30 @@ export default function AccountResearcherClient() {
       </div>
 
       <AnimatePresence>
+        {isStreaming && (
+          <motion.div
+            key="streaming"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="card p-6 mb-6"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex gap-1">
+                <span className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "0ms" }} />
+                <span className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "150ms" }} />
+                <span className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "300ms" }} />
+              </div>
+              <span className="text-white/40 text-xs uppercase tracking-wide">Researching {selected}...</span>
+            </div>
+            <pre className="text-white/30 text-xs font-mono leading-relaxed whitespace-pre-wrap overflow-hidden max-h-32">
+              {streamedText.replace(/^__COMPANY__:[^\n]*\n/, "")}
+            </pre>
+          </motion.div>
+        )}
+
         {result && (
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="space-y-6">
+          <motion.div key="result" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="space-y-6">
             {/* Overview */}
             <div className="card p-8">
               <div className="text-accent text-xs uppercase tracking-widest mb-4 font-medium">Company Overview</div>

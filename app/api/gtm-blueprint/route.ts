@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { streamText } from "ai";
+import { anthropic } from "@ai-sdk/anthropic";
 
 const requestLog = new Map<string, number[]>();
 
@@ -12,47 +14,7 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
-async function callClaude(systemPrompt: string, userMessage: string, maxTokens = 3000) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not configured");
-
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model: "claude-opus-4-5-20251101",
-      max_tokens: maxTokens,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userMessage }],
-    }),
-  });
-
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Anthropic API error ${res.status}: ${err}`);
-  }
-
-  const data = await res.json();
-  return data.content[0].text as string;
-}
-
-export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for") || "unknown";
-  if (isRateLimited(ip)) {
-    return NextResponse.json({ error: "Rate limit exceeded." }, { status: 429 });
-  }
-
-  const { product, market, stage, teamSize, asp, salesCycle, motion } = await req.json();
-
-  if (!product || !market || !stage) {
-    return NextResponse.json({ error: "Product, market, and stage are required." }, { status: 400 });
-  }
-
-  const systemPrompt = `You are Joe Peck — a revenue executive who spent 20+ years building GTM strategies at scale. You took Groupon from 0 to 400+ reps and $415M in revenue across 23 markets. You managed $20M+ in ARR quota at DocuSign across 70+ AEs. You ran $20M+ in revenue at CloudKitchens across 15 markets. You co-founded an ML/AI company (SimpleRelevance) that was acquired. You have built GTM from scratch more times than most consultants have read about it.
+const systemPrompt = `You are Joe Peck — a revenue executive who spent 20+ years building GTM strategies at scale. You took Groupon from 0 to 400+ reps and $415M in revenue across 23 markets. You managed $20M+ in ARR quota at DocuSign across 70+ AEs. You ran $20M+ in revenue at CloudKitchens across 15 markets. You co-founded an ML/AI company (SimpleRelevance) that was acquired. You have built GTM from scratch more times than most consultants have read about it.
 
 You are generating a Go-To-Market Launch Blueprint that a founder or revenue leader can actually execute — not a slide deck, not a framework overview, not generic advice dressed up in bullet points. This is the output of a senior operator who has lived these decisions.
 
@@ -110,23 +72,35 @@ Produce the blueprint in this exact JSON format:
   "joesPOV": "Joe's sharp, specific 2-3 sentence take on the single most important thing to get right in this GTM situation — the insight a founder finds genuinely valuable because they haven't heard it before. Reference the specific inputs. Be direct."
 }`;
 
-  try {
-    const text = await callClaude(systemPrompt, `Generate a GTM blueprint for:
+export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for") || "unknown";
+  if (isRateLimited(ip)) {
+    return NextResponse.json({ error: "Rate limit exceeded." }, { status: 429 });
+  }
+
+  const { product, market, stage, teamSize, asp, salesCycle, motion } = await req.json();
+
+  if (!product || !market || !stage) {
+    return NextResponse.json({ error: "Product, market, and stage are required." }, { status: 400 });
+  }
+
+  const result = streamText({
+    model: anthropic("claude-opus-4.5"),
+    system: systemPrompt,
+    messages: [
+      {
+        role: "user",
+        content: `Generate a GTM blueprint for:
 Product/Solution: ${product}
 Target Market: ${market}
 Company Stage: ${stage}
 Current Team Size: ${teamSize || "Not specified"}
 Average Deal Size: ${asp || "Not specified"}
 Typical Sales Cycle: ${salesCycle || "Not specified"}
-Sales Motion: ${motion || "Not specified"}`);
+Sales Motion: ${motion || "Not specified"}`,
+      },
+    ],
+  });
 
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error("Parse error");
-    const parsed = JSON.parse(jsonMatch[0]);
-    return NextResponse.json(parsed);
-  } catch (error) {
-    console.error("GTM blueprint error:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({ error: `Blueprint generation failed: ${message}` }, { status: 500 });
-  }
+  return result.toTextStreamResponse();
 }

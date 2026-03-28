@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { streamText } from "ai";
+import { anthropic } from "@ai-sdk/anthropic";
 
 const requestLog = new Map<string, number[]>();
 
@@ -12,55 +14,7 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
-async function callClaude(systemPrompt: string, userMessage: string, maxTokens = 1500) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not configured");
-
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model: "claude-opus-4-5-20251101",
-      max_tokens: maxTokens,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userMessage }],
-    }),
-  });
-
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Anthropic API error ${res.status}: ${err}`);
-  }
-
-  const data = await res.json();
-  return data.content[0].text as string;
-}
-
-export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for") || "unknown";
-  if (isRateLimited(ip)) {
-    return NextResponse.json(
-      { error: "Rate limit exceeded. Please try again in an hour." },
-      { status: 429 }
-    );
-  }
-
-  const { dealNotes } = await req.json();
-
-  if (!dealNotes || typeof dealNotes !== "string" || dealNotes.trim().length < 20) {
-    return NextResponse.json(
-      { error: "Please provide at least a brief description of your deal." },
-      { status: 400 }
-    );
-  }
-
-  const truncated = dealNotes.slice(0, 2000);
-
-  const systemPrompt = `You are a battle-hardened enterprise sales coach who has personally coached over 500 enterprise AEs and closed hundreds of complex, multi-stakeholder deals. You have lived MEDDPICC from both sides — as an individual contributor who used it to close $400K–$2M ACV deals, and as a VP who used it to run pipeline reviews across 70+ AEs. You do not give generic advice. You give the advice a great manager would give in a private deal review — honest, specific, and immediately actionable.
+const systemPrompt = `You are a battle-hardened enterprise sales coach who has personally coached over 500 enterprise AEs and closed hundreds of complex, multi-stakeholder deals. You have lived MEDDPICC from both sides — as an individual contributor who used it to close $400K–$2M ACV deals, and as a VP who used it to run pipeline reviews across 70+ AEs. You do not give generic advice. You give the advice a great manager would give in a private deal review — honest, specific, and immediately actionable.
 
 Your coaching philosophy: A poorly qualified deal in the forecast is worse than no deal. If the qualification is thin, say so plainly. If the deal is in trouble, name the specific risk. The rep can handle the truth. What they can't handle is a deal that slips because no one told them what was wrong.
 
@@ -91,15 +45,31 @@ Format your response as valid JSON with this exact structure:
 
 Never give a next action like 'schedule a follow-up call' — that's not coaching. Give actions like 'Get your champion to walk you through the written decision criteria document before EOW — if they can't produce one, the criteria aren't defined yet and that's your job to fix.'`;
 
-  try {
-    const text = await callClaude(systemPrompt, `Analyze these deal notes:\n\n${truncated}`);
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error("Could not parse response");
-    const parsed = JSON.parse(jsonMatch[0]);
-    return NextResponse.json(parsed);
-  } catch (error) {
-    console.error("Deal coach error:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({ error: `Analysis failed: ${message}` }, { status: 500 });
+export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for") || "unknown";
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { error: "Rate limit exceeded. Please try again in an hour." },
+      { status: 429 }
+    );
   }
+
+  const { dealNotes } = await req.json();
+
+  if (!dealNotes || typeof dealNotes !== "string" || dealNotes.trim().length < 20) {
+    return NextResponse.json(
+      { error: "Please provide at least a brief description of your deal." },
+      { status: 400 }
+    );
+  }
+
+  const truncated = dealNotes.slice(0, 2000);
+
+  const result = streamText({
+    model: anthropic("claude-opus-4.5"),
+    system: systemPrompt,
+    messages: [{ role: "user", content: `Analyze these deal notes:\n\n${truncated}` }],
+  });
+
+  return result.toTextStreamResponse();
 }

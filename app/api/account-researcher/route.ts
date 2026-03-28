@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { streamText } from "ai";
+import { anthropic } from "@ai-sdk/anthropic";
 
 const requestLog = new Map<string, number[]>();
 
@@ -10,34 +12,6 @@ function isRateLimited(ip: string): boolean {
   if (requests.length >= maxRequests) return true;
   requestLog.set(ip, [...requests, now]);
   return false;
-}
-
-async function callClaude(systemPrompt: string, userMessage: string, maxTokens = 2000) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not configured");
-
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model: "claude-opus-4-5-20251101",
-      max_tokens: maxTokens,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userMessage }],
-    }),
-  });
-
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Anthropic API error ${res.status}: ${err}`);
-  }
-
-  const data = await res.json();
-  return data.content[0].text as string;
 }
 
 const COMPANY_PROFILES: Record<string, string> = {
@@ -55,21 +29,7 @@ const COMPANY_PROFILES: Record<string, string> = {
 
 const ALLOWED_COMPANIES = Object.keys(COMPANY_PROFILES);
 
-export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for") || "unknown";
-  if (isRateLimited(ip)) {
-    return NextResponse.json({ error: "Rate limit exceeded." }, { status: 429 });
-  }
-
-  const { company } = await req.json();
-
-  if (!company || !ALLOWED_COMPANIES.includes(company)) {
-    return NextResponse.json({ error: "Please select a valid company." }, { status: 400 });
-  }
-
-  const profile = COMPANY_PROFILES[company];
-
-  const systemPrompt = `You are a senior revenue intelligence analyst — the kind that top-tier PE firms and enterprise sales teams rely on before major accounts. You produce briefs that make sellers sound like they've been following this company for months, even on a first call. You understand business strategy, not just sales tactics.
+const systemPrompt = `You are a senior revenue intelligence analyst — the kind that top-tier PE firms and enterprise sales teams rely on before major accounts. You produce briefs that make sellers sound like they've been following this company for months, even on a first call. You understand business strategy, not just sales tactics.
 
 Your standard: a senior AE should read your brief and immediately have 3 things they can say in the first two minutes of an executive meeting that will make the buyer lean forward. Generic observations do not meet your standard. "They're focused on growth" is not intelligence. "Their latest earnings call flagged rep ramp time as their #1 sales productivity concern" is intelligence.
 
@@ -101,17 +61,51 @@ Respond in this exact JSON format:
   "talkingPoints": ["Specific insight or stat that will make the buyer say 'I hadn't thought about it that way'", "Specific business outcome you can reference from a comparable company or situation", "Specific question to ask that positions you as strategic, not transactional"]
 }`;
 
-  try {
-    const text = await callClaude(systemPrompt, `Generate a full account research brief for: ${company}\n\nCompany context: ${profile}`);
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error("Parse error");
-    const parsed = JSON.parse(jsonMatch[0]);
-    return NextResponse.json({ company, ...parsed });
-  } catch (error) {
-    console.error("Account researcher error:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({ error: `Research failed: ${message}` }, { status: 500 });
+export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for") || "unknown";
+  if (isRateLimited(ip)) {
+    return NextResponse.json({ error: "Rate limit exceeded." }, { status: 429 });
   }
+
+  const { company } = await req.json();
+
+  if (!company || !ALLOWED_COMPANIES.includes(company)) {
+    return NextResponse.json({ error: "Please select a valid company." }, { status: 400 });
+  }
+
+  const profile = COMPANY_PROFILES[company];
+
+  const result = streamText({
+    model: anthropic("claude-opus-4.5"),
+    system: systemPrompt,
+    messages: [
+      {
+        role: "user",
+        content: `Generate a full account research brief for: ${company}\n\nCompany context: ${profile}`,
+      },
+    ],
+  });
+
+  // Prepend company name as a header line so client can extract it from the stream
+  const companyHeader = `__COMPANY__:${company}\n`;
+  const encoder = new TextEncoder();
+
+  const stream = new ReadableStream({
+    async start(controller) {
+      controller.enqueue(encoder.encode(companyHeader));
+      const reader = result.textStream.getReader();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        controller.enqueue(encoder.encode(value));
+      }
+      controller.close();
+    },
+  });
+
+  return new Response(stream, {
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
+  });
 }
 
 export async function GET() {

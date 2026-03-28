@@ -26,27 +26,55 @@ const motions = ["PLG (Product-Led Growth)", "SLG (Sales-Led Growth)", "Hybrid P
 
 export default function GTMBlueprintClient() {
   const [form, setForm] = useState({ product: "", market: "", stage: "", teamSize: "", asp: "", salesCycle: "", motion: "" });
-  const [loading, setLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [streamedText, setStreamedText] = useState("");
   const [result, setResult] = useState<GTMBlueprint | null>(null);
   const [error, setError] = useState("");
 
   const generate = async () => {
-    setLoading(true);
-    setError("");
+    setIsStreaming(true);
+    setStreamedText("");
     setResult(null);
-    try {
-      const res = await fetch("/api/gtm-blueprint", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+    setError("");
+
+    const res = await fetch("/api/gtm-blueprint", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+
+    if (!res.ok) {
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Generation failed");
-      setResult(data);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong");
-    } finally {
-      setLoading(false);
+      setError(data.error || "Generation failed");
+      setIsStreaming(false);
+      return;
+    }
+
+    const reader = res.body!.getReader();
+    const decoder = new TextDecoder();
+    let accumulated = "";
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        accumulated += decoder.decode(value, { stream: true });
+        setStreamedText(accumulated);
+      }
+    } catch {
+      setError("Stream interrupted");
+      setIsStreaming(false);
+      return;
+    }
+
+    setIsStreaming(false);
+
+    try {
+      const jsonMatch = accumulated.match(/\{[\s\S]*\}/);
+      if (jsonMatch) setResult(JSON.parse(jsonMatch[0]));
+      else setError("Failed to parse response");
+    } catch {
+      setError("Failed to parse response");
     }
   };
 
@@ -142,10 +170,10 @@ export default function GTMBlueprintClient() {
         <div className="mt-6">
           <button
             onClick={generate}
-            disabled={!isValid || loading}
+            disabled={!isValid || isStreaming}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-accent hover:bg-accent-light disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-accent/25"
           >
-            {loading ? (
+            {isStreaming ? (
               <><svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg> Generating Blueprint...</>
             ) : "Generate GTM Blueprint"}
           </button>
@@ -154,8 +182,30 @@ export default function GTMBlueprintClient() {
       </div>
 
       <AnimatePresence>
+        {isStreaming && (
+          <motion.div
+            key="streaming"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="card p-6 mb-6"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex gap-1">
+                <span className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "0ms" }} />
+                <span className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "150ms" }} />
+                <span className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "300ms" }} />
+              </div>
+              <span className="text-white/40 text-xs uppercase tracking-wide">Generating Blueprint...</span>
+            </div>
+            <pre className="text-white/30 text-xs font-mono leading-relaxed whitespace-pre-wrap overflow-hidden max-h-32">
+              {streamedText}
+            </pre>
+          </motion.div>
+        )}
+
         {result && (
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="space-y-6">
+          <motion.div key="result" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="space-y-6">
             {/* Summary */}
             <div className="card p-8">
               <div className="text-accent text-xs uppercase tracking-widest mb-3 font-medium">Executive Summary</div>
