@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const requestLog = new Map<string, number[]>();
 
@@ -78,8 +81,8 @@ Produce a focused, actionable GTM blueprint in this JSON format:
 Be specific. Use real numbers. Draw on patterns from actual GTM builds, not generic advice.`;
 
   try {
-    const { default: Anthropic } = await import("@anthropic-ai/sdk");
-    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+
     const message = await client.messages.create({
       model: "claude-opus-4-5-20251101",
       max_tokens: 3000,
