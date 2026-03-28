@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: "Joe Peck — AI-Powered Sales Leadership",
   description:
     "Senior SaaS sales executive and AI strategist helping revenue teams sell smarter. 20+ years scaling organizations from $0 to $400M+.",
+  keywords: "AI sales strategy, fractional CRO, AI powered sales, B2B sales leadership, sales AI tools, GTM strategy, revenue operations, AI agent sales, fractional VP Sales, sales transformation",
   openGraph: {
     title: "Joe Peck — AI-Powered Sales Leadership",
     description:

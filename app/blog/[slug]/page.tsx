@@ -19,10 +19,10 @@ const posts: Record<string, {
     readTime: "10 min read",
     date: "March 2026",
     dateISO: "2026-03-28",
-    description: "Gartner says AI agents will outnumber human sellers 10-to-1 by 2028. McKinsey says only 6% of companies are extracting real value from AI. Forrester says B2B buyers will send their own AI agents to negotiate with your AI agents. Here's what the data actually means for revenue leaders who are paying attention.",
+    description: "Gartner predicts AI agents will outnumber human sales reps 10-to-1 by 2028 — and intermediate $15 trillion in B2B spending. McKinsey says only 6% of companies extract real AI value. Forrester says buyer agents are already negotiating autonomously. Here's what the data actually means for revenue leaders.",
     content: `Let me give you three data points and then tell you why most people are drawing the wrong conclusions from all of them.
 
-**Data point one:** Gartner predicts that by 2028, AI agents will outnumber human sellers by a factor of ten. In the same breath, they predict that fewer than 40% of sellers will report that those agents actually improved their productivity. Ten times the agents. Less than half the reps feeling the benefit. That's not a rounding error — that's a structural warning.
+**Data point one:** Gartner predicts that by 2028, AI agents will outnumber human sellers by a factor of ten — and will intermediate over $15 trillion in B2B spending. In the same breath, Gartner predicts that fewer than 40% of sellers will report that those agents actually improved their productivity. Ten times the agents. $15 trillion in autonomous transactions. Less than half the reps feeling the benefit. That's not a rounding error — that's a structural warning.
 
 **Data point two:** McKinsey's 2025 State of AI report found that 88% of organizations are now using AI in at least one business function. Of those, only 6% — six percent — qualify as "high performers" who are extracting meaningful bottom-line value. The other 94% are running AI tools and not moving the needle.
 
@@ -609,16 +609,40 @@ export function generateStaticParams() {
   return Object.keys(posts).map((slug) => ({ slug }));
 }
 
+const postKeywords: Record<string, string[]> = {
+  "ai-agents-will-outnumber-sellers": [
+    "AI agents in sales", "AI sales agents 2028", "Gartner AI agents prediction",
+    "future of B2B sales", "agentic AI sales", "AI replacing sales reps",
+    "B2B buyer agents", "AI sales automation", "sales AI forecast",
+    "McKinsey AI in sales", "Forrester B2B predictions 2026", "AI powered sales",
+    "revenue team AI strategy", "autonomous sales agents",
+  ],
+  "what-changed-in-ai-sales-2025": [
+    "AI sales tools 2025", "AI in sales 2026", "best AI tools for sales leaders",
+    "sales AI trends", "AI powered sales strategy",
+  ],
+  "fractional-cro-model": [
+    "fractional CRO", "fractional sales leadership", "fractional VP Sales",
+    "hire fractional CRO", "fractional chief revenue officer", "B2B sales consulting",
+  ],
+  "ai-agent-budget-experiment": [
+    "AI agent for sales", "autonomous AI sales agent", "AI outbound prospecting",
+    "build AI sales agent", "AI pipeline generation",
+  ],
+};
+
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const post = posts[params.slug];
   if (!post) return {};
 
   const url = `https://joepeck.ai/blog/${params.slug}`;
   const ogTitle = `${post.title} — Joe Peck`;
+  const keywords = postKeywords[params.slug] || [post.category, "B2B Sales", "AI Strategy", "Sales Leadership"];
 
   return {
     title: ogTitle,
     description: post.description,
+    keywords: keywords.join(", "),
     authors: [{ name: "Joe Peck", url: "https://joepeck.ai" }],
     openGraph: {
       title: ogTitle,
@@ -626,16 +650,19 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
       url,
       type: "article",
       publishedTime: post.dateISO,
+      modifiedTime: post.dateISO,
       authors: ["Joe Peck"],
-      tags: [post.category, "Sales Leadership", "AI Strategy", "B2B Sales"],
+      tags: keywords.slice(0, 6),
       siteName: "Joe Peck",
     },
     twitter: {
       card: "summary_large_image",
       title: ogTitle,
       description: post.description,
+      creator: "@joepeck",
     },
     alternates: { canonical: url },
+    robots: { index: true, follow: true, "max-snippet": -1, "max-image-preview": "large", "max-video-preview": -1 },
   };
 }
 
@@ -721,7 +748,10 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
       "@type": "WebPage",
       "@id": `https://joepeck.ai/blog/${params.slug}`,
     },
-    keywords: [post.category, "B2B Sales", "AI Strategy", "Sales Leadership", "Revenue Operations"].join(", "),
+    keywords: (postKeywords[params.slug] || [post.category, "B2B Sales", "AI Strategy", "Sales Leadership"]).join(", "),
+    wordCount: post.content.split(" ").length,
+    timeRequired: post.readTime,
+    isAccessibleForFree: true,
   };
 
   return (
