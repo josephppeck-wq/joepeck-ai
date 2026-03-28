@@ -112,7 +112,7 @@ The window to build this capability before it becomes table stakes is probably 1
 
 ---
 
-*The data in this piece draws on Gartner's November 2025 predictions report, McKinsey's 2025 State of AI survey, Forrester's 2026 B2B predictions, Salesforce's 2024 State of Sales report, and MarketsandMarkets AI sales market sizing research. All forecasts are projections — the future is uncertain. But the direction is not.*`,
+*The data in this piece draws on Gartner's November 2025 predictions report ("AI Agents Poised to Reshape Sales"); McKinsey's 2025 State of AI global survey; Forrester's 2026 B2B Marketing, Sales, and Product Predictions report; Salesforce's 6th State of Sales report (2024); HubSpot's 2024 State of AI in Sales report; and P&S Intelligence's AI in Sales Market sizing research. All forecasts are projections — the future is uncertain. But the direction is not.*`,
   },
   "what-changed-in-ai-sales-2025": {
     title: "What Changed in AI Sales Tools in 2025 — And What's Coming in 2026",
