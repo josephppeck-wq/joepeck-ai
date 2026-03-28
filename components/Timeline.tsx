@@ -3,13 +3,62 @@
 import { motion } from "framer-motion";
 
 const career = [
-  { company: "Prokeep", period: "2024 – 2025", title: "Senior Director of Sales", highlights: "Designed GTM strategy · $1M+ new ARR · 3 new verticals", current: false },
-  { company: "CloudKitchens", period: "2022 – 2023", title: "Head of Sales, Central U.S.", highlights: "4 regional teams · 15 markets · $20M+ revenue", current: false },
-  { company: "DocuSign", period: "2019 – 2022", title: "AVP & RVP of Sales", highlights: "70+ AEs · $20M+ ARR quota · 41% multi-product adoption", current: false },
-  { company: "SpringCM → DocuSign", period: "2018 – 2022", title: "VP Business Development", highlights: "Founded BD org, $1.5M new revenue in 6 months · Executive sponsor on $10M+ ACV deals", current: false },
-  { company: "SimpleRelevance", period: "2013 – 2016", title: "Co-Founder", highlights: "Built ML/predictive analytics SaaS · Acquired by Rise Interactive", current: false },
-  { company: "Groupon", period: "2010 – 2012", title: "Regional VP of Sales", highlights: "0 to 400+ sellers · $415M+ revenue · 23 new markets", current: false },
-  { company: "CareerBuilder", period: "2004 – 2010", title: "Sales Director", highlights: "Built SMB sales team from 0 to 240 sellers", current: false },
+  {
+    company: "Prokeep",
+    period: "Nov 2024 – Nov 2025",
+    title: "Senior Director of Sales",
+    highlights: "GTM strategy driving 30% of company revenue · 3× pipeline expansion · 3 new verticals",
+    current: false,
+    badge: null,
+  },
+  {
+    company: "CloudKitchens",
+    period: "Nov 2022 – Dec 2023",
+    title: "Head of Sales, Central U.S.",
+    highlights: "4 regional teams · 15 markets · $20M+ revenue · 300% increase in outbound demos",
+    current: false,
+    badge: null,
+  },
+  {
+    company: "DocuSign",
+    period: "Jan 2019 – Sept 2022",
+    title: "AVP & RVP of Sales",
+    highlights: "70+ AEs · $20M+ ARR quota · $15M net new ARR · Multi-product adoption 8% → 41%",
+    current: false,
+    badge: null,
+  },
+  {
+    company: "SpringCM → DocuSign",
+    period: "Feb 2018 – Sept 2022",
+    title: "VP Business Development",
+    highlights: "Founded BD org, $1.5M new revenue in 6 months · Executive sponsor on $10M+ ACV deals",
+    current: false,
+    badge: null,
+  },
+  {
+    company: "SimpleRelevance",
+    period: "Jan 2013 – Dec 2016",
+    title: "Co-Founder & VP",
+    highlights: "Built ML/predictive analytics SaaS for Fortune 500 clients · Acquired by Rise Interactive",
+    current: false,
+    badge: "Co-Founded",
+  },
+  {
+    company: "Groupon",
+    period: "Aug 2010 – Sept 2012",
+    title: "Regional Vice President",
+    highlights: "0 to 400+ sellers · $415M+ revenue · 23 new markets · Consumer Goods at $8M/mo run rate",
+    current: false,
+    badge: null,
+  },
+  {
+    company: "CareerBuilder",
+    period: "2004 – 2010",
+    title: "Sales Director",
+    highlights: "Built SMB team from 0 to 240 sellers · $20M division revenue",
+    current: false,
+    badge: null,
+  },
 ];
 
 export default function Timeline() {
@@ -20,12 +69,13 @@ export default function Timeline() {
           {/* Left */}
           <div className="lg:sticky lg:top-32 lg:self-start">
             <div className="mb-4"><span className="tag">Experience</span></div>
-            <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-8 leading-tight">
+            <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-4 leading-tight">
               The Track<br /><span className="accent-text">Record</span>
             </h2>
-            <p className="text-white/55 leading-relaxed mb-12 text-base lg:text-lg">
+            <p className="text-white/55 leading-relaxed mb-2 text-base lg:text-lg">
               Two decades of building. Now available to build for you.
             </p>
+            <p className="text-accent text-sm mb-12">Currently accepting a limited number of advisory and fractional engagements.</p>
 
             <div className="card p-6 mb-8">
               <div className="flex items-start gap-4">
@@ -58,13 +108,17 @@ export default function Timeline() {
                 className="relative pl-12 pb-10"
               >
                 {i < career.length - 1 && <div className="timeline-line" />}
-                <div className={`absolute left-0 top-1 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${role.current ? "bg-accent/20 border-2 border-accent" : "bg-white/05 border border-white/12"}`}>
-                  <div className={`w-2 h-2 rounded-full ${role.current ? "bg-accent" : "bg-white/30"}`} />
+                <div className={`absolute left-0 top-1 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${role.badge === "Co-Founded" ? "bg-violet-500/20 border-2 border-violet-400" : "bg-white/05 border border-white/12"}`}>
+                  <div className={`w-2 h-2 rounded-full ${role.badge === "Co-Founded" ? "bg-violet-400" : "bg-white/30"}`} />
                 </div>
                 <div className="pt-1">
                   <div className="flex items-center gap-3 mb-1 flex-wrap">
                     <span className="text-white font-semibold text-base">{role.company}</span>
-                    {role.current && <span className="tag text-xs px-2 py-0.5">Current</span>}
+                    {role.badge && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-violet-500/15 text-violet-400 border border-violet-500/25">
+                        {role.badge}
+                      </span>
+                    )}
                   </div>
                   <div className="text-accent text-sm font-medium mb-1">{role.title}</div>
                   <div className="text-white/35 text-xs mb-3">{role.period}</div>

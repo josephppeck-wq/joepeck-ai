@@ -433,6 +433,8 @@ That's the moment your forecast goes from fiction to intelligence.`,
     description: "I built an autonomous AI agent that runs on a Mac Mini in my home office. What I learned changed how I think about every role on a revenue team — and the future of sales organizations.",
     content: `There's a Mac Mini sitting on a shelf in my home office. It's been running continuously for the past several months, doing work that used to require a team.
 
+A quick note before we dive in: I'm not new to AI. In 2013, I co-founded SimpleRelevance — a machine-learning SaaS company that sold predictive analytics to Fortune 500 clients before most people had heard the term "AI." We were acquired by Rise Interactive in 2015. So when I say I build with AI, I mean it in the deepest sense — not as a user of tools, but as someone who has built the tools themselves.
+
 It monitors industry news. It researches accounts. It drafts outreach. It synthesizes intelligence and delivers it on a schedule. It doesn't take days off. It doesn't have a bad week. It doesn't need to be managed.
 
 Building it taught me more about the future of revenue teams than 20 years of managing humans did.
@@ -485,6 +487,8 @@ I'd rather be first.`,
     dateISO: "2024-12-01",
     description: "MEDDPICC isn't dead — it's about to get a major upgrade. Here's how AI changes the cost of gathering qualification data without changing the fundamentals of why the framework works.",
     content: `MEDDPICC isn't going anywhere. Let me be clear about that upfront, because I've seen the hot takes suggesting that AI makes deal qualification frameworks obsolete. They're wrong.
+
+I've run MEDDPICC, SPICED, Sandler, and Challenger across hundreds of reps over two decades. Each framework serves a purpose. AI doesn't replace any of them — it changes the cost of executing them.
 
 What AI does is change the cost of gathering the information MEDDPICC demands — dramatically. And that changes how you should apply it.
 

@@ -26,8 +26,8 @@ const sampleOutputs = [
   {
     company: "Velocity Inc",
     contact: "Marcus Webb, CRO",
-    subject: "DocuSign went from 41% to 68% multi-product — here's how",
-    opener: "Marcus — I led the multi-product motion at DocuSign that moved attach rate from 41% to 68% in 18 months. I noticed Velocity launched two new product lines this year. The GTM coordination challenge is real. I have a playbook that might be relevant.",
+    subject: "DocuSign multi-product adoption went from 8% to 41% — here's how",
+    opener: "Marcus — I led the multi-product motion at DocuSign that moved adoption from 8% to 41%. I noticed Velocity launched two new product lines this year. The GTM coordination challenge is real. I have a playbook that might be relevant.",
     score: 94,
   },
   {

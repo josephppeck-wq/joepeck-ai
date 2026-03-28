@@ -26,12 +26,13 @@ export default function About() {
               <br />
               <span className="accent-text">to Scaling Intelligence</span>
             </h2>
+
             <div className="space-y-5">
               {[
-                "I've spent two decades in the trenches of SaaS sales — building teams from zero, opening new markets, and driving hundreds of millions in revenue at companies like Groupon, DocuSign, and CloudKitchens.",
-                "Now I'm focused on what I believe is the biggest unlock in the history of B2B sales: artificial intelligence. Not the hype. The real, practical application of AI to pipeline generation, deal execution, forecasting, enablement, and everything in between.",
-                "I don't just talk about AI — I build with it. I run autonomous AI agents, architect workflows, and develop frameworks that give revenue teams a genuine competitive edge.",
-                "Whether you're a startup trying to find product-market fit or an enterprise looking to transform your GTM motion, I can help.",
+                "I've spent two decades building SaaS revenue organizations — from zero to 400+ sellers, from first dollar to $415M+, at companies like Groupon, DocuSign, and CloudKitchens.",
+                "But here's what makes my background different: I didn't just discover AI last year. In 2013, I co-founded SimpleRelevance, a machine-learning SaaS platform that sold predictive analytics to Fortune 500 clients in Financial Services, Media, and Retail. We were acquired by Rise Interactive in 2015. I've been building at the intersection of AI and revenue since before it was a buzzword.",
+                "Today, I combine that deep operating experience with hands-on AI development. I build autonomous agents, AI-powered prospecting systems, and intelligent forecasting tools — not as demos, but as working systems that give revenue teams a real competitive edge.",
+                "Whether you're a startup trying to find product-market fit or an enterprise looking to transform your GTM motion, I bring something rare: a leader who has scaled massive sales organizations AND who builds the technology to make them better.",
               ].map((para, i) => (
                 <motion.p
                   key={i}

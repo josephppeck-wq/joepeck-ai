@@ -39,9 +39,9 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[1.05] mb-8"
         >
-          <span className="gradient-text">The CRO who</span>
+          <span className="gradient-text">The Sales Leader</span>
           <br />
-          <span className="accent-text">builds AI agents.</span>
+          <span className="accent-text">Who Builds AI.</span>
         </motion.h1>
 
         {/* Subtext */}
@@ -51,8 +51,8 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="max-w-2xl mx-auto text-lg lg:text-xl text-white/55 leading-relaxed mb-12"
         >
-          20 years scaling SaaS teams to $400M+. Now I build the AI tools and strategies
-          that make your next $100M inevitable.
+          20 years scaling SaaS teams to $415M+ in revenue. Co-founded an ML company (acquired).
+          Now I build the AI tools and strategies that give revenue teams a structural competitive advantage.
         </motion.p>
 
         {/* CTAs */}
