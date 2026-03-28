@@ -1,0 +1,78 @@
+---
+title: "The $20M Forecast That Was Never Right — and How I Finally Fixed It"
+slug: "forecast-that-was-never-right"
+date: "April 2026"
+dateISO: "2026-04-14"
+category: "Revenue Operations"
+readTime: "8 min read"
+excerpt: "Forecasting fails because we ask humans to objectively assess the probability of their own deals closing. That was always the problem."
+description: "After carrying a $20M+ ARR quota at DocuSign, the forecast was never right for one consistent reason — human psychology. Here's how AI-assisted forecasting finally fixes it."
+author: "Joe Peck"
+keywords: ["sales forecasting AI", "forecast accuracy", "pipeline review AI", "revenue forecasting", "sales operations AI"]
+---
+
+It's 8:45 AM on a Monday. You're three days before the end of the quarter. You're in a conference room with your CRO, your CFO, and a deck that shows you 94% likely to hit the number.
+
+You know it's wrong. They know it's wrong. The number on the slide is what your reps submitted, filtered through your RVPs' optimism, filtered through your own reluctance to deliver bad news to a room of people who are about to have a very uncomfortable conversation. Nobody in the room actually believes the 94%.
+
+This is not a hypothetical. This is a scene I lived through multiple times, including when I was carrying a $20M+ ARR quota as AVP at DocuSign. And the thing that's hard to admit is that the forecast being wrong wasn't primarily a data problem or a systems problem. It was a psychology problem.
+
+## Why Forecasting Fails
+
+The core issue: we ask human beings to objectively assess the probability of their own deals closing. This is structurally impossible.
+
+Three psychological mechanisms guarantee the forecast will be wrong:
+
+**Optimism bias.** Every rep believes their deal is special. The procurement process that usually takes six weeks will move faster because the champion is enthusiastic. The budget that typically requires three approvals is already secured. The competition doesn't have the same relationships. Every deal has a story that explains why it's different from the base rate. Almost none of those stories are true.
+
+**Anchoring.** The first probability a rep assigns to a deal becomes an anchor that's remarkably hard to move even as evidence changes. A rep who submitted a deal at 70% in week 2 will continue to submit it at 70% in week 8 even when no one from the buying team has responded to an email in 19 days. The number anchors to the early enthusiasm and resists updating.
+
+**Sunk cost fallacy.** A rep who has invested three months in a deal is psychologically committed to believing it will close. The honest forecast — "this deal is probably not going to close this quarter" — requires them to admit that three months of work is at risk. Very few people are willing to say that in a Monday morning pipeline review.
+
+I don't say this to criticize reps. These are universal human tendencies. The problem is that the forecasting system was designed assuming these tendencies didn't exist.
+
+## What AI Can Actually Score
+
+The reason AI changes forecasting is not that it's smarter than experienced sales managers. It's that it doesn't have feelings about the deal.
+
+Here are the behavioral signals AI can score objectively — signals that correlate with deal outcomes far more reliably than rep-submitted probability:
+
+**Days since last substantive activity.** Not a check-in email that says "just following up." A response, a meeting, a document shared, a question asked by the buyer. The decay curve on deal engagement is brutal and consistent: after 14 days of no substantive activity, close probability in the current quarter drops by roughly half. After 21 days, the deal is almost certainly not closing when the rep says it is.
+
+**Economic buyer engagement.** Has the person who actually approves budget participated in the process? In how many interactions? When was the last one? In my experience running enterprise teams at DocuSign — where deals ran $200K–$400K ACV — deals where the economic buyer had less than two direct touchpoints closed at less than 20% of the rate reps predicted.
+
+**Stage velocity relative to historical average.** How long is this deal taking compared to deals that closed at similar ACV in this segment? A deal moving 40% slower than average isn't necessarily dead, but it should be flagged. The rep's pipeline review narrative almost never surfaces this.
+
+**Multi-threading depth.** How many contacts at the buying organization have been engaged? Deals with a single champion and no broader stakeholder engagement are fragile in ways that don't show up in rep confidence scores.
+
+**Champion response time.** A champion who used to respond within 4 hours is now taking 3 days. This is a signal. The rep notices it but rarely updates their forecast based on it because it's uncomfortable to do so.
+
+## Before and After
+
+The pipeline review I used to run at DocuSign took 90 minutes per team and spent the majority of that time on status updates. "Where are we with Acme?" "Still in legal review." "Okay. What's the path to getting it out of legal?" This is theater. The rep knows the answer. The manager knows the answer. The answer is the same as it was last week.
+
+The pipeline review I run now takes 20 minutes. Here's why:
+
+The AI scoring runs before the meeting. By the time I sit down with a rep or an RVP, I already have a ranked list of deals by risk, flagged with the specific behavioral signals that are concerning. I don't need to ask "where are we with Acme?" — I can see that no one from Acme has opened an email in 11 days and the economic buyer has never been on a call. That's the question I walk in with.
+
+The 20-minute meeting is entirely about strategy, not status. What are we doing about the Acme engagement gap? What's the plan to get the economic buyer on a call? What's our alternative path if that call doesn't happen before quarter end? That's a different conversation, and it's the only conversation worth having.
+
+## The Parallel Forecast
+
+The specific tactic I recommend: run two forecasts simultaneously, every week.
+
+One is the rep-submitted forecast — what the rep believes the probability is, based on their qualitative judgment and relationship knowledge.
+
+The second is the AI-scored forecast — what the behavioral signals suggest the probability is, based on engagement data.
+
+Coach to the gap. When a rep submits a deal at 80% and the AI scores it at 35%, that's your coaching conversation for the week. Not "the AI says you're wrong" — that's a bad conversation. But "walk me through why you're confident this is closing. The engagement pattern suggests the buying team has gone quiet. What's your read?" That conversation generates useful information and develops the rep's forecasting instincts.
+
+Over time, the reps who respond well to this — who internalize the behavioral signals and update their own judgment based on them — become dramatically more accurate forecasters. The reps who resist it consistently tend to be the ones whose deals also consistently slip.
+
+## What This Actually Changes
+
+The most important thing the AI-assisted forecast changes is the manager's ability to intervene early. The reason deals slip at the end of the quarter is not that problems arise in the last week — it's that problems that arose three weeks earlier were not surfaced in time for anyone to do anything about them.
+
+If the behavioral scoring is running weekly and you're reviewing the flags, you have 3–4 weeks to change the trajectory of an at-risk deal. If you're relying on rep-submitted forecasts and weekly status calls, you often have days. The math on recovery time is dramatically different.
+
+I built the Forecast Truth Machine at [joepeck.ai/projects/forecast-machine](https://joepeck.ai/projects/forecast-machine) to make this kind of analysis accessible without a six-figure RevOps build. Paste in your deal data, get an honest read on what the signals actually say. It's the version of this I wish I'd had sitting across from my CRO at 8:45 AM, three days before end of quarter.

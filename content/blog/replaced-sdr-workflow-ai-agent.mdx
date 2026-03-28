@@ -1,0 +1,78 @@
+---
+title: "I Replaced 40% of My SDR Workflow with an AI Agent. Here's Exactly What Happened."
+slug: "replaced-sdr-workflow-ai-agent"
+date: "April 2026"
+dateISO: "2026-04-07"
+category: "AI Tools"
+readTime: "8 min read"
+excerpt: "40% of what a typical SDR does is research, admin, and coordination. An AI agent eliminates that. Here's the exact architecture and the honest results."
+description: "A detailed breakdown of the AI agent that replaced 40% of a typical SDR workflow — what it does each morning, the 4-step architecture, what it gets wrong, and what it means for SDR team structure."
+author: "Joe Peck"
+keywords: ["SDR AI automation", "AI sales agent", "SDR workflow automation", "AI prospecting", "sales development AI"]
+---
+
+Let me give you the actual numbers before I explain the architecture, because the numbers are the reason any of this matters.
+
+A skilled SDR doing honest research — not copy-paste, not skimming, actually reading and synthesizing — can produce about 15 quality account briefs per week. I know this because I've managed SDR teams at CloudKitchens across 15 markets, at DocuSign with 70+ AEs, and watched the manual research process up close for two decades. Fifteen per week is good. Most do fewer.
+
+My AI agent produces 50 account briefs in 12 minutes. Every morning. Before I open my email.
+
+That delta — 15 per week versus 50 before breakfast — is what I mean when I say 40% of the SDR workflow is automatable right now.
+
+## What the Agent Does Each Morning
+
+The agent runs at 5:50 AM. By 6:02 AM, it's done. Here's exactly what it pulls:
+
+**Source 1: Account news.** Google News alerts for every company on my target list, filtered for signals that indicate change — leadership moves, product announcements, expansions, layoffs, funding.
+
+**Source 2: Job posting intelligence.** Hiring patterns are one of the most honest signals of where a company is investing. A company posting 12 sales ops roles in Q1 is signaling something about their infrastructure priorities that their press releases won't tell you.
+
+**Source 3: Funding and financial signals.** Crunchbase for recent rounds, SEC filings for public companies. New money usually means new priorities and new budget cycles.
+
+**Source 4: Social and professional signals.** Key executive activity — posts, job changes, conference appearances. An executive who just spoke at a conference about their company's digital transformation priorities is telling you what to lead with.
+
+The output is a structured brief for each account: what changed, what it likely means, and a suggested conversation angle. Not a template — a specific opener tied to a specific signal at that specific company.
+
+## The 4-Step Architecture
+
+**Step 1: Signal collection.** The agent queries the target account list against each source simultaneously. It's not sequential — it runs parallel queries across all sources, which is why 50 accounts takes 12 minutes rather than 4 hours.
+
+**Step 2: Relevance scoring.** Not every signal is worth acting on. A CTO departure at a 200-person SaaS company is high priority; a minor product update is not. The agent scores each signal by relevance to specific ICP criteria and conversation angles I've defined.
+
+**Step 3: Brief synthesis.** For each account with a score above threshold, Claude synthesizes the signals into a structured brief: here's what happened, here's why it matters for this conversation, here's a non-obvious angle you could open with.
+
+**Step 4: Delivery and prioritization.** The briefs land in a structured daily document, sorted by signal strength. I spend about 20 minutes reviewing, deciding which accounts to act on, and occasionally rewriting an opener that sounds too robotic.
+
+The whole thing runs on a Mac Mini in my home office. Monthly cost including API calls is about $40.
+
+## The Honest Failures
+
+Early versions had two consistent problems that took several weeks to fix.
+
+The first was hallucinated citations. In early builds, the agent would produce a brief citing a "recent article" that didn't exist, or attribute a quote to an executive that was either fabricated or badly paraphrased. This is a real and well-documented problem with AI systems that synthesize information across sources. The fix: I added a verification step that requires the agent to cite a source URL for any specific factual claim. I spot-check 5–10 briefs per week. Hallucination rate dropped by roughly 90% within a month of implementing this.
+
+The second problem was obvious openers. The agent defaulted to the lazy version of signal-based outreach: "Congrats on the Series B — would love to show you how we could help with your scaling journey." Every sales leader in the world gets 40 of those a week. I refined the prompt to push for non-obvious angles — what does this signal imply that isn't immediately visible? What's the downstream consequence of this news? The quality of suggested openers improved dramatically.
+
+Both failures have a common lesson: the agent is a reflection of the quality of the prompts and the design of the workflow. The first version is always mediocre. You iterate to value. Most people give up at version one.
+
+## What Changes for SDR Team Structure
+
+The math is uncomfortable but it's real. If one agent produces the research output of 3–4 SDRs, the headcount model for research-heavy SDR teams doesn't hold.
+
+But here's the distinction that matters: agents are excellent at research, synthesis, first-draft generation, scheduling coordination, and CRM maintenance. These are real activities that consumed real SDR hours. What agents cannot do is read the room on a call, notice the shift in a prospect's tone that signals actual interest, know that the VP you're targeting just had a rough board meeting, or build the kind of trust that comes from showing up consistently and being genuinely useful over time.
+
+The model I recommend: smaller, higher-caliber SDR teams where each rep manages 400–500 AI-assisted sequences rather than writing 15 manually. The SDR's job shifts from researcher and first-draft writer to conversation manager and relationship builder. A team of 4 exceptional SDRs with AI infrastructure will outproduce a team of 12 average SDRs without it. That's already true. It's going to become more true every quarter.
+
+## The Uncomfortable Truth
+
+Some SDR roles won't survive this. Not the job category — the specific roles defined primarily by research, list building, data entry, and template-based outreach. Those are the activities the agent replaces.
+
+The SDRs who thrive are the ones who can do what the agent cannot. They were always the best SDRs. They're now even more valuable.
+
+The SDRs who built their value proposition around volume — high dials, high emails, low genuine engagement — don't have a place to hide anymore.
+
+If you manage an SDR team, the most useful thing you can do is be honest about this with your people. The ones who lean toward the judgment side of the job have a strong career ahead of them. The ones who don't need to know so they can make informed decisions about their own development. Protecting them from the truth doesn't help them.
+
+The agent is running. The question is whether you want to design the transition or have it happen to you.
+
+See the full Autonomous SDR architecture at [joepeck.ai/projects/autonomous-sdr](https://joepeck.ai/projects/autonomous-sdr).

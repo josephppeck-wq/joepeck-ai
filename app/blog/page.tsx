@@ -1,86 +1,17 @@
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-
-const posts = [
-  {
-    slug: "ai-agents-will-outnumber-sellers",
-    title: "By 2028, AI Agents Will Outnumber Human Sellers 10 to 1. Here's What That Actually Means.",
-    excerpt: "Gartner, McKinsey, and Forrester just released data that tells a story most revenue leaders aren't ready to hear. Here's the unfiltered version.",
-    category: "AI Strategy",
-    readTime: "10 min read",
-    date: "March 2026",
-  },
-  {
-    slug: "what-changed-in-ai-sales-2025",
-    title: "What Changed in AI Sales Tools in 2025 — And What's Coming in 2026",
-    excerpt: "I've been in the trenches watching this space evolve in real time. Here's an honest assessment of what moved the needle, what was hype, and where I'm placing my bets for 2026.",
-    category: "AI Strategy",
-    readTime: "8 min read",
-    date: "March 2026",
-  },
-  {
-    slug: "fractional-cro-model",
-    title: "The Fractional CRO Model: Why More Companies Are Choosing Flexible Leadership",
-    excerpt: "The full-time CRO model made sense when companies scaled linearly. AI-era companies don't. Here's why fractional leadership is becoming the default for smart founders.",
-    category: "Sales Leadership",
-    readTime: "6 min read",
-    date: "February 2026",
-  },
-  {
-    slug: "ai-agent-budget-experiment",
-    title: "I Gave My AI Agent a Budget. Here's What Happened.",
-    excerpt: "I gave my autonomous agent $50 and told it to generate pipeline. What it did — and what it couldn't do — taught me more about the future of sales than any conference I've attended.",
-    category: "Tools & Workflows",
-    readTime: "7 min read",
-    date: "January 2026",
-  },
-  {
-    slug: "5-ai-tools-every-sales-leader",
-    title: "The 5 AI Tools Every Sales Leader Should Be Using Right Now",
-    excerpt: "Most sales leaders are still treating AI like a novelty. The ones who aren't are pulling away from the pack. Here's what's actually worth your time.",
-    category: "AI Strategy",
-    readTime: "6 min read",
-    date: "March 2025",
-  },
-  {
-    slug: "why-your-forecast-is-wrong",
-    title: "Why Your Forecast Is Wrong — And How AI Fixes It",
-    excerpt: "Every CRO has sat in a board meeting defending a number they knew was fiction. It doesn't have to be this way. AI-native forecasting changes everything.",
-    category: "Sales Leadership",
-    readTime: "5 min read",
-    date: "February 2025",
-  },
-  {
-    slug: "autonomous-ai-agent-lessons",
-    title: "I Built an Autonomous AI Agent. Here's What It Taught Me About the Future of Work.",
-    excerpt: "I spent a weekend building an agent that runs on a Mac Mini in my home office. It changed how I think about every role on a revenue team.",
-    category: "Tools & Workflows",
-    readTime: "8 min read",
-    date: "January 2025",
-  },
-  {
-    slug: "meddpicc-in-the-age-of-ai",
-    title: "MEDDPICC in the Age of AI: What Changes and What Doesn't",
-    excerpt: "The methodology isn't dead — it's about to get a significant upgrade. Here's how I think about deal qualification when AI can do half the research.",
-    category: "Sales Leadership",
-    readTime: "7 min read",
-    date: "December 2024",
-  },
-  {
-    slug: "from-zero-to-400m-playbook",
-    title: "From $0 to $400M: The Playbook I'd Run Differently Today (With AI)",
-    excerpt: "Looking back at Groupon and what I'd do differently if I had today's AI tools in my hands. The answer might surprise you.",
-    category: "AI Strategy",
-    readTime: "9 min read",
-    date: "November 2024",
-  },
-];
+import { getAllPosts } from "@/lib/blog";
 
 const categoryColors: Record<string, string> = {
   "AI Strategy": "bg-blue-500/10 text-blue-400 border-blue-500/20",
   "Sales Leadership": "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
   "Tools & Workflows": "bg-purple-500/10 text-purple-400 border-purple-500/20",
+  "Revenue Operations": "bg-orange-500/10 text-orange-400 border-orange-500/20",
+  "Sales Methodology": "bg-violet-500/10 text-violet-400 border-violet-500/20",
+  "GTM Strategy": "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+  "Sales Operations": "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+  "Career": "bg-rose-500/10 text-rose-400 border-rose-500/20",
 };
 
 export const metadata = {
@@ -89,6 +20,8 @@ export const metadata = {
 };
 
 export default function BlogPage() {
+  const posts = getAllPosts();
+
   return (
     <main>
       <Nav />

@@ -16,9 +16,12 @@
     "@next/mdx": "^14",
     "ai": "^6.0.141",
     "framer-motion": "^11",
+    "gray-matter": "^4.0.3",
     "next": "14.2.0",
+    "next-mdx-remote": "^6.0.0",
     "react": "^18",
     "react-dom": "^18",
+    "reading-time": "^1.5.0",
     "remark-gfm": "^4"
   },
   "devDependencies": {

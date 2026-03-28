@@ -1,0 +1,97 @@
+---
+title: "How to Run an AI-Assisted Pipeline Review in 20 Minutes (That Used to Take 90)"
+slug: "ai-pipeline-review-20-minutes"
+date: "May 2026"
+dateISO: "2026-05-05"
+category: "Sales Operations"
+readTime: "8 min read"
+excerpt: "AI doesn't eliminate the pipeline review. It eliminates 70 minutes of status theater so you can spend 20 minutes on strategy."
+description: "A field manual for running an AI-assisted pipeline review. Includes the exact prompt to use beforehand, a before/after agenda, and the 3 questions that matter once AI has done the pre-work."
+author: "Joe Peck"
+keywords: ["pipeline review AI", "AI sales meeting", "pipeline review best practices", "CRO AI tools", "sales operations AI"]
+---
+
+The 90-minute pipeline review has one genuine purpose and 70 minutes of activities that have nothing to do with it.
+
+The genuine purpose: identify which deals need intervention and decide what that intervention looks like.
+
+The 70 minutes of other activities: asking reps to explain what stage their deals are in, asking what happened last week, asking whether the champion is still engaged, asking about competitive dynamics that the rep mentioned two weeks ago and hasn't updated since. Status theater. Everyone in the room already has the information. The meeting is spent narrating it to each other.
+
+AI eliminates the 70 minutes. Not by making the review shorter for its own sake — by making the status information available before the meeting so the meeting can focus on the only conversation worth having.
+
+Here's exactly how to do it.
+
+## The Prompt to Run Before Every Pipeline Review
+
+This is the actual prompt I use. Paste it into Claude with your CRM export or pipeline spreadsheet attached:
+
+---
+
+*You are a senior sales operations analyst reviewing a pipeline for a B2B SaaS company. Analyze the deals below and produce a pre-meeting brief with the following sections:*
+
+*1. COMMIT RISK FLAGS: Any deal in commit or best-case that shows concerning signals (days since last activity > 10, no economic buyer engagement, stage velocity below average). List each deal with the specific signal.*
+
+*2. UPSIDE OPPORTUNITIES: Any deal in pipeline that shows positive signals suggesting it could pull forward — increased engagement frequency, economic buyer now engaged, competitive intelligence suggesting competitor stumbles.*
+
+*3. COACHING PRIORITIES: The 3 deals where manager attention will have the highest impact this week. For each, identify the specific gap and the recommended conversation.*
+
+*4. FORECAST REALITY CHECK: Compare rep-submitted commit to the behavioral signals. Flag any deal where there is a significant gap between rep confidence and engagement reality.*
+
+*Use only the data provided. Do not make assumptions about information not present. If data is missing, flag the gap rather than filling it in.*
+
+---
+
+This takes about 3 minutes to run. The output replaces 60 minutes of meeting prep and in-meeting status narration.
+
+## Before and After: What Each Minute Is Spent On
+
+**Before AI (90-minute pipeline review):**
+- Minutes 0–10: Status update on top 3 deals. Where are we, what happened last week, what's next?
+- Minutes 10–30: Rep walks through mid-pipeline deals. Manager asks clarifying questions. Most answers were already in Salesforce.
+- Minutes 30–50: Discussion of at-risk deals. This is where useful conversation starts — 30 minutes in.
+- Minutes 50–70: Competitive updates. Forecast submission discussion. Why did we move this deal out?
+- Minutes 70–90: Action items. Often the last 5 minutes because everyone is tired.
+
+**After AI (20-minute pipeline review):**
+- Minutes 0–5: Manager distributes AI brief. Everyone reads the risk flags and coaching priorities silently.
+- Minutes 5–12: Discussion of the 3 flagged coaching priorities only. No status narration — the brief has it. Pure strategy: what are we doing about this gap?
+- Minutes 12–17: Forecast reality check. Manager walks through the deals where AI scoring diverges from rep confidence. Reps explain their reasoning or update their commit.
+- Minutes 17–20: Action items assigned. Meeting ends.
+
+The 70 minutes you saved aren't "efficiency gains" in the abstract. They're 70 minutes that can go toward coaching calls, customer conversations, and deal strategy for deals that are actually worth the time.
+
+## When AI Flags a Deal the Rep Is Bullish On
+
+This is the most important moment in the new format, and it requires the most skill.
+
+The scene: the AI brief flags a deal at 35% confidence based on behavioral signals. The rep submitted it at 75%. The rep is your highest performer and they're visibly not happy about the flag.
+
+The wrong response: "The AI says this deal is at risk." This is defensively stupid. The AI doesn't have access to the phone call the rep had yesterday that isn't logged. It doesn't know that the champion texted them over the weekend. It doesn't have the relational intelligence the rep has built over four months.
+
+The right response: "Walk me through why you're confident. The behavioral signals show 14 days without a response from the economic buyer — what's your read on that?" This is a coaching conversation, not an audit. You're using the AI flag as a question, not a verdict.
+
+One of two things happens. Either the rep has genuine information that explains the gap — the EB is at a conference all week, there's a verbal from legal — and you update your read accordingly. Or the rep starts explaining and realizes mid-sentence that the deal is more at risk than they wanted to admit. Both outcomes are useful. Neither requires you to position AI as smarter than an experienced rep.
+
+## The 3 Questions That Matter in Every Pipeline Review
+
+Once AI has handled the pre-work, your 20 minutes should circle around three questions:
+
+**1. What is the specific next step that changes the trajectory of this deal?** Not "we need to get back in front of the EB." That's an objective. What is the specific next step — the email you send, the call you set up, the executive you bring in — that actually moves something?
+
+**2. Is the rep's confidence score calibrated to the evidence or to their investment in the deal?** You don't ask this out loud. You assess it based on how the rep responds to the AI flags. A well-calibrated rep updates their confidence when confronted with evidence. An overconfident rep explains why the evidence doesn't apply.
+
+**3. Which deals should we stop investing time in?** This question almost never gets asked in traditional pipeline reviews because there's no graceful way to raise it in a room where the rep has to sit there while you evaluate whether their work of the last 90 days was worth it. The AI brief gives you an impersonal way to surface it: "The behavioral signals on this one are pretty thin for an end-of-quarter push. What would make you feel good about continuing to invest here versus redirecting that energy?"
+
+## A Deal That Almost Slipped Unnoticed
+
+At Prokeep, early in my tenure, we had a deal that my most experienced rep was carrying at 80% confidence heading into the last three weeks of the quarter. Mid-six-figure expansion, existing customer, champion we'd worked with for years.
+
+Running behavioral scoring against it, I noticed that the champion — the person this rep had the deepest relationship with — hadn't responded to anything in 17 days. Not a long time in isolation. But the rep had been sending one thing a week for those three weeks. Three sends, zero responses, from someone who had previously been highly engaged.
+
+I asked the rep about it in the next pipeline review. Turned out the champion had been promoted laterally. They were no longer the decision-maker. The new DM was someone we'd never spoken to, and the deal paperwork was sitting in that person's queue with no context about why it should be prioritized.
+
+We had time to fix it. We got the executive sponsor engaged, got an intro to the new DM, and the deal closed — late, but in the quarter. If I hadn't been running behavioral signals, I would have found out about the champion change three days before quarter end. That's not a recoverable situation.
+
+The AI didn't close that deal. It just gave me the question I needed to ask three weeks earlier than I otherwise would have.
+
+Run your next pipeline review with the prompt above. And if you want to see the Deal Coach and Forecast Machine demos, they're at [joepeck.ai](https://joepeck.ai).
