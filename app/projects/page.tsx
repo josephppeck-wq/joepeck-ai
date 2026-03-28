@@ -106,7 +106,7 @@ export default function ProjectsPage() {
         <div className="flex flex-wrap gap-8 mb-16 py-8 border-y border-white/06">
           {[
             { value: "6", label: "Live Tools" },
-            { value: "3", label: "Powered by Claude Opus" },
+            { value: "4", label: "Powered by Claude Opus" },
             { value: "~30s", label: "Average response time" },
             { value: "Free", label: "No account required" },
           ].map((stat) => (

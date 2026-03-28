@@ -96,11 +96,11 @@ export default function LeadMagnet() {
               <div className="card p-8">
                 {/* Playbook preview */}
                 <div className="bg-gradient-to-br from-accent/20 to-transparent rounded-xl p-6 mb-8 border border-accent/15">
-                  <div className="text-xs text-accent/60 uppercase tracking-widest mb-2">Free Download</div>
+                  <div className="text-xs text-accent/60 uppercase tracking-widest mb-2">Free Resource</div>
                   <div className="text-white font-bold text-lg mb-1">The AI-Powered Sales Playbook</div>
                   <div className="text-white/50 text-sm">7 Workflows You Can Implement This Week</div>
                   <div className="flex items-center gap-4 mt-4">
-                    <span className="text-white/30 text-xs">PDF · 12 pages</span>
+                    <span className="text-white/30 text-xs">Sent to your inbox</span>
                     <span className="text-white/30 text-xs">·</span>
                     <span className="text-white/30 text-xs">Free forever</span>
                   </div>

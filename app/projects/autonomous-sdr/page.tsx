@@ -125,7 +125,7 @@ export default function AutonomousSDRPage() {
             <div className="card p-8">
               <div className="text-accent text-xs uppercase tracking-widest mb-6 font-medium">Built With</div>
               <div className="flex flex-wrap gap-3">
-                {["Claude Opus (reasoning)", "OpenClaw (orchestration)", "Web Search API", "Google Sheets API", "Mac Mini (always-on)", "Cron scheduling"].map((tech) => (
+                {["Claude Opus (reasoning)", "Claude API (orchestration)", "Web Search API", "Google Sheets API", "Mac Mini (always-on)", "Cron scheduling"].map((tech) => (
                   <span key={tech} className="px-4 py-2 rounded-full bg-white/04 border border-white/10 text-white/60 text-sm">{tech}</span>
                 ))}
               </div>

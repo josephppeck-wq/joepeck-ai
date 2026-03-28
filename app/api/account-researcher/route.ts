@@ -69,32 +69,36 @@ export async function POST(req: NextRequest) {
 
   const profile = COMPANY_PROFILES[company];
 
-  const systemPrompt = `You are a world-class sales researcher producing executive-quality account briefs. You have deep knowledge of enterprise SaaS companies and sales dynamics.
+  const systemPrompt = `You are a senior revenue intelligence analyst — the kind that top-tier PE firms and enterprise sales teams rely on before major accounts. You produce briefs that make sellers sound like they've been following this company for months, even on a first call. You understand business strategy, not just sales tactics.
 
-Using the company context provided, produce a comprehensive account research brief that a senior AE would use before a first executive meeting. The brief should position the seller to demonstrate business acumen and earn a second meeting.
+Your standard: a senior AE should read your brief and immediately have 3 things they can say in the first two minutes of an executive meeting that will make the buyer lean forward. Generic observations do not meet your standard. "They're focused on growth" is not intelligence. "Their latest earnings call flagged rep ramp time as their #1 sales productivity concern" is intelligence.
+
+For stakeholder engagement angles: do not say "discuss their priorities." Tell the seller HOW to engage — what hook, what question, what insight to lead with that will make that specific persona want to continue the conversation.
+
+For outreach angles: each angle must be genuinely differentiated. Not three variations of "I noticed you're growing." One angle from a strategic business event. One angle from a specific pain point their peer companies share. One angle that challenges their current assumption or status quo.
 
 Respond in this exact JSON format:
 {
-  "companyOverview": "3-4 sentences covering what they do, scale, and market position",
-  "strategicContext": "2-3 sentences on their current strategic priorities and pressures",
-  "buyingSignals": ["signal1", "signal2", "signal3"],
+  "companyOverview": "3-4 sentences covering what they do, their scale, market position, and one specific recent development that matters for context",
+  "strategicContext": "2-3 sentences on their current strategic priorities and pressures — specific, not generic. What is this company trying to prove to the market right now?",
+  "buyingSignals": ["Specific signal 1 that suggests active need or timing", "Specific signal 2", "Specific signal 3"],
   "keyStakeholders": [
-    { "role": "Chief Revenue Officer", "typicalPriorities": "...", "engagementAngle": "..." },
-    { "role": "VP of Sales", "typicalPriorities": "...", "engagementAngle": "..." },
+    { "role": "Chief Revenue Officer", "typicalPriorities": "2-3 specific things this persona cares about at a company like this", "engagementAngle": "Specific HOW to engage — the hook, question, or insight that will earn a second sentence from this person" },
+    { "role": "VP of Sales", "typicalPriorities": "...", "engagementAngle": "Specific HOW to engage — not a generic opener" },
     { "role": "Revenue Operations Leader", "typicalPriorities": "...", "engagementAngle": "..." }
   ],
   "painPoints": [
-    { "pain": "...", "impact": "...", "yourAngle": "..." },
+    { "pain": "Specific, named pain point this company likely experiences", "impact": "Business impact of this pain — quantify where possible", "yourAngle": "How to position your solution against this specific pain — be direct" },
     { "pain": "...", "impact": "...", "yourAngle": "..." },
     { "pain": "...", "impact": "...", "yourAngle": "..." }
   ],
   "outreachAngles": [
-    { "angle": "...", "subject": "...", "opener": "..." },
-    { "angle": "...", "subject": "...", "opener": "..." },
-    { "angle": "...", "subject": "...", "opener": "..." }
+    { "angle": "Strategic event angle — tied to something specific happening at the company", "subject": "Subject line that would make a CRO open the email", "opener": "2-3 sentence opener that is specific, relevant, and earns a response — not a template" },
+    { "angle": "Industry/peer insight angle — challenge their assumption or share a pattern from their peer set", "subject": "...", "opener": "..." },
+    { "angle": "Pain + solution angle — lead with a specific pain point they're visibly experiencing", "subject": "...", "opener": "..." }
   ],
-  "competitiveLandscape": "2 sentences on who else they're likely talking to and how to differentiate",
-  "talkingPoints": ["point1", "point2", "point3"]
+  "competitiveLandscape": "2 specific sentences on who else is likely in this account and what the differentiation argument should be — name competitors where relevant",
+  "talkingPoints": ["Specific insight or stat that will make the buyer say 'I hadn't thought about it that way'", "Specific business outcome you can reference from a comparable company or situation", "Specific question to ask that positions you as strategic, not transactional"]
 }`;
 
   try {
