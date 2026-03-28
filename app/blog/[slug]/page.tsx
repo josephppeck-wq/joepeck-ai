@@ -667,14 +667,29 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 }
 
 function renderInline(text: string): React.ReactNode {
-  // Handle **bold** and *italic* inline
-  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+  // Handle **bold**, *italic*, and [link text](url)
+  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\))/g);
   return parts.map((part, idx) => {
     if (part.startsWith("**") && part.endsWith("**")) {
       return <strong key={idx} className="text-white font-semibold">{part.slice(2, -2)}</strong>;
     }
-    if (part.startsWith("*") && part.endsWith("*")) {
+    if (part.startsWith("*") && part.endsWith("*") && !part.startsWith("**")) {
       return <em key={idx}>{part.slice(1, -1)}</em>;
+    }
+    const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (linkMatch) {
+      const [, linkText, href] = linkMatch;
+      const isExternal = href.startsWith("http");
+      return (
+        <a
+          key={idx}
+          href={href}
+          className="text-accent hover:text-accent-light underline underline-offset-2 transition-colors"
+          {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        >
+          {linkText}
+        </a>
+      );
     }
     return part;
   });
