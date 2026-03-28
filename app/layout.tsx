@@ -10,6 +10,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://joepeck.ai"),
+  icons: { icon: "/favicon.ico" },
   title: "Joe Peck — AI-Powered Sales Leadership",
   description:
     "Senior SaaS sales executive and AI strategist helping revenue teams sell smarter. 20+ years scaling organizations from $0 to $400M+.",

@@ -39,7 +39,7 @@ export default function ProjectsTeaser() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.6 }}
               className="mb-4"
             >
@@ -48,7 +48,7 @@ export default function ProjectsTeaser() {
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight leading-tight"
             >
@@ -60,7 +60,7 @@ export default function ProjectsTeaser() {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <Link
@@ -81,7 +81,7 @@ export default function ProjectsTeaser() {
               key={project.href}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
             >
               <Link href={project.href} className="card p-8 flex flex-col group block h-full">

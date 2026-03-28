@@ -9,28 +9,29 @@ const stats = [
   { value: "3×", label: "Average Pipeline Growth" },
 ];
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
+
 export default function About() {
   return (
     <section id="about" className="section-padding relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           {/* Left: Text */}
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="mb-4"
-            >
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0 }}
+            transition={{ staggerChildren: 0.08 }}
+          >
+            <motion.div variants={fadeUp} className="mb-4">
               <span className="tag">About</span>
             </motion.div>
 
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+              variants={fadeUp}
               className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-8 leading-tight"
             >
               From Scaling Sales Teams
@@ -47,28 +48,28 @@ export default function About() {
               ].map((para, i) => (
                 <motion.p
                   key={i}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.15 + i * 0.08 }}
+                  variants={fadeUp}
                   className="text-white/60 leading-relaxed text-base lg:text-lg"
                 >
                   {para}
                 </motion.p>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Right: Stats */}
-          <div className="lg:pt-20">
+          <motion.div
+            className="lg:pt-20"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0 }}
+            transition={{ staggerChildren: 0.1, delayChildren: 0.1 }}
+          >
             <div className="grid grid-cols-2 gap-4">
-              {stats.map((stat, i) => (
+              {stats.map((stat) => (
                 <motion.div
                   key={stat.label}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.1 + i * 0.1 }}
+                  variants={fadeUp}
                   className="card p-6 lg:p-8"
                 >
                   <div className="text-4xl lg:text-5xl xl:text-6xl font-bold accent-text mb-3 leading-none">
@@ -80,7 +81,7 @@ export default function About() {
                 </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

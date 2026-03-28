@@ -44,7 +44,7 @@ export default function Services() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0 }}
             transition={{ duration: 0.6 }}
             className="mb-4"
           >
@@ -53,7 +53,7 @@ export default function Services() {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight leading-tight"
           >
@@ -68,7 +68,7 @@ export default function Services() {
               key={service.title}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.6, delay: i * 0.12 }}
               className="card p-8 flex flex-col"
             >

@@ -11,19 +11,23 @@ export default function Contact() {
     e.preventDefault();
     setStatus("sending");
     try {
-      const res = await fetch("https://formspree.io/f/REPLACE_WITH_FORMSPREE_ID", {
+      const res = await fetch("https://formspree.io/f/xjkwbqpl", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify(form),
       });
       if (res.ok) {
         setStatus("sent");
         setForm({ name: "", email: "", message: "" });
       } else {
-        setStatus("error");
+        // Fallback: open mailto
+        window.location.href = `mailto:Joseph.p.peck@gmail.com?subject=From ${encodeURIComponent(form.name)}&body=${encodeURIComponent(form.message)}%0A%0AReply to: ${encodeURIComponent(form.email)}`;
+        setStatus("sent");
+        setForm({ name: "", email: "", message: "" });
       }
     } catch {
-      setStatus("error");
+      window.location.href = `mailto:Joseph.p.peck@gmail.com?subject=From ${encodeURIComponent(form.name)}&body=${encodeURIComponent(form.message)}%0A%0AReply to: ${encodeURIComponent(form.email)}`;
+      setStatus("sent");
     }
   };
 
@@ -42,7 +46,7 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0 }}
             transition={{ duration: 0.6 }}
             className="mb-4 flex justify-center"
           >
@@ -51,7 +55,7 @@ export default function Contact() {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-6 leading-tight"
           >
@@ -60,7 +64,7 @@ export default function Contact() {
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-white/55 text-lg leading-relaxed"
           >
@@ -74,7 +78,7 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-2 space-y-6"
           >
@@ -115,7 +119,7 @@ export default function Contact() {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:col-span-3"
           >

@@ -9,7 +9,7 @@ export default function Footer() {
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0 }}
           transition={{ duration: 0.6 }}
           className="flex flex-col sm:flex-row items-center justify-between gap-6"
         >

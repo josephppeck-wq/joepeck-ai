@@ -64,7 +64,7 @@ export default function Timeline() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.6 }}
               className="mb-4"
             >
@@ -73,7 +73,7 @@ export default function Timeline() {
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-8 leading-tight"
             >
@@ -83,7 +83,7 @@ export default function Timeline() {
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-white/55 leading-relaxed mb-12 text-base lg:text-lg"
             >
@@ -94,7 +94,7 @@ export default function Timeline() {
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="card p-6 mb-8"
             >
@@ -115,7 +115,7 @@ export default function Timeline() {
             <motion.a
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
               href="/resume.pdf"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-white/12 hover:border-accent/40 text-white/70 hover:text-white text-sm font-medium transition-all duration-300 group"
@@ -135,7 +135,7 @@ export default function Timeline() {
                   key={`${role.company}-${i}`}
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: true, amount: 0 }}
                   transition={{ duration: 0.5, delay: i * 0.08 }}
                   className="relative pl-12 pb-10"
                 >

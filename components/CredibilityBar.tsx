@@ -18,7 +18,7 @@ export default function CredibilityBar() {
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0 }}
           transition={{ duration: 0.6 }}
           className="text-center text-xs tracking-widest uppercase text-white/25 mb-10"
         >
@@ -27,7 +27,7 @@ export default function CredibilityBar() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6"
         >
@@ -36,7 +36,7 @@ export default function CredibilityBar() {
               key={company}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.4, delay: 0.1 + i * 0.08 }}
               className="text-white/25 text-base lg:text-lg font-semibold tracking-wide hover:text-white/50 transition-colors duration-300 cursor-default select-none"
             >

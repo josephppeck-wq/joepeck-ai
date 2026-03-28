@@ -48,7 +48,7 @@ export default function Insights() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.6 }}
               className="mb-4"
             >
@@ -57,7 +57,7 @@ export default function Insights() {
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight leading-tight"
             >
@@ -67,7 +67,7 @@ export default function Insights() {
           <motion.a
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             href="/blog"
             className="hidden lg:inline-flex items-center gap-2 text-white/50 hover:text-white text-sm transition-colors group"
@@ -87,7 +87,7 @@ export default function Insights() {
               href={`/blog/${post.slug}`}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
               className="card p-8 flex flex-col group cursor-pointer"
             >
