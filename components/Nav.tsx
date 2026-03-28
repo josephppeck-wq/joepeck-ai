@@ -92,7 +92,7 @@ export default function Nav() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="lg:hidden nav-blur border-t border-white/05 px-6 py-6 flex flex-col gap-4"
+          className="lg:hidden nav-blur border-t border-white/05 px-8 py-6 flex flex-col gap-4"
         >
           {links.map((link) => (
             <a
