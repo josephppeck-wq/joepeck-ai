@@ -19,7 +19,7 @@ export default function About() {
             <div className="mb-4"><span className="tag">About</span></div>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 mb-6">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-emerald-400 text-sm font-medium">Currently taking on a limited number of advisory and fractional engagements.</span>
+
             </div>
             <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-8 leading-tight">
               From Scaling Sales Teams

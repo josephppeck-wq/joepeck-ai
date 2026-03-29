@@ -75,7 +75,7 @@ export default function Timeline() {
             <p className="text-white/55 leading-relaxed mb-2 text-base lg:text-lg">
               Two decades of building. Now available to build for you.
             </p>
-            <p className="text-accent text-sm mb-12">Currently accepting a limited number of advisory and fractional engagements.</p>
+
 
             <div className="card p-6 mb-8">
               <div className="flex items-start gap-4">

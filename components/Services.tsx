@@ -75,7 +75,7 @@ export default function Services() {
           <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight leading-tight mb-4">
             How I Help
           </h2>
-          <p className="text-white/50 text-base">Currently accepting 2–3 new engagements per quarter.</p>
+
         </div>
 
         {/* Service cards */}
