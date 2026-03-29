@@ -88,6 +88,7 @@ export async function POST(req: NextRequest) {
 
   const result = streamText({
     model: anthropic("claude-opus-4-5-20251101"),
+    maxOutputTokens: 8000,
     system: systemPrompt,
     messages: [
       {
