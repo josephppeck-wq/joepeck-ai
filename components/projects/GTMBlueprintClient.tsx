@@ -31,12 +31,7 @@ export default function GTMBlueprintClient() {
   const [result, setResult] = useState<GTMBlueprint | null>(null);
   const [error, setError] = useState("");
 
-  const generate = async () => {
-    setIsStreaming(true);
-    setStreamedText("");
-    setResult(null);
-    setError("");
-
+  const attemptGenerate = async (): Promise<boolean> => {
     const res = await fetch("/api/gtm-blueprint", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -46,8 +41,7 @@ export default function GTMBlueprintClient() {
     if (!res.ok) {
       const data = await res.json();
       setError(data.error || "Generation failed");
-      setIsStreaming(false);
-      return;
+      return false;
     }
 
     const reader = res.body!.getReader();
@@ -62,20 +56,43 @@ export default function GTMBlueprintClient() {
         setStreamedText(accumulated);
       }
     } catch {
-      setError("Stream interrupted");
-      setIsStreaming(false);
-      return;
+      return false;
+    }
+
+    try {
+      const cleaned = accumulated.replace(/^```(?:json)?\n?/m, "").replace(/```$/m, "").trim();
+      const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        setResult(JSON.parse(jsonMatch[0]));
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  };
+
+  const generate = async () => {
+    setIsStreaming(true);
+    setStreamedText("");
+    setResult(null);
+    setError("");
+
+    // First attempt
+    const success = await attemptGenerate();
+
+    if (!success && !result) {
+      // Auto-retry once after a brief pause
+      setStreamedText("");
+      setError("");
+      await new Promise(r => setTimeout(r, 1500));
+      const retrySuccess = await attemptGenerate();
+      if (!retrySuccess) {
+        setError("Blueprint generation failed after retry. Please try again.");
+      }
     }
 
     setIsStreaming(false);
-
-    try {
-      const jsonMatch = accumulated.match(/\{[\s\S]*\}/);
-      if (jsonMatch) setResult(JSON.parse(jsonMatch[0]));
-      else setError("Failed to parse response");
-    } catch {
-      setError("Failed to parse response");
-    }
   };
 
   const isValid = form.product.trim().length > 5 && form.market.trim().length > 5 && form.stage;

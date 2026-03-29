@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { streamText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 
+// Extend Vercel function timeout to maximum allowed on free tier
+export const maxDuration = 60;
+
 const requestLog = new Map<string, number[]>();
 
 function isRateLimited(ip: string): boolean {
