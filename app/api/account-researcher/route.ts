@@ -59,7 +59,9 @@ Respond in this exact JSON format:
   ],
   "competitiveLandscape": "2 specific sentences on who else is likely in this account and what the differentiation argument should be — name competitors where relevant",
   "talkingPoints": ["Specific insight or stat that will make the buyer say 'I hadn't thought about it that way'", "Specific business outcome you can reference from a comparable company or situation", "Specific question to ask that positions you as strategic, not transactional"]
-}`;
+}
+
+IMPORTANT: Return ONLY the raw JSON object. No markdown code fences, no backticks around the JSON, no preamble, no explanation. Start your response with { and end with }.`;
 
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") || "unknown";

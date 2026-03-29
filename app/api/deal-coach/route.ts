@@ -43,7 +43,9 @@ Format your response as valid JSON with this exact structure:
   "topThreeActions": ["Specific action 1 — who, what, by when", "Specific action 2 — who, what, by when", "Specific action 3 — who, what, by when"]
 }
 
-Never give a next action like 'schedule a follow-up call' — that's not coaching. Give actions like 'Get your champion to walk you through the written decision criteria document before EOW — if they can't produce one, the criteria aren't defined yet and that's your job to fix.'`;
+Never give a next action like 'schedule a follow-up call' — that's not coaching. Give actions like 'Get your champion to walk you through the written decision criteria document before EOW — if they can't produce one, the criteria aren't defined yet and that's your job to fix.'
+
+IMPORTANT: Return ONLY the raw JSON object. No markdown code fences, no backticks around the JSON, no preamble, no explanation. Start your response with { and end with }.`;
 
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") || "unknown";

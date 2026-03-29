@@ -50,7 +50,9 @@ Analyze the win/loss summaries provided and return a strategic analysis in this 
     { "objection": "...", "frequency": "High|Medium|Low", "recommendedResponse": "..." }
   ],
   "strategicRecommendation": "The ONE thing this sales organization should change immediately based on the data. Specific, concrete, and briefable to a frontline manager in 60 seconds. This should be the insight that makes the CRO say 'I needed to hear that.'"
-}`;
+}
+
+IMPORTANT: Return ONLY the raw JSON object. No markdown code fences, no backticks around the JSON, no preamble, no explanation. Start your response with { and end with }.`;
 
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") || "unknown";

@@ -70,7 +70,9 @@ Produce the blueprint in this exact JSON format:
     { "risk": "...", "mitigation": "..." }
   ],
   "joesPOV": "Joe's sharp, specific 2-3 sentence take on the single most important thing to get right in this GTM situation — the insight a founder finds genuinely valuable because they haven't heard it before. Reference the specific inputs. Be direct."
-}`;
+}
+
+IMPORTANT: Return ONLY the raw JSON object. No markdown code fences, no backticks around the JSON, no preamble, no explanation. Start your response with { and end with }.`;
 
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") || "unknown";
