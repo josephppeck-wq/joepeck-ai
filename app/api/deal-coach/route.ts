@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
   const truncated = dealNotes.slice(0, 2000);
 
   const result = streamText({
-    model: anthropic("claude-opus-4.5"),
+    model: anthropic("claude-opus-4-5-20251101"),
     system: systemPrompt,
     messages: [{ role: "user", content: `Analyze these deal notes:\n\n${truncated}` }],
   });

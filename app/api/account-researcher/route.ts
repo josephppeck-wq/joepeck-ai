@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
   const profile = COMPANY_PROFILES[company];
 
   const result = streamText({
-    model: anthropic("claude-opus-4.5"),
+    model: anthropic("claude-opus-4-5-20251101"),
     system: systemPrompt,
     messages: [
       {
