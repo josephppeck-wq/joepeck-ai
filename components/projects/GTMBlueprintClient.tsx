@@ -95,7 +95,7 @@ export default function GTMBlueprintClient() {
     setIsStreaming(false);
   };
 
-  const isValid = form.product.trim().length > 5 && form.market.trim().length > 5 && form.stage;
+  const isValid = form.product.trim().length > 2 && form.market.trim().length > 2 && form.stage;
 
   return (
     <div className="max-w-4xl mx-auto">
