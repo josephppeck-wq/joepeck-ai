@@ -25,7 +25,7 @@ export default function ForecastMachinePage() {
             </h1>
             <p className="text-xl text-accent mb-4">Stop guessing. Start knowing.</p>
             <p className="text-white/55 text-lg leading-relaxed">
-              I&apos;ve managed a quota in the tens of millions across 70+ reps. The forecast was never right — because we relied on gut feel dressed up in stage names. I built a tool that scores every deal on actual behavioral signals, not what the rep hopes will happen. Below is a live demo with realistic mock pipeline data.
+              I&apos;ve managed hundreds of millions of dollars in quota. The forecast was never right because we relied on gut feel dressed up in stage names. I built a tool that scores every deal on actual behavioral signals, not what the rep hopes will happen. Below is a live demo with realistic mock pipeline data.
             </p>
           </div>
         </div>
