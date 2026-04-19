@@ -131,10 +131,10 @@ Every factual claim must cite its source. Distinguish CONFIRMED from INFERRED. U
     method: "POST",
     headers: {"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01"},
     body: JSON.stringify({
-      model: "claude-opus-4-20250514",
-      max_tokens: 16000,
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 12000,
       system: sys,
-      tools: [{type:"web_search_20250305",name:"web_search",max_uses:25}],
+      tools: [{type:"web_search_20250305",name:"web_search",max_uses:20}],
       messages: [{role:"user",content:"Generate the most comprehensive and accurate Account Intelligence Docket possible using extensive multi-source web research.\n\nPARTNER: "+partner+"\nPROSPECT: "+prospect+"\nCONTEXT: "+(context||"No additional context. Conduct thorough independent research across all available sources.")+"\n\nRESEARCH REQUIREMENTS: Search at least 15-20 different sources across these categories: 1) Financial data from SEC filings or earnings with specific numbers and time periods 2) Named technology executives verified on LinkedIn with backgrounds and tenure 3) Engineering team size from multiple sources cross-referenced 4) Technology stack confirmed from job postings, StackShare, GitHub, and G2 5) Recent news, press releases, acquisitions, and leadership changes with exact dates 6) Job posting analysis — count of engineering roles, seniority levels, methodology and tool requirements 7) Engineering culture from Glassdoor, company blog, conference talks 8) Competitive tools confirmed in their stack from job postings and reviews 9) Partner relationship evidence 10) Board and investor pressure points from proxy statements or investor presentations 11) Industry analyst coverage 12) Patent or R&D investment signals. ACCURACY RULES: Cross-reference every claim. Label CONFIRMED vs INFERRED. Never fabricate names or numbers. Cite every source. If you cannot verify something, say so. This docket must be so accurate that the AE can quote any fact in it to the prospect's CEO with complete confidence."}]
     })
   });
