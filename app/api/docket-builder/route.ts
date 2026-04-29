@@ -107,22 +107,54 @@ The JSON schema:
 RESEARCH METHODOLOGY (internal — never narrate)
 ==============================================================
 
-Seller research (deep — this is the core of the demo):
-- Crawl SELLER_WEBSITE_URL homepage, product/solutions pages,
-  and case studies
-- If acquisition or merger language appears, treat each acquired
-  product as distinct. Crawl sub-domains if applicable.
-- Treat each product line as a separate offering. Never merge.
-- If seller site is thin, identify 3-5 competitors and use
-  consensus to infer profile. Set seller_profile_source to
-  INFERRED.
-- When crawling any seller with multiple product brands, verify
-  each product name by visiting its dedicated page on the seller's
-  website. Do not infer product names from context — they must
-  appear verbatim on the seller's site. If a product is mentioned
-  in a press release or acquisition announcement but does not have
-  a current product page, note this in the warnings field rather
-  than inventing details.
+SELLER RESEARCH PROCEDURE — follow these three steps in order.
+Violating any rule requires a metadata.warnings entry.
+
+STEP A — DISCOVER PRODUCT NAMES (no fabrication allowed)
+1. Fetch the seller's homepage at SELLER_WEBSITE_URL.
+2. Fetch the seller's main product or solutions index page if
+   one exists (e.g. /products, /solutions, /platform).
+3. Extract every product name that appears as a navigation link,
+   product card heading, or "Our Products / Our Brands / Our
+   Family" callout on these pages. Capture the product name
+   exactly as it appears AND the URL it links to.
+4. The list of product names you produce in this step is the
+   COMPLETE and FINAL portfolio. You may NOT add any product
+   that did not appear with a working link on the homepage or
+   product index page.
+5. If a product is mentioned in prose ("powered by X" or
+   "integrated with Y") but has no navigation link or product
+   card, do NOT include it. Add it to metadata.warnings as
+   "Mentioned but not crawled: [name]".
+
+STEP B — VERIFY EACH PRODUCT BY VISITING ITS PAGE
+For each product name and URL captured in Step A:
+1. Fetch the URL.
+2. Confirm the page describes that specific product.
+3. Extract: what_it_does, primary_user, primary_value_prop.
+4. If the URL fails, returns 404, or doesn't describe the
+   product, REMOVE it from the portfolio and add a warning:
+   "Could not verify [name] — page unreachable or mismatched."
+
+STEP C — POPULATE THE PORTFOLIO
+Build seller_profile.product_portfolio using ONLY the products
+that survived Steps A and B. The number of products in the
+portfolio must equal the number of verified product pages
+crawled. No exceptions.
+
+ABSOLUTE PROHIBITIONS
+- You may NOT include a product whose name was inferred from
+  industry knowledge or training data.
+- You may NOT include a product mentioned in a press release,
+  acquisition announcement, or third-party article unless that
+  product also has a verifiable page on the seller's site or
+  official sub-domain.
+- You may NOT include partner products unless presented as part
+  of the seller's own product family on the seller's homepage.
+- If after Steps A and B you have fewer than two products, set
+  seller_profile_confidence to LOW and add a warning explaining
+  that the seller's site structure made product discovery
+  difficult.
 
 Customer research (lightweight):
 - Hard cap: 3 web sources total
