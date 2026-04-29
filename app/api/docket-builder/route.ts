@@ -298,6 +298,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Please provide a valid seller URL including https://" }, { status: 400 });
   }
 
+  // Pre-flight: ensure API key is configured before committing to a stream response
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json(
+      { error: "Configuration error: API key not set. Please contact the site owner." },
+      { status: 500 }
+    );
+  }
+
   const userMessage = `SELLER_WEBSITE_URL: ${sellerUrl.trim()}\nCUSTOMER_NAME: ${customerName.trim()}`;
 
   const result = streamText({
@@ -309,24 +317,40 @@ export async function POST(req: NextRequest) {
 
   const encoder = new TextEncoder();
 
-  const stream = new ReadableStream({
-    async start(controller) {
-      const reader = result.textStream.getReader();
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          controller.enqueue(encoder.encode(value));
-        }
-      } catch (err) {
-        controller.error(err);
-      } finally {
-        controller.close();
-      }
-    },
-  });
+  // Eagerly pull the first chunk before returning the Response so that
+  // auth / model errors surface as a proper HTTP status rather than
+  // an empty 200 body.
+  let firstChunk: string;
+  try {
+    const reader = result.textStream.getReader();
+    const { done, value } = await reader.read();
+    firstChunk = done ? "" : (value ?? "");
 
-  return new Response(stream, {
-    headers: { "Content-Type": "text/plain; charset=utf-8" },
-  });
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          if (firstChunk) controller.enqueue(encoder.encode(firstChunk));
+          while (true) {
+            const { done: d, value: v } = await reader.read();
+            if (d) break;
+            controller.enqueue(encoder.encode(v ?? ""));
+          }
+        } catch (err) {
+          controller.error(err);
+        } finally {
+          controller.close();
+        }
+      },
+    });
+
+    return new Response(stream, {
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Upstream API error";
+    return NextResponse.json(
+      { error: `Agent error: ${message}` },
+      { status: 502 }
+    );
+  }
 }
