@@ -86,7 +86,13 @@ function isValidUrl(value: string): boolean {
 
 function extractJson(text: string): Docket | null {
   try {
-    // Find the outermost JSON object in the streamed text
+    // Primary: extract JSON from inside the last ```json ... ``` fence
+    const fenceMatches = Array.from(text.matchAll(/```json\s*([\s\S]*?)```/g));
+    if (fenceMatches.length > 0) {
+      const last = fenceMatches[fenceMatches.length - 1];
+      return JSON.parse(last[1].trim()) as Docket;
+    }
+    // Fallback: find the outermost JSON object in the streamed text
     const start = text.indexOf("{");
     const end = text.lastIndexOf("}");
     if (start === -1 || end === -1 || end <= start) return null;
@@ -617,10 +623,20 @@ export default function DocketBuilderClient() {
     setActivePhase(5); // all done
 
     // Extract the Phase 4 JSON block from the streamed output
-    const jsonStart = accumulated.indexOf("{");
-    const jsonEnd = accumulated.lastIndexOf("}");
-    if (jsonStart !== -1 && jsonEnd > jsonStart) {
-      const jsonStr = accumulated.slice(jsonStart, jsonEnd + 1);
+    // Primary: prefer content inside the last ```json ... ``` fence
+    const fenceMatches = Array.from(accumulated.matchAll(/```json\s*([\s\S]*?)```/g));
+    let jsonStr = "";
+    if (fenceMatches.length > 0) {
+      jsonStr = fenceMatches[fenceMatches.length - 1][1].trim();
+    } else {
+      // Fallback: outermost braces
+      const jsonStart = accumulated.indexOf("{");
+      const jsonEnd = accumulated.lastIndexOf("}");
+      if (jsonStart !== -1 && jsonEnd > jsonStart) {
+        jsonStr = accumulated.slice(jsonStart, jsonEnd + 1);
+      }
+    }
+    if (jsonStr) {
       setRawJson(jsonStr);
       const parsed = extractJson(accumulated);
       if (parsed) {

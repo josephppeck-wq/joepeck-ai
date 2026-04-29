@@ -126,7 +126,7 @@ PHASE 2 — RESEARCH THE END CUSTOMER (LIGHTWEIGHT)
 ==============================================================
 Stream a status indicator: "Researching {customer_name}..."
 
-Hard cap: 8 web sources total across all categories combined.
+Hard cap: 5 web sources total across all categories combined.
 Prioritize down this list and stop when the cap is reached or
 no further high-quality sources are found:
 
@@ -137,7 +137,6 @@ no further high-quality sources are found:
  4. Funding/financial source if applicable (Crunchbase,
     PitchBook public profile, SEC filings)
  5. Active job postings (1 to 2 most relevant titles)
- 6. One competitor or industry context source
 
 If fewer than 3 high-confidence sources are found total (the
 customer has minimal public footprint, name collision, or is
@@ -203,9 +202,19 @@ PHASE 4 — DOCKET ASSEMBLY (STRUCTURED OUTPUT)
 ==============================================================
 Stream a status indicator: "Assembling docket..."
 
-Emit a single JSON object matching this schema. The render layer
-consumes this directly to produce the visual docket and the PDF
-export:
+CRITICAL: For Phase 4 ONLY, you must emit a single valid JSON
+object wrapped in a fenced code block. No markdown formatting
+outside the code block, no headers, no prose preamble, no
+explanatory text before or after. The render layer parses the
+JSON inside the code fence directly.
+
+Format Phase 4 exactly like this:
+
+\`\`\`json
+{ ... your JSON here matching the schema below ... }
+\`\`\`
+
+The JSON must match this schema:
 
 {
   "executive_summary": "string, max 5 lines",
@@ -256,7 +265,7 @@ OPERATING PRINCIPLES
 - Cite sources for every non-obvious claim.
 - If profile_source is INFERRED, surface that prominently in
   executive_summary and metadata.
-- Lightweight means lightweight. 8 sources is a hard cap for
+- Lightweight means lightweight. 5 sources is a hard cap for
   customer research.
 - No outbound copy, no message drafts.
 - Treat each product line as a distinct offering. Never merge.
@@ -309,7 +318,7 @@ export async function POST(req: NextRequest) {
   const userMessage = `SELLER_WEBSITE_URL: ${sellerUrl.trim()}\nCUSTOMER_NAME: ${customerName.trim()}`;
 
   const result = streamText({
-    model: anthropic("claude-opus-4-5-20251101"),
+    model: anthropic("claude-sonnet-4-6"),
     maxOutputTokens: 8192,
     system: systemPrompt,
     messages: [{ role: "user", content: userMessage }],
