@@ -5,30 +5,26 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-interface CompanyOverview {
-  industry?: string;
-  size?: string;
-  hq?: string;
-  ownership?: string;
-  funding_stage?: string;
+interface SellerProduct {
+  name: string;
+  what_it_does?: string;
+  primary_user?: string;
+  primary_value_prop?: string;
+}
+
+interface SellerProfile {
+  company_one_liner?: string;
+  product_portfolio?: SellerProduct[];
+  icp?: { industries?: string[]; company_sizes?: string[]; buyer_roles?: string[] };
+  top_3_differentiators?: string[];
 }
 
 interface CustomerSnapshot {
-  company_overview?: CompanyOverview;
-  business_model?: string;
-  tech_stack_signals?: string[];
-  recent_news?: string[];
-  strategic_priorities?: string[];
-  relevant_job_postings?: string[];
-}
-
-interface DecisionMaker {
-  name: string;
-  title: string;
-  tenure?: string;
-  public_signal: string;
-  persona_match: string;
-  source_url: string;
+  name?: string;
+  industry?: string;
+  size_estimate?: string;
+  location?: string;
+  what_they_do?: string;
 }
 
 interface FitMapEntry {
@@ -38,8 +34,16 @@ interface FitMapEntry {
   evidence_refs?: string[];
 }
 
+interface CrossSellOpportunity {
+  rank?: number;
+  product?: string;
+  play_type?: string;
+  summary?: string;
+  why_now?: string;
+}
+
 interface RecommendedPlays {
-  cross_sell_opportunities?: string[];
+  cross_sell_opportunities?: CrossSellOpportunity[];
   talking_points?: string[];
   discovery_questions?: string[];
 }
@@ -47,20 +51,16 @@ interface RecommendedPlays {
 interface DocketMetadata {
   seller_profile_source?: string;
   seller_profile_confidence?: string;
-  customer_research_quality?: string;
   customer_research_source_count?: number | string;
   warnings?: string[];
   generated_at?: string;
 }
 
 interface Docket {
-  executive_summary?: string;
+  seller_profile?: SellerProfile;
   customer_snapshot?: CustomerSnapshot;
-  decision_makers?: DecisionMaker[];
-  seller_fit_map?: FitMapEntry[];
+  fit_map?: FitMapEntry[];
   recommended_plays?: RecommendedPlays;
-  risks_and_unknowns?: string[];
-  sources?: { seller?: string[]; customer?: string[] };
   metadata?: DocketMetadata;
 }
 
@@ -83,7 +83,7 @@ function extractJson(text: string): Docket | null {
       const last = fenceMatches[fenceMatches.length - 1];
       return JSON.parse(last[1].trim()) as Docket;
     }
-    // Fallback: find the outermost JSON object in the streamed text
+    // Fallback: outermost braces
     const start = text.indexOf("{");
     const end = text.lastIndexOf("}");
     if (start === -1 || end === -1 || end <= start) return null;
@@ -205,7 +205,7 @@ function CopyButton({ json }: { json: string }) {
 
 function DocketView({ docket, rawJson }: { docket: Docket; rawJson: string }) {
   const snap = docket.customer_snapshot;
-  const overview = snap?.company_overview;
+  const profile = docket.seller_profile;
 
   return (
     <motion.div
@@ -245,27 +245,50 @@ function DocketView({ docket, rawJson }: { docket: Docket; rawJson: string }) {
         </div>
       )}
 
-      {/* Executive Summary */}
-      {docket.executive_summary && (
+      {/* Seller Profile */}
+      {profile && (
         <div className="card p-8">
-          <div className="text-accent text-xs uppercase tracking-widest mb-4 font-medium">Executive Summary</div>
-          <p className="text-white/80 leading-relaxed">{docket.executive_summary}</p>
+          <div className="text-accent text-xs uppercase tracking-widest mb-4 font-medium">Seller Profile</div>
+          {profile.company_one_liner && (
+            <p className="text-white/80 leading-relaxed mb-6">{profile.company_one_liner}</p>
+          )}
+          {profile.product_portfolio && profile.product_portfolio.length > 0 && (
+            <div className="mb-6">
+              <div className="text-white/35 text-xs uppercase tracking-wide mb-3">Products</div>
+              <div className="space-y-4">
+                {profile.product_portfolio.map((p, i) => (
+                  <div key={i} className="border-b border-white/06 pb-4 last:border-0 last:pb-0">
+                    <div className="text-white font-semibold text-sm mb-1">{p.name}</div>
+                    {p.what_it_does && <p className="text-white/55 text-xs leading-relaxed mb-1">{p.what_it_does}</p>}
+                    {p.primary_value_prop && <p className="text-accent/70 text-xs italic">{p.primary_value_prop}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {profile.top_3_differentiators && profile.top_3_differentiators.length > 0 && (
+            <div>
+              <div className="text-white/35 text-xs uppercase tracking-wide mb-2">Top Differentiators</div>
+              <ul className="space-y-1">
+                {profile.top_3_differentiators.map((d, i) => (
+                  <li key={i} className="flex items-start gap-2 text-white/55 text-xs leading-relaxed">
+                    <span className="text-accent mt-0.5 flex-shrink-0">→</span>
+                    <span>{d}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {docket.metadata && (
             <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-white/06">
-              {docket.metadata.seller_profile_confidence && (
-                <span className="text-xs text-white/35">
-                  Seller confidence: <span className="text-white/55">{docket.metadata.seller_profile_confidence}</span>
-                </span>
+              {docket.metadata.seller_profile_source && (
+                <span className="text-xs text-white/35">Source: <span className="text-white/55">{docket.metadata.seller_profile_source}</span></span>
               )}
-              {docket.metadata.customer_research_quality && (
-                <span className="text-xs text-white/35">
-                  Customer research: <span className="text-white/55">{docket.metadata.customer_research_quality}</span>
-                </span>
+              {docket.metadata.seller_profile_confidence && (
+                <span className="text-xs text-white/35">Confidence: <span className="text-white/55">{docket.metadata.seller_profile_confidence}</span></span>
               )}
               {docket.metadata.customer_research_source_count !== undefined && (
-                <span className="text-xs text-white/35">
-                  Sources: <span className="text-white/55">{docket.metadata.customer_research_source_count}</span>
-                </span>
+                <span className="text-xs text-white/35">Customer sources: <span className="text-white/55">{docket.metadata.customer_research_source_count}</span></span>
               )}
             </div>
           )}
@@ -276,125 +299,29 @@ function DocketView({ docket, rawJson }: { docket: Docket; rawJson: string }) {
       {snap && (
         <div className="card p-8">
           <div className="text-accent text-xs uppercase tracking-widest mb-6 font-medium">Customer Snapshot</div>
-          {overview && (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-              {overview.industry && (
-                <div>
-                  <div className="text-white/35 text-xs mb-1">Industry</div>
-                  <div className="text-white/75 text-sm">{overview.industry}</div>
-                </div>
-              )}
-              {overview.size && (
-                <div>
-                  <div className="text-white/35 text-xs mb-1">Size</div>
-                  <div className="text-white/75 text-sm">{overview.size}</div>
-                </div>
-              )}
-              {overview.hq && (
-                <div>
-                  <div className="text-white/35 text-xs mb-1">HQ</div>
-                  <div className="text-white/75 text-sm">{overview.hq}</div>
-                </div>
-              )}
-              {overview.ownership && (
-                <div>
-                  <div className="text-white/35 text-xs mb-1">Ownership</div>
-                  <div className="text-white/75 text-sm">{overview.ownership}</div>
-                </div>
-              )}
-              {overview.funding_stage && (
-                <div>
-                  <div className="text-white/35 text-xs mb-1">Funding Stage</div>
-                  <div className="text-white/75 text-sm">{overview.funding_stage}</div>
-                </div>
-              )}
-            </div>
-          )}
-          {snap.business_model && (
-            <div className="mb-5">
-              <div className="text-white/35 text-xs mb-2">Business Model</div>
-              <p className="text-white/65 text-sm leading-relaxed">{snap.business_model}</p>
-            </div>
-          )}
-          {snap.strategic_priorities && snap.strategic_priorities.length > 0 && (
-            <div className="mb-5">
-              <div className="text-white/35 text-xs mb-2">Strategic Priorities</div>
-              <ul className="space-y-1">
-                {snap.strategic_priorities.map((p, i) => (
-                  <li key={i} className="flex items-start gap-2 text-white/60 text-xs leading-relaxed">
-                    <span className="text-accent mt-0.5 flex-shrink-0">→</span>
-                    <span>{p}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {snap.tech_stack_signals && snap.tech_stack_signals.length > 0 && (
-            <div className="mb-5">
-              <div className="text-white/35 text-xs mb-2">Tech Stack Signals</div>
-              <div className="flex flex-wrap gap-2">
-                {snap.tech_stack_signals.map((t, i) => (
-                  <span key={i} className="px-2.5 py-1 rounded-full bg-white/04 border border-white/08 text-white/50 text-xs">{t}</span>
-                ))}
-              </div>
-            </div>
-          )}
-          {snap.recent_news && snap.recent_news.length > 0 && (
-            <div>
-              <div className="text-white/35 text-xs mb-2">Recent News</div>
-              <ul className="space-y-1">
-                {snap.recent_news.map((n, i) => (
-                  <li key={i} className="text-white/50 text-xs leading-relaxed flex items-start gap-2">
-                    <span className="text-white/20 flex-shrink-0 mt-0.5">•</span>
-                    <span>{n}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Decision Makers */}
-      {docket.decision_makers && docket.decision_makers.length > 0 && (
-        <div className="card p-8">
-          <div className="text-accent text-xs uppercase tracking-widest mb-6 font-medium">Decision-Maker Map</div>
-          <div className="space-y-5">
-            {docket.decision_makers.map((dm, i) => (
-              <div key={i} className="border-b border-white/06 pb-5 last:border-0 last:pb-0">
-                <div className="flex items-start justify-between gap-4 mb-2 flex-wrap">
-                  <div>
-                    <div className="text-white font-semibold text-sm">{dm.name}</div>
-                    <div className="text-white/45 text-xs mt-0.5">{dm.title}</div>
-                    {dm.tenure && <div className="text-white/30 text-xs mt-0.5">{dm.tenure}</div>}
-                  </div>
-                  <span className="tag text-xs px-2.5 py-1 flex-shrink-0">{dm.persona_match}</span>
-                </div>
-                {dm.public_signal && (
-                  <p className="text-white/50 text-xs leading-relaxed mb-2">{dm.public_signal}</p>
-                )}
-                {dm.source_url && (
-                  <a
-                    href={dm.source_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-accent/60 hover:text-accent text-xs transition-colors break-all"
-                  >
-                    {dm.source_url}
-                  </a>
-                )}
-              </div>
-            ))}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+            {snap.industry && (
+              <div><div className="text-white/35 text-xs mb-1">Industry</div><div className="text-white/75 text-sm">{snap.industry}</div></div>
+            )}
+            {snap.size_estimate && (
+              <div><div className="text-white/35 text-xs mb-1">Size</div><div className="text-white/75 text-sm">{snap.size_estimate}</div></div>
+            )}
+            {snap.location && (
+              <div><div className="text-white/35 text-xs mb-1">Location</div><div className="text-white/75 text-sm">{snap.location}</div></div>
+            )}
           </div>
+          {snap.what_they_do && (
+            <p className="text-white/60 text-sm leading-relaxed">{snap.what_they_do}</p>
+          )}
         </div>
       )}
 
-      {/* Seller Fit Map */}
-      {docket.seller_fit_map && docket.seller_fit_map.length > 0 && (
+      {/* Fit Map */}
+      {docket.fit_map && docket.fit_map.length > 0 && (
         <div className="card p-8">
           <div className="text-accent text-xs uppercase tracking-widest mb-6 font-medium">Product Fit Map</div>
           <div className="space-y-5">
-            {docket.seller_fit_map.map((entry, i) => {
+            {docket.fit_map.map((entry, i) => {
               const cfg = fitScoreConfig[entry.fit_score] ?? fitScoreConfig["None"];
               return (
                 <div key={i} className="border-b border-white/06 pb-5 last:border-0 last:pb-0">
@@ -408,13 +335,8 @@ function DocketView({ docket, rawJson }: { docket: Docket; rawJson: string }) {
                   {entry.evidence_refs && entry.evidence_refs.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                       {entry.evidence_refs.map((ref, j) => (
-                        <a
-                          key={j}
-                          href={ref}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-accent/50 hover:text-accent text-xs transition-colors truncate max-w-xs"
-                        >
+                        <a key={j} href={ref} target="_blank" rel="noopener noreferrer"
+                          className="text-accent/50 hover:text-accent text-xs transition-colors truncate max-w-xs">
                           {ref}
                         </a>
                       ))}
@@ -438,12 +360,17 @@ function DocketView({ docket, rawJson }: { docket: Docket; rawJson: string }) {
               <div className="space-y-4">
                 {docket.recommended_plays.cross_sell_opportunities.map((opp, i) => (
                   <div key={i} className="bg-white/02 border border-white/06 rounded-lg p-5">
-                    <div className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-accent flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5">
-                        {i + 1}
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-5 h-5 rounded-full bg-accent flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                        {opp.rank ?? i + 1}
                       </div>
-                      <p className="text-white/65 text-sm leading-relaxed">{opp}</p>
+                      <div className="text-white font-medium text-sm">{opp.product ?? ""}</div>
+                      {opp.play_type && (
+                        <span className="ml-auto px-2 py-0.5 rounded-full text-xs border border-white/10 text-white/40">{opp.play_type}</span>
+                      )}
                     </div>
+                    {opp.summary && <p className="text-white/65 text-sm leading-relaxed mb-2">{opp.summary}</p>}
+                    {opp.why_now && <p className="text-white/40 text-xs leading-relaxed italic">{opp.why_now}</p>}
                   </div>
                 ))}
               </div>
@@ -479,58 +406,6 @@ function DocketView({ docket, rawJson }: { docket: Docket; rawJson: string }) {
               </div>
             </div>
           )}
-        </div>
-      )}
-
-      {/* Risks */}
-      {docket.risks_and_unknowns && docket.risks_and_unknowns.length > 0 && (
-        <div className="card p-8">
-          <div className="text-accent text-xs uppercase tracking-widest mb-4 font-medium">Risks &amp; Unknowns</div>
-          <div className="space-y-3">
-            {docket.risks_and_unknowns.map((risk, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <span className="text-orange-400/60 text-xs mt-0.5 flex-shrink-0">⚠</span>
-                <p className="text-white/55 text-xs leading-relaxed">{risk}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Sources */}
-      {docket.sources && (
-        <div className="card p-6">
-          <div className="text-white/25 text-xs uppercase tracking-widest mb-4 font-medium">Sources</div>
-          <div className="grid sm:grid-cols-2 gap-6">
-            {docket.sources.seller && docket.sources.seller.length > 0 && (
-              <div>
-                <div className="text-white/30 text-xs mb-2">Seller</div>
-                <ul className="space-y-1">
-                  {docket.sources.seller.map((s, i) => (
-                    <li key={i}>
-                      <a href={s} target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-accent text-xs transition-colors break-all">
-                        {s}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {docket.sources.customer && docket.sources.customer.length > 0 && (
-              <div>
-                <div className="text-white/30 text-xs mb-2">Customer</div>
-                <ul className="space-y-1">
-                  {docket.sources.customer.map((s, i) => (
-                    <li key={i}>
-                      <a href={s} target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-accent text-xs transition-colors break-all">
-                        {s}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
         </div>
       )}
     </motion.div>
