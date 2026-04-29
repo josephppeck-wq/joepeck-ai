@@ -9,7 +9,7 @@ const requestLog = new Map<string, number[]>();
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
   const windowMs = 60 * 60 * 1000;
-  const maxRequests = 3;
+  const maxRequests = 50; // TESTING ONLY — reset to 3 before merging to main
   const requests = (requestLog.get(ip) || []).filter((t) => now - t < windowMs);
   if (requests.length >= maxRequests) return true;
   requestLog.set(ip, [...requests, now]);
