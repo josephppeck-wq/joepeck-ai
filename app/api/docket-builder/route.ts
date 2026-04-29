@@ -1,21 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
 import { streamText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
+import { checkRateLimit, isDebounced, logRun } from "@/lib/docket-ratelimit";
 
 export const maxDuration = 300;
 
-// ─── Rate limiter ─────────────────────────────────────────────────────────────
+// ─── Abuse protection helpers ─────────────────────────────────────────────────
 
-const requestLog = new Map<string, number[]>();
+const INJECTION_PATTERNS = [
+  /ignore\s+previous\s+instructions/i,
+  /^system\s*:/im,
+  /^###/m,
+  /<\|im_start\|>/,
+  /forget\s+(all\s+)?previous\s+(instructions|context)/i,
+  /reveal\s+(your\s+)?(system\s+)?prompt/i,
+  /disregard\s+(all\s+)?previous/i,
+  /\[INST\]/i,
+];
 
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const windowMs = 60 * 60 * 1000;
-  const maxRequests = 50; // TESTING ONLY — reset to 3 before merging to main
-  const requests = (requestLog.get(ip) || []).filter((t) => now - t < windowMs);
-  if (requests.length >= maxRequests) return true;
-  requestLog.set(ip, [...requests, now]);
-  return false;
+function containsInjection(value: string): boolean {
+  return INJECTION_PATTERNS.some((p) => p.test(value));
+}
+
+function isBlockedUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return true;
+    const h = parsed.hostname.toLowerCase();
+    if (h === "localhost" || h === "127.0.0.1" || h === "0.0.0.0") return true;
+    if (/^10\.\d+\.\d+\.\d+$/.test(h)) return true;
+    if (/^192\.168\.\d+\.\d+$/.test(h)) return true;
+    if (/^172\.(1[6-9]|2\d|3[01])\.\d+\.\d+$/.test(h)) return true;
+    if (h.endsWith(".local") || h.endsWith(".internal") || h.endsWith(".test")) return true;
+    return false;
+  } catch {
+    return true;
+  }
 }
 
 // ─── Pre-crawl: deterministic seller product discovery ────────────────────────
@@ -350,13 +370,7 @@ OUTPUT RULES (strict)
 // ─── Route Handler ────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for") || "unknown";
-  if (isRateLimited(ip)) {
-    return NextResponse.json(
-      { error: "Rate limit reached. This demo allows 3 dockets per hour. Please try again shortly." },
-      { status: 429 }
-    );
-  }
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
 
   let sellerUrl: string;
   let customerName: string;
@@ -364,14 +378,33 @@ export async function POST(req: NextRequest) {
   try {
     ({ sellerUrl, customerName } = await req.json());
   } catch {
+    await logRun({ ip, sellerUrl: "", customerName: "", success: false, failReason: "invalid_body" });
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
 
+  // ── Input validation ──────────────────────────────────────────────────────
   if (!sellerUrl || typeof sellerUrl !== "string") {
     return NextResponse.json({ error: "Seller website URL is required." }, { status: 400 });
   }
   if (!customerName || typeof customerName !== "string" || customerName.trim().length < 2) {
     return NextResponse.json({ error: "Customer name is required (minimum 2 characters)." }, { status: 400 });
+  }
+  if (customerName.trim().length > 200) {
+    return NextResponse.json({ error: "Customer name must be 200 characters or fewer." }, { status: 400 });
+  }
+
+  // ── Abuse protection ──────────────────────────────────────────────────────
+  if (containsInjection(customerName)) {
+    await logRun({ ip, sellerUrl, customerName, success: false, failReason: "injection_detected" });
+    return NextResponse.json({ error: "Invalid customer name. Please enter a real company name." }, { status: 400 });
+  }
+  if (isBlockedUrl(sellerUrl)) {
+    await logRun({ ip, sellerUrl, customerName, success: false, failReason: "blocked_url" });
+    return NextResponse.json({ error: "Please provide a valid, publicly accessible seller URL." }, { status: 400 });
+  }
+  if (isDebounced(ip, sellerUrl.trim(), customerName.trim())) {
+    await logRun({ ip, sellerUrl, customerName, success: false, failReason: "debounced" });
+    return NextResponse.json({ error: "Duplicate request detected. Please wait 60 seconds before resubmitting." }, { status: 429 });
   }
 
   let parsedSellerUrl: URL;
@@ -380,6 +413,16 @@ export async function POST(req: NextRequest) {
     if (parsedSellerUrl.protocol !== "http:" && parsedSellerUrl.protocol !== "https:") throw new Error();
   } catch {
     return NextResponse.json({ error: "Please provide a valid seller URL including https://" }, { status: 400 });
+  }
+
+  // ── Rate limit (persistent, runs before expensive operations) ─────────────
+  const { allowed } = await checkRateLimit(ip);
+  if (!allowed) {
+    await logRun({ ip, sellerUrl, customerName, success: false, failReason: "rate_limited" });
+    return NextResponse.json(
+      { error: "RATE_LIMIT" },
+      { status: 429 }
+    );
   }
 
   if (!process.env.ANTHROPIC_API_KEY) {
@@ -440,11 +483,15 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // Log successful run (fire-and-forget)
+    logRun({ ip, sellerUrl, customerName, success: true }).catch(() => {});
+
     return new Response(stream, {
       headers: { "Content-Type": "text/plain; charset=utf-8" },
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Upstream API error";
+    logRun({ ip, sellerUrl, customerName, success: false, failReason: message }).catch(() => {});
     return NextResponse.json({ error: `Agent error: ${message}` }, { status: 502 });
   }
 }

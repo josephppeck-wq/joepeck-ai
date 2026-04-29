@@ -1,6 +1,7 @@
 import DocketBuilderClient from "@/components/projects/DocketBuilderClient";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import "./print.css";
 
 export const metadata = {
   title: "Account Docket Builder — Joe Peck",
