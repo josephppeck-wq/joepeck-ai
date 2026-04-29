@@ -38,17 +38,8 @@ interface FitMapEntry {
   evidence_refs?: string[];
 }
 
-interface CrossSellOpportunity {
-  rank?: number;
-  product?: string;
-  buyer?: string;
-  why_now?: string;
-  summary?: string;
-  [key: string]: unknown;
-}
-
 interface RecommendedPlays {
-  cross_sell_opportunities?: CrossSellOpportunity[];
+  cross_sell_opportunities?: string[];
   talking_points?: string[];
   discovery_questions?: string[];
 }
@@ -443,25 +434,16 @@ function DocketView({ docket, rawJson }: { docket: Docket; rawJson: string }) {
 
           {docket.recommended_plays.cross_sell_opportunities && docket.recommended_plays.cross_sell_opportunities.length > 0 && (
             <div className="mb-8">
-              <div className="text-white/35 text-xs uppercase tracking-wide mb-4">Land & Expand Opportunities</div>
+              <div className="text-white/35 text-xs uppercase tracking-wide mb-4">Land &amp; Expand Opportunities</div>
               <div className="space-y-4">
                 {docket.recommended_plays.cross_sell_opportunities.map((opp, i) => (
                   <div key={i} className="bg-white/02 border border-white/06 rounded-lg p-5">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-5 h-5 rounded-full bg-accent flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                        {opp.rank ?? i + 1}
+                    <div className="flex items-start gap-3">
+                      <div className="w-5 h-5 rounded-full bg-accent flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5">
+                        {i + 1}
                       </div>
-                      <div className="text-white font-medium text-sm">{opp.product ?? ""}</div>
+                      <p className="text-white/65 text-sm leading-relaxed">{opp}</p>
                     </div>
-                    {opp.buyer && (
-                      <div className="text-white/40 text-xs mb-2">Buyer: <span className="text-white/60">{opp.buyer}</span></div>
-                    )}
-                    {opp.why_now && (
-                      <p className="text-white/55 text-xs leading-relaxed mb-2">{opp.why_now}</p>
-                    )}
-                    {opp.summary && (
-                      <p className="text-white/40 text-xs leading-relaxed italic">{opp.summary}</p>
-                    )}
                   </div>
                 ))}
               </div>

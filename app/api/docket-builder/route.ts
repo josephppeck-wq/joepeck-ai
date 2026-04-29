@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { streamText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 const requestLog = new Map<string, number[]>();
 
@@ -189,7 +189,7 @@ export async function POST(req: NextRequest) {
   const userMessage = `SELLER_WEBSITE_URL: ${sellerUrl.trim()}\nCUSTOMER_NAME: ${customerName.trim()}`;
 
   const result = streamText({
-    model: anthropic("claude-sonnet-4-6"),
+    model: anthropic("claude-opus-4-5-20251101"),
     maxOutputTokens: 8192,
     system: systemPrompt,
     messages: [{ role: "user", content: userMessage }],
