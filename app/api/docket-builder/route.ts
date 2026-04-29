@@ -98,8 +98,7 @@ The JSON schema:
     "seller_profile_source": "DIRECT | INFERRED | HYBRID",
     "seller_profile_confidence": "HIGH | MEDIUM | LOW",
     "customer_research_source_count": 0,
-    "warnings": ["string"],
-    "generated_at": "ISO8601"
+    "warnings": ["string"]
   }
 }
 \`\`\`
@@ -117,6 +116,13 @@ Seller research (deep — this is the core of the demo):
 - If seller site is thin, identify 3-5 competitors and use
   consensus to infer profile. Set seller_profile_source to
   INFERRED.
+- When crawling any seller with multiple product brands, verify
+  each product name by visiting its dedicated page on the seller's
+  website. Do not infer product names from context — they must
+  appear verbatim on the seller's site. If a product is mentioned
+  in a press release or acquisition announcement but does not have
+  a current product page, note this in the warnings field rather
+  than inventing details.
 
 Customer research (lightweight):
 - Hard cap: 3 web sources total

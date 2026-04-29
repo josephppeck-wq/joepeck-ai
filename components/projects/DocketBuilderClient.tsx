@@ -53,7 +53,7 @@ interface DocketMetadata {
   seller_profile_confidence?: string;
   customer_research_source_count?: number | string;
   warnings?: string[];
-  generated_at?: string;
+  generated_at?: string; // injected client-side on parse, never trusted from agent
 }
 
 interface Docket {
@@ -106,8 +106,8 @@ function extractStatusLines(text: string): string[] {
 function detectActivePhase(text: string): number {
   const lower = text.toLowerCase();
   if (lower.includes("assembling")) return 4;
+  if (lower.includes("recommended") || lower.includes("plays")) return 3.5;
   if (lower.includes("mapping") || lower.includes("fit")) return 3;
-  if (lower.includes("decision") || lower.includes("identifying")) return 2.5;
   if (lower.includes("researching") || lower.includes("customer")) return 2;
   if (lower.includes("crawl") || lower.includes("analyzing") || lower.includes("product page")) return 1;
   return 1;
@@ -123,8 +123,8 @@ const fitScoreConfig: Record<string, { label: string; classes: string }> = {
 const phaseLabels = [
   { phase: 1, label: "Analyzing seller" },
   { phase: 2, label: "Researching customer" },
-  { phase: 2.5, label: "Identifying decision-makers" },
   { phase: 3, label: "Mapping product fit" },
+  { phase: 3.5, label: "Generating recommended plays" },
   { phase: 4, label: "Assembling docket" },
 ];
 
@@ -290,16 +290,22 @@ function DocketView({ docket, rawJson }: { docket: Docket; rawJson: string }) {
               {docket.metadata.customer_research_source_count !== undefined && (
                 <span className="text-xs text-white/35">Customer sources: <span className="text-white/55">{docket.metadata.customer_research_source_count}</span></span>
               )}
+              {docket.metadata.generated_at && (
+                <span className="text-xs text-white/20">Generated: <span className="text-white/35">{new Date(docket.metadata.generated_at).toLocaleString()}</span></span>
+              )}
             </div>
           )}
         </div>
       )}
 
       {/* Customer Snapshot */}
-      {snap && (
+      {snap && (snap.name || snap.industry || snap.size_estimate || snap.location || snap.what_they_do) && (
         <div className="card p-8">
           <div className="text-accent text-xs uppercase tracking-widest mb-6 font-medium">Customer Snapshot</div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5">
+            {snap.name && (
+              <div><div className="text-white/35 text-xs mb-1">Company</div><div className="text-white/75 text-sm font-medium">{snap.name}</div></div>
+            )}
             {snap.industry && (
               <div><div className="text-white/35 text-xs mb-1">Industry</div><div className="text-white/75 text-sm">{snap.industry}</div></div>
             )}
@@ -513,6 +519,12 @@ export default function DocketBuilderClient() {
       setRawJson(jsonStr);
       const parsed = extractJson(accumulated);
       if (parsed) {
+        // Inject real timestamp client-side — never trust agent-generated dates
+        if (parsed.metadata) {
+          parsed.metadata.generated_at = new Date().toISOString();
+        } else {
+          parsed.metadata = { generated_at: new Date().toISOString() };
+        }
         setDocket(parsed);
       } else {
         setJsonParseError(true);
