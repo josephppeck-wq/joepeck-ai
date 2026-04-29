@@ -1,261 +1,193 @@
 /* ── Docket Builder Print Stylesheet ────────────────────────────────────────── */
-/* Applied only during window.print() via a <link media="print"> tag            */
 
 @media print {
-  /* ── Hide everything except the docket ── */
-  nav,
-  footer,
-  [data-print="hide"],
-  .no-print {
-    display: none !important;
-  }
 
-  /* ── Page setup ── */
+  /* ── 1. PAGE SETUP ── */
   @page {
     size: letter portrait;
-    margin: 0.75in 0.75in 0.85in 0.75in;
+    margin: 0.6in 0.7in 0.7in 0.7in;
   }
 
+  /* ── 2. BASE BODY ── */
   body {
     background: white !important;
-    color: #1a1a1a !important;
+    color: #111 !important;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 11pt;
-    line-height: 1.5;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  /* ── Print header (injected via JS before print, removed after) ── */
-  #docket-print-header {
-    display: block !important;
-    border-bottom: 2px solid #1a1a1a;
-    padding-bottom: 12pt;
-    margin-bottom: 20pt;
-  }
-
-  #docket-print-header h1 {
-    font-size: 16pt;
-    font-weight: 700;
-    margin: 0 0 4pt 0;
-    color: #1a1a1a;
-  }
-
-  #docket-print-header .meta {
-    font-size: 9pt;
-    color: #666;
-    display: flex;
-    gap: 16pt;
-  }
-
-  /* ── Print footer ── */
-  #docket-print-footer {
-    display: block !important;
-    position: fixed;
-    bottom: 0.4in;
-    left: 0.75in;
-    right: 0.75in;
-    border-top: 1px solid #ccc;
-    padding-top: 6pt;
-    font-size: 8pt;
-    color: #999;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  /* ── Docket sections ── */
-  [data-print="docket"] {
-    display: block !important;
-  }
-
-  [data-print="docket"] > div {
-    page-break-inside: avoid;
-    margin-bottom: 20pt;
-    border: 1px solid #e0e0e0;
-    border-radius: 6pt;
-    padding: 14pt 16pt;
-    background: white !important;
-  }
-
-  /* ── Section headings ── */
-  .print-section-title {
-    font-size: 8pt;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #666;
-    margin-bottom: 10pt;
-    border-bottom: 1px solid #e8e8e8;
-    padding-bottom: 6pt;
-  }
-
-  /* ── Text colors ── */
-  .print-body {
-    color: #1a1a1a;
     font-size: 10.5pt;
     line-height: 1.55;
   }
 
-  .print-muted {
-    color: #555;
-    font-size: 10pt;
+  /* ── 3. HIDE MARKED SECTIONS AND CONTROLS ── */
+  /* Everything tagged data-print="hide" is hidden */
+  [data-print="hide"],
+  .no-print,
+  nav,
+  footer {
+    display: none !important;
   }
 
-  .print-subtle {
-    color: #777;
-    font-size: 9.5pt;
+  /* ── 4. PRINT HEADER (inside docket-root, shown by ID) ── */
+  #docket-print-header {
+    display: block !important;
+    border-bottom: 2px solid #111;
+    padding-bottom: 10pt;
+    margin-bottom: 18pt;
   }
 
-  /* ── Fit score badges ── */
-  .print-badge {
-    display: inline-block;
-    padding: 2pt 8pt;
-    border-radius: 3pt;
+  #docket-print-header .ph-title {
+    font-size: 14pt;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 4pt 0;
+  }
+
+  #docket-print-header .ph-meta {
     font-size: 8.5pt;
-    font-weight: 600;
-    border: 1px solid currentColor;
-  }
-
-  .print-badge-high   { color: #166534; border-color: #166534; }
-  .print-badge-medium { color: #92400e; border-color: #92400e; }
-  .print-badge-low    { color: #9a3412; border-color: #9a3412; }
-  .print-badge-none   { color: #6b7280; border-color: #6b7280; }
-
-  /* ── Lists ── */
-  ul.print-list {
-    margin: 0;
-    padding-left: 16pt;
-  }
-
-  ul.print-list li {
-    margin-bottom: 5pt;
-    color: #333;
-    font-size: 10.5pt;
-  }
-
-  /* ── Grid ── */
-  .print-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12pt;
-    margin-bottom: 12pt;
-  }
-
-  .print-grid-item .label {
-    font-size: 8pt;
-    color: #888;
-    margin-bottom: 2pt;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .print-grid-item .value {
-    font-size: 10.5pt;
-    color: #1a1a1a;
-    font-weight: 500;
-  }
-
-  /* ── Product table in fit map ── */
-  .print-product-row {
+    color: #555;
     display: flex;
-    align-items: flex-start;
-    gap: 12pt;
-    padding: 10pt 0;
-    border-bottom: 1px solid #f0f0f0;
+    gap: 20pt;
+    flex-wrap: wrap;
   }
 
-  .print-product-row:last-child {
-    border-bottom: none;
-  }
-
-  .print-product-name {
-    font-weight: 600;
-    font-size: 10.5pt;
-    min-width: 100pt;
-    flex-shrink: 0;
-  }
-
-  .print-product-reasoning {
-    color: #444;
-    font-size: 10pt;
-    flex: 1;
-  }
-
-  /* ── Numbered items ── */
-  .print-numbered {
-    display: flex;
-    gap: 10pt;
-    margin-bottom: 8pt;
-    align-items: flex-start;
-  }
-
-  .print-number {
-    font-weight: 700;
-    font-size: 9pt;
+  /* ── 5. PRINT FOOTER (inside docket-root, static block at end) ── */
+  #docket-print-footer {
+    display: flex !important;
+    margin-top: 24pt;
+    border-top: 1px solid #ccc;
+    padding-top: 6pt;
+    font-size: 7.5pt;
     color: #888;
-    min-width: 16pt;
-    flex-shrink: 0;
-    padding-top: 1pt;
+    justify-content: space-between;
   }
 
-  /* ── Page breaks ── */
-  .print-break-before {
-    page-break-before: always;
+  /* ── 6. FORCE ALL TEXT DARK INSIDE THE DOCKET ROOT ── */
+  /*
+     The on-screen design uses Tailwind utilities like text-white/55,
+     text-accent, text-emerald-400 etc. on a dark background.
+     On white paper, these are invisible. This blanket rule forces
+     all text to dark, then we selectively re-color badges below.
+  */
+  [data-print="docket-root"],
+  [data-print="docket-root"] * {
+    color: #111 !important;
+    background-color: transparent !important;
+    border-color: #ddd !important;
+    text-decoration: none;
   }
 
-  /* ── Opportunity cards ── */
-  .print-opp-card {
-    border: 1px solid #e8e8e8;
-    border-radius: 4pt;
-    padding: 10pt 12pt;
-    margin-bottom: 8pt;
+  /* ── 7. CARD SECTIONS ── */
+  [data-print="docket-root"] .card {
+    border: 1px solid #ddd !important;
+    border-radius: 4pt !important;
+    background: white !important;
+    padding: 12pt 14pt !important;
+    margin-bottom: 14pt !important;
     page-break-inside: avoid;
+    break-inside: avoid;
   }
 
-  .print-opp-header {
-    display: flex;
-    align-items: center;
-    gap: 8pt;
-    margin-bottom: 6pt;
+  /* ── 8. FIT SCORE BADGES — dark text on light tint ── */
+  /* High (emerald) */
+  [data-print="docket-root"] [class*="bg-emerald-500"] {
+    background-color: #dcfce7 !important;
+    border-color: #86efac !important;
+  }
+  [data-print="docket-root"] [class*="text-emerald"] {
+    color: #14532d !important;
+  }
+  /* Medium (amber) */
+  [data-print="docket-root"] [class*="bg-amber-500"] {
+    background-color: #fef9c3 !important;
+    border-color: #fde047 !important;
+  }
+  [data-print="docket-root"] [class*="text-amber"] {
+    color: #78350f !important;
+  }
+  /* Low (orange) */
+  [data-print="docket-root"] [class*="bg-orange-500"] {
+    background-color: #ffedd5 !important;
+    border-color: #fdba74 !important;
+  }
+  [data-print="docket-root"] [class*="text-orange"] {
+    color: #7c2d12 !important;
+  }
+  /* None (gray/white) */
+  [data-print="docket-root"] [class*="bg-white/05"] {
+    background-color: #f3f4f6 !important;
+    border-color: #d1d5db !important;
   }
 
-  .print-opp-rank {
-    width: 18pt;
-    height: 18pt;
-    border-radius: 50%;
-    background: #1a1a1a;
-    color: white;
-    font-size: 8pt;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+  /* ── 9. NUMBERED CIRCLES (accent bg) ── */
+  [data-print="docket-root"] [class*="bg-accent"] {
+    background-color: #1a1a1a !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  [data-print="docket-root"] [class*="bg-accent"] * {
+    color: white !important;
+  }
+  [data-print="docket-root"] [class*="bg-accent/1"],
+  [data-print="docket-root"] [class*="bg-accent/2"] {
+    background-color: #e5e7eb !important;
+  }
+  [data-print="docket-root"] [class*="bg-accent/1"] *,
+  [data-print="docket-root"] [class*="bg-accent/2"] * {
+    color: #111 !important;
   }
 
-  .print-opp-product {
-    font-weight: 600;
-    font-size: 10.5pt;
+  /* ── 10. OPPORTUNITY CARDS (bg-white/02 etc.) ── */
+  [data-print="docket-root"] [class*="bg-white/02"],
+  [data-print="docket-root"] [class*="bg-white/03"],
+  [data-print="docket-root"] [class*="bg-white/04"],
+  [data-print="docket-root"] [class*="bg-white/06"] {
+    background-color: #f9fafb !important;
+    border-color: #e5e7eb !important;
   }
 
-  .print-opp-type {
-    font-size: 8pt;
-    color: #888;
-    border: 1px solid #ccc;
-    padding: 1pt 6pt;
-    border-radius: 3pt;
-    margin-left: auto;
+  /* ── 11. DIVIDERS (border-white/06 etc.) ── */
+  [data-print="docket-root"] [class*="border-white"] {
+    border-color: #e5e7eb !important;
   }
 
-  .print-opp-summary {
-    font-size: 10pt;
-    color: #333;
-    margin-bottom: 4pt;
+  /* ── 12. LINKS ── */
+  [data-print="docket-root"] a {
+    color: #1d4ed8 !important;
   }
 
-  .print-opp-why {
-    font-size: 9.5pt;
-    color: #666;
-    font-style: italic;
+  /* ── 13. WARNINGS BOX ── */
+  [data-print="docket-root"] [class*="bg-amber-500/05"] {
+    background-color: #fffbeb !important;
+    border-color: #fcd34d !important;
+  }
+
+  /* ── 14. PAGE BREAK CONTROL ── */
+  [data-print="docket-root"] .card,
+  [data-print="docket-root"] > div > div {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  [data-print="docket-root"] > div {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* ── 15. TAG / BADGE ELEMENTS ── */
+  [data-print="docket-root"] .tag {
+    color: #374151 !important;
+    background-color: #f3f4f6 !important;
+    border-color: #d1d5db !important;
+  }
+
+  /* ── 16. INLINE BADGES (rounded-full px-2.5) ── */
+  [data-print="docket-root"] [class*="rounded-full"][class*="px-2"] {
+    border: 1px solid #d1d5db !important;
+    background-color: #f9fafb !important;
+  }
+
+  /* ── 17. SECTION TITLE LABELS ── */
+  [data-print="docket-root"] [class*="uppercase"][class*="tracking-widest"] {
+    color: #374151 !important;
+    font-weight: 700 !important;
   }
 }
