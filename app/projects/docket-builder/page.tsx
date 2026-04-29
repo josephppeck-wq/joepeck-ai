@@ -15,7 +15,7 @@ export default function DocketBuilderPage() {
       <Nav />
       <div className="pt-24">
         {/* Hero */}
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-16" data-print="hide">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-16 print:hidden">
           <div className="max-w-3xl">
             <div className="flex items-center gap-3 mb-6">
               <span className="tag">Account Intelligence</span>
@@ -37,7 +37,7 @@ export default function DocketBuilderPage() {
         </div>
 
         {/* Problem / Approach / Impact */}
-        <div className="border-t border-white/06" data-print="hide">
+        <div className="border-t border-white/06 print:hidden">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
             <div className="grid md:grid-cols-3 gap-8 mb-16">
               <div className="card p-6">
@@ -72,7 +72,7 @@ export default function DocketBuilderPage() {
         </div>
 
         {/* CTA */}
-        <div className="border-t border-white/06" data-print="hide">
+        <div className="border-t border-white/06 print:hidden">
           <div className="max-w-3xl mx-auto px-6 lg:px-8 py-16 text-center">
             <h3 className="text-2xl font-bold mb-4">Want this running for your team?</h3>
             <p className="text-white/55 mb-8">

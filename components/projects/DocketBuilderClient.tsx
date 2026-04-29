@@ -103,15 +103,13 @@ function containsInjection(value: string): boolean {
 }
 
 function triggerPrint(docket: Docket, sellerUrl: string) {
-  // Inject print header and footer INSIDE the docket-root div
-  // so they appear in the print flow (body > main hide/show approach
-  // requires elements to be inside the visible subtree)
   const root = document.querySelector('[data-print="docket-root"]');
   if (!root) { window.print(); return; }
 
   // Clean up any previous injections
   document.getElementById("docket-print-header")?.remove();
   document.getElementById("docket-print-footer")?.remove();
+  document.getElementById("docket-print-styles")?.remove();
 
   const sellerDomain = (() => { try { return new URL(sellerUrl).hostname; } catch { return sellerUrl; } })();
   const customerName = docket.customer_snapshot?.name || "Unknown Customer";
@@ -119,6 +117,105 @@ function triggerPrint(docket: Docket, sellerUrl: string) {
     ? new Date(docket.metadata.generated_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
     : new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
+  // Inject a <style> tag that overrides Tailwind print colors with
+  // maximum specificity. This is more reliable than an external
+  // stylesheet fighting against Tailwind's compiled opacity utilities.
+  const style = document.createElement("style");
+  style.id = "docket-print-styles";
+  style.textContent = `
+    @media print {
+      /* Force ALL text to dark — overrides text-white/*, text-accent, etc. */
+      [data-print="docket-root"],
+      [data-print="docket-root"] p,
+      [data-print="docket-root"] span,
+      [data-print="docket-root"] div,
+      [data-print="docket-root"] h1,
+      [data-print="docket-root"] h2,
+      [data-print="docket-root"] h3,
+      [data-print="docket-root"] li,
+      [data-print="docket-root"] a {
+        color: #111 !important;
+      }
+      /* Force backgrounds to white/light — overrides bg-white/0X */
+      [data-print="docket-root"] div,
+      [data-print="docket-root"] .card {
+        background-color: #fff !important;
+      }
+      /* Opportunity/info sub-cards */
+      [data-print="docket-root"] .rounded-lg {
+        background-color: #f8f8f8 !important;
+        border-color: #e0e0e0 !important;
+      }
+      /* Dividers */
+      [data-print="docket-root"] [class*="border-white"] {
+        border-color: #e0e0e0 !important;
+      }
+      /* Fit score badge — High */
+      [data-print="docket-root"] [class*="bg-emerald"] {
+        background-color: #d1fae5 !important;
+      }
+      [data-print="docket-root"] [class*="text-emerald"] {
+        color: #065f46 !important;
+      }
+      /* Fit score badge — Medium */
+      [data-print="docket-root"] [class*="bg-amber"] {
+        background-color: #fef3c7 !important;
+      }
+      [data-print="docket-root"] [class*="text-amber"] {
+        color: #92400e !important;
+      }
+      /* Fit score badge — Low */
+      [data-print="docket-root"] [class*="bg-orange"] {
+        background-color: #fed7aa !important;
+      }
+      [data-print="docket-root"] [class*="text-orange"] {
+        color: #9a3412 !important;
+      }
+      /* Numbered accent circles */
+      [data-print="docket-root"] [class*="bg-accent"]:not([class*="bg-accent/"]) {
+        background-color: #1e3a5f !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      [data-print="docket-root"] [class*="bg-accent"]:not([class*="bg-accent/"]) span,
+      [data-print="docket-root"] [class*="bg-accent"]:not([class*="bg-accent/"]) div {
+        color: #fff !important;
+      }
+      /* Print header */
+      #docket-print-header {
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        border-bottom: 2px solid #111;
+        padding-bottom: 10pt;
+        margin-bottom: 18pt;
+      }
+      #docket-print-header .ph-title {
+        font-size: 14pt; font-weight: 700; color: #111; margin: 0 0 4pt 0;
+      }
+      #docket-print-header .ph-meta {
+        font-size: 8.5pt; color: #555;
+        display: flex; gap: 16pt; flex-wrap: wrap; margin-top: 4pt;
+      }
+      /* Print footer */
+      #docket-print-footer {
+        margin-top: 24pt;
+        border-top: 1px solid #ccc;
+        padding-top: 6pt;
+        font-size: 7.5pt;
+        color: #888;
+        display: flex;
+        justify-content: space-between;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+      /* Page break avoidance */
+      [data-print="docket-root"] .card {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Inject header inside docket-root
   const header = document.createElement("div");
   header.id = "docket-print-header";
   header.innerHTML = `
@@ -131,6 +228,7 @@ function triggerPrint(docket: Docket, sellerUrl: string) {
   `;
   root.prepend(header);
 
+  // Inject footer inside docket-root
   const footer = document.createElement("div");
   footer.id = "docket-print-footer";
   footer.innerHTML = `
@@ -145,6 +243,7 @@ function triggerPrint(docket: Docket, sellerUrl: string) {
   setTimeout(() => {
     header.remove();
     footer.remove();
+    style.remove();
   }, 2000);
 }
 
@@ -612,7 +711,7 @@ export default function DocketBuilderClient() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Form card */}
-      <div className="card p-8 mb-8 no-print" data-print="hide">
+      <div className="card p-8 mb-8 print:hidden">
         <form onSubmit={handleSubmit} noValidate>
           {/* Seller URL */}
           <div className="mb-6">
@@ -786,7 +885,7 @@ export default function DocketBuilderClient() {
         {!isGenerating && docket && (
           <motion.div key="docket" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {statusLines.length > 0 && (
-              <div className="mb-6 no-print" data-print="status-feed">
+              <div className="mb-6 print:hidden">
                 <StatusFeed lines={statusLines} done />
               </div>
             )}

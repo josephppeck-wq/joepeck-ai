@@ -1,193 +1,31 @@
 /* ── Docket Builder Print Stylesheet ────────────────────────────────────────── */
+/* This file handles page setup and hides via data-print attribute.              */
+/* Color overrides are injected dynamically via <style> tag in triggerPrint()    */
+/* so they win the specificity battle against Tailwind compiled utilities.        */
 
 @media print {
 
-  /* ── 1. PAGE SETUP ── */
+  /* Page margins */
   @page {
     size: letter portrait;
     margin: 0.6in 0.7in 0.7in 0.7in;
   }
 
-  /* ── 2. BASE BODY ── */
+  /* Base body for print */
   body {
     background: white !important;
-    color: #111 !important;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 10.5pt;
-    line-height: 1.55;
-  }
-
-  /* ── 3. HIDE MARKED SECTIONS AND CONTROLS ── */
-  /* Everything tagged data-print="hide" is hidden */
-  [data-print="hide"],
-  .no-print,
-  nav,
-  footer {
-    display: none !important;
-  }
-
-  /* ── 4. PRINT HEADER (inside docket-root, shown by ID) ── */
-  #docket-print-header {
-    display: block !important;
-    border-bottom: 2px solid #111;
-    padding-bottom: 10pt;
-    margin-bottom: 18pt;
-  }
-
-  #docket-print-header .ph-title {
-    font-size: 14pt;
-    font-weight: 700;
-    color: #111;
-    margin: 0 0 4pt 0;
-  }
-
-  #docket-print-header .ph-meta {
-    font-size: 8.5pt;
-    color: #555;
-    display: flex;
-    gap: 20pt;
-    flex-wrap: wrap;
-  }
-
-  /* ── 5. PRINT FOOTER (inside docket-root, static block at end) ── */
-  #docket-print-footer {
-    display: flex !important;
-    margin-top: 24pt;
-    border-top: 1px solid #ccc;
-    padding-top: 6pt;
-    font-size: 7.5pt;
-    color: #888;
-    justify-content: space-between;
-  }
-
-  /* ── 6. FORCE ALL TEXT DARK INSIDE THE DOCKET ROOT ── */
-  /*
-     The on-screen design uses Tailwind utilities like text-white/55,
-     text-accent, text-emerald-400 etc. on a dark background.
-     On white paper, these are invisible. This blanket rule forces
-     all text to dark, then we selectively re-color badges below.
-  */
-  [data-print="docket-root"],
-  [data-print="docket-root"] * {
-    color: #111 !important;
-    background-color: transparent !important;
-    border-color: #ddd !important;
-    text-decoration: none;
-  }
-
-  /* ── 7. CARD SECTIONS ── */
-  [data-print="docket-root"] .card {
-    border: 1px solid #ddd !important;
-    border-radius: 4pt !important;
-    background: white !important;
-    padding: 12pt 14pt !important;
-    margin-bottom: 14pt !important;
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  /* ── 8. FIT SCORE BADGES — dark text on light tint ── */
-  /* High (emerald) */
-  [data-print="docket-root"] [class*="bg-emerald-500"] {
-    background-color: #dcfce7 !important;
-    border-color: #86efac !important;
-  }
-  [data-print="docket-root"] [class*="text-emerald"] {
-    color: #14532d !important;
-  }
-  /* Medium (amber) */
-  [data-print="docket-root"] [class*="bg-amber-500"] {
-    background-color: #fef9c3 !important;
-    border-color: #fde047 !important;
-  }
-  [data-print="docket-root"] [class*="text-amber"] {
-    color: #78350f !important;
-  }
-  /* Low (orange) */
-  [data-print="docket-root"] [class*="bg-orange-500"] {
-    background-color: #ffedd5 !important;
-    border-color: #fdba74 !important;
-  }
-  [data-print="docket-root"] [class*="text-orange"] {
-    color: #7c2d12 !important;
-  }
-  /* None (gray/white) */
-  [data-print="docket-root"] [class*="bg-white/05"] {
-    background-color: #f3f4f6 !important;
-    border-color: #d1d5db !important;
-  }
-
-  /* ── 9. NUMBERED CIRCLES (accent bg) ── */
-  [data-print="docket-root"] [class*="bg-accent"] {
-    background-color: #1a1a1a !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  [data-print="docket-root"] [class*="bg-accent"] * {
-    color: white !important;
-  }
-  [data-print="docket-root"] [class*="bg-accent/1"],
-  [data-print="docket-root"] [class*="bg-accent/2"] {
-    background-color: #e5e7eb !important;
-  }
-  [data-print="docket-root"] [class*="bg-accent/1"] *,
-  [data-print="docket-root"] [class*="bg-accent/2"] * {
-    color: #111 !important;
+
+  /* Safety net: anything tagged data-print="hide" is hidden */
+  [data-print="hide"] {
+    display: none !important;
   }
 
-  /* ── 10. OPPORTUNITY CARDS (bg-white/02 etc.) ── */
-  [data-print="docket-root"] [class*="bg-white/02"],
-  [data-print="docket-root"] [class*="bg-white/03"],
-  [data-print="docket-root"] [class*="bg-white/04"],
-  [data-print="docket-root"] [class*="bg-white/06"] {
-    background-color: #f9fafb !important;
-    border-color: #e5e7eb !important;
-  }
-
-  /* ── 11. DIVIDERS (border-white/06 etc.) ── */
-  [data-print="docket-root"] [class*="border-white"] {
-    border-color: #e5e7eb !important;
-  }
-
-  /* ── 12. LINKS ── */
-  [data-print="docket-root"] a {
-    color: #1d4ed8 !important;
-  }
-
-  /* ── 13. WARNINGS BOX ── */
-  [data-print="docket-root"] [class*="bg-amber-500/05"] {
-    background-color: #fffbeb !important;
-    border-color: #fcd34d !important;
-  }
-
-  /* ── 14. PAGE BREAK CONTROL ── */
-  [data-print="docket-root"] .card,
-  [data-print="docket-root"] > div > div {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  [data-print="docket-root"] > div {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  /* ── 15. TAG / BADGE ELEMENTS ── */
-  [data-print="docket-root"] .tag {
-    color: #374151 !important;
-    background-color: #f3f4f6 !important;
-    border-color: #d1d5db !important;
-  }
-
-  /* ── 16. INLINE BADGES (rounded-full px-2.5) ── */
-  [data-print="docket-root"] [class*="rounded-full"][class*="px-2"] {
-    border: 1px solid #d1d5db !important;
-    background-color: #f9fafb !important;
-  }
-
-  /* ── 17. SECTION TITLE LABELS ── */
-  [data-print="docket-root"] [class*="uppercase"][class*="tracking-widest"] {
-    color: #374151 !important;
-    font-weight: 700 !important;
+  /* Ensure print:hidden Tailwind utility is active
+     (Tailwind v3 generates this, but belt-and-suspenders) */
+  .print\:hidden {
+    display: none !important;
   }
 }
