@@ -36,10 +36,10 @@ export default function DocketBuilderPage() {
           </div>
         </div>
 
-        {/* Problem / Approach / Impact */}
+        {/* Problem / Approach / Impact — hidden in print */}
         <div className="border-t border-white/06 print:hidden">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-            <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-0">
+            <div className="grid md:grid-cols-3 gap-8">
               <div className="card p-6">
                 <div className="text-accent text-xs uppercase tracking-widest mb-3 font-medium">
                   The Problem
@@ -65,8 +65,12 @@ export default function DocketBuilderPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
 
-            {/* Interactive Demo */}
+        {/* Interactive Demo — NOT hidden in print; docket content lives here */}
+        <div className="border-t border-white/06">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
             <DocketBuilderClient />
           </div>
         </div>
