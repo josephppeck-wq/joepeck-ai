@@ -102,14 +102,24 @@ function extractJson(text: string): Docket | null {
   }
 }
 
-// Detect which phase is currently streaming based on accumulated text
+// Extract [STATUS] lines from streamed text
+function extractStatusLines(text: string): string[] {
+  return text
+    .split("\n")
+    .filter((l) => l.trim().startsWith("[STATUS]"))
+    .map((l) => l.replace(/^\[STATUS\]\s*/, "").trim())
+    .filter(Boolean);
+}
+
+// Map the last status line to a rough phase number for the progress bar
 function detectActivePhase(text: string): number {
-  if (text.includes("PHASE 4") || text.includes("Assembling docket")) return 4;
-  if (text.includes("PHASE 3") || text.includes("Mapping product fit")) return 3;
-  if (text.includes("PHASE 2.5") || text.includes("Identifying decision-makers")) return 2.5;
-  if (text.includes("PHASE 2") || text.includes("Researching ")) return 2;
-  if (text.includes("PHASE 1") || text.includes("Analyzing ")) return 1;
-  return 0;
+  const lower = text.toLowerCase();
+  if (lower.includes("assembling")) return 4;
+  if (lower.includes("mapping") || lower.includes("fit")) return 3;
+  if (lower.includes("decision") || lower.includes("identifying")) return 2.5;
+  if (lower.includes("researching") || lower.includes("customer")) return 2;
+  if (lower.includes("crawl") || lower.includes("analyzing") || lower.includes("product page")) return 1;
+  return 1;
 }
 
 const fitScoreConfig: Record<string, { label: string; classes: string }> = {
@@ -552,6 +562,7 @@ export default function DocketBuilderClient() {
   const [customerName, setCustomerName] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [streamedText, setStreamedText] = useState("");
+  const [statusLines, setStatusLines] = useState<string[]>([]);
   const [activePhase, setActivePhase] = useState(0);
   const [docket, setDocket] = useState<Docket | null>(null);
   const [rawJson, setRawJson] = useState("");
@@ -568,6 +579,7 @@ export default function DocketBuilderClient() {
 
     setIsGenerating(true);
     setStreamedText("");
+    setStatusLines([]);
     setDocket(null);
     setRawJson("");
     setError("");
@@ -612,7 +624,11 @@ export default function DocketBuilderClient() {
         if (done) break;
         accumulated += decoder.decode(value, { stream: true });
         setStreamedText(accumulated);
-        setActivePhase(detectActivePhase(accumulated));
+        const lines = extractStatusLines(accumulated);
+        setStatusLines(lines);
+        if (lines.length > 0) {
+          setActivePhase(detectActivePhase(lines[lines.length - 1]));
+        }
       }
     } catch {
       setError("Stream interrupted. The response may be incomplete — scroll down to see what was generated.");
@@ -652,6 +668,7 @@ export default function DocketBuilderClient() {
   const handleReset = () => {
     setDocket(null);
     setStreamedText("");
+    setStatusLines([]);
     setRawJson("");
     setError("");
     setJsonParseError(false);
@@ -792,24 +809,37 @@ export default function DocketBuilderClient() {
             className="card p-6 mb-6"
           >
             <PhaseProgressBar activePhase={activePhase} />
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-5">
               <div className="flex gap-1">
                 <span className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "0ms" }} />
                 <span className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "150ms" }} />
                 <span className="w-2 h-2 rounded-full bg-accent animate-bounce" style={{ animationDelay: "300ms" }} />
               </div>
-              <span className="text-white/40 text-xs uppercase tracking-wide">
-                {activePhase === 1 && "Analyzing seller..."}
-                {activePhase === 2 && "Researching customer..."}
-                {activePhase === 2.5 && "Identifying decision-makers..."}
-                {activePhase === 3 && "Mapping product fit..."}
-                {activePhase === 4 && "Assembling docket..."}
-                {activePhase === 0 && "Starting agent..."}
-              </span>
+              <span className="text-white/40 text-xs uppercase tracking-wide">Agent running...</span>
             </div>
-            <pre className="text-white/25 text-xs font-mono leading-relaxed whitespace-pre-wrap overflow-hidden max-h-48">
-              {streamedText}
-            </pre>
+            {/* Live status feed */}
+            <div className="space-y-2">
+              {statusLines.length === 0 && (
+                <div className="text-white/20 text-xs font-mono">Starting agent...</div>
+              )}
+              {statusLines.map((line, i) => {
+                const isLast = i === statusLines.length - 1;
+                return (
+                  <div key={i} className={`flex items-center gap-2 text-xs font-mono transition-all ${
+                    isLast ? "text-white/70" : "text-white/30"
+                  }`}>
+                    {isLast ? (
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse flex-shrink-0" />
+                    ) : (
+                      <svg className="w-3 h-3 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                    {line}
+                  </div>
+                );
+              })}
+            </div>
           </motion.div>
         )}
 
@@ -839,6 +869,19 @@ export default function DocketBuilderClient() {
         {!isGenerating && docket && (
           <motion.div key="docket" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <PhaseProgressBar activePhase={5} />
+            {/* Completed status feed */}
+            {statusLines.length > 0 && (
+              <div className="mb-6 space-y-1.5">
+                {statusLines.map((line, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs font-mono text-white/25">
+                    <svg className="w-3 h-3 text-emerald-400/50 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {line}
+                  </div>
+                ))}
+              </div>
+            )}
             <DocketView docket={docket} rawJson={rawJson} />
           </motion.div>
         )}
