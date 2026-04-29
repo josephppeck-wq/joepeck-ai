@@ -1,0 +1,904 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+interface SellerProduct {
+  name: string;
+  what_it_does?: string;
+  primary_user?: string;
+  primary_value_prop?: string;
+}
+
+interface SellerProfile {
+  company_one_liner?: string;
+  product_portfolio?: SellerProduct[];
+  icp?: { industries?: string[]; company_sizes?: string[]; buyer_roles?: string[] };
+  top_3_differentiators?: string[];
+}
+
+interface CustomerSnapshot {
+  name?: string;
+  industry?: string;
+  size_estimate?: string;
+  location?: string;
+  what_they_do?: string;
+}
+
+interface FitMapEntry {
+  product_name: string;
+  fit_score: "High" | "Medium" | "Low" | "None";
+  reasoning: string;
+  evidence_refs?: string[];
+}
+
+interface CrossSellOpportunity {
+  rank?: number;
+  product?: string;
+  play_type?: string;
+  summary?: string;
+  why_now?: string;
+}
+
+interface RecommendedPlays {
+  cross_sell_opportunities?: CrossSellOpportunity[];
+  talking_points?: string[];
+  discovery_questions?: string[];
+}
+
+interface DocketMetadata {
+  seller_profile_source?: string;
+  seller_profile_confidence?: string;
+  customer_research_source_count?: number | string;
+  warnings?: string[];
+  generated_at?: string; // injected client-side on parse, never trusted from agent
+}
+
+interface Docket {
+  seller_profile?: SellerProfile;
+  customer_snapshot?: CustomerSnapshot;
+  fit_map?: FitMapEntry[];
+  recommended_plays?: RecommendedPlays;
+  metadata?: DocketMetadata;
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function isValidUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return false;
+    const h = url.hostname.toLowerCase();
+    // Block localhost, internal IPs, and non-public TLDs
+    if (h === "localhost" || h === "127.0.0.1" || h === "0.0.0.0") return false;
+    if (/^10\.\d+\.\d+\.\d+$/.test(h)) return false;
+    if (/^192\.168\.\d+\.\d+$/.test(h)) return false;
+    if (/^172\.(1[6-9]|2\d|3[01])\.\d+\.\d+$/.test(h)) return false;
+    if (h.endsWith(".local") || h.endsWith(".internal") || h.endsWith(".test")) return false;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const INJECTION_PATTERNS = [
+  /^ignore\s+previous\s+instructions/i,
+  /^system\s*:/i,
+  /^###/,
+  /^<\|im_start\|>/,
+  /^<\|system\|>/,
+  /^\[INST\]/i,
+  /^ASSISTANT\s*:/i,
+  /forget\s+(all\s+)?previous\s+(instructions|context)/i,
+  /reveal\s+(your\s+)?(system\s+)?prompt/i,
+  /disregard\s+(all\s+)?previous/i,
+];
+
+function containsInjection(value: string): boolean {
+  return value.split("\n").some((line) =>
+    INJECTION_PATTERNS.some((p) => p.test(line.trim()))
+  );
+}
+
+function triggerPrint(docket: Docket, sellerUrl: string) {
+  const root = document.querySelector('[data-print="docket-root"]');
+  if (!root) { window.print(); return; }
+
+  // Clean up any previous injections
+  document.getElementById("docket-print-header")?.remove();
+  document.getElementById("docket-print-footer")?.remove();
+  document.getElementById("docket-print-styles")?.remove();
+
+  const sellerDomain = (() => { try { return new URL(sellerUrl).hostname; } catch { return sellerUrl; } })();
+  const customerName = docket.customer_snapshot?.name || "Unknown Customer";
+  const generatedAt = docket.metadata?.generated_at
+    ? new Date(docket.metadata.generated_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+    : new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+  // Inject a <style> tag that overrides Tailwind print colors with
+  // maximum specificity. This is more reliable than an external
+  // stylesheet fighting against Tailwind's compiled opacity utilities.
+  const style = document.createElement("style");
+  style.id = "docket-print-styles";
+  style.textContent = `
+    @media print {
+      /* Force ALL text to dark — overrides text-white/*, text-accent, etc. */
+      [data-print="docket-root"],
+      [data-print="docket-root"] p,
+      [data-print="docket-root"] span,
+      [data-print="docket-root"] div,
+      [data-print="docket-root"] h1,
+      [data-print="docket-root"] h2,
+      [data-print="docket-root"] h3,
+      [data-print="docket-root"] li,
+      [data-print="docket-root"] a {
+        color: #111 !important;
+      }
+      /* Force backgrounds to white/light — overrides bg-white/0X */
+      [data-print="docket-root"] div,
+      [data-print="docket-root"] .card {
+        background-color: #fff !important;
+      }
+      /* Opportunity/info sub-cards */
+      [data-print="docket-root"] .rounded-lg {
+        background-color: #f8f8f8 !important;
+        border-color: #e0e0e0 !important;
+      }
+      /* Dividers */
+      [data-print="docket-root"] [class*="border-white"] {
+        border-color: #e0e0e0 !important;
+      }
+      /* Fit score badge — High */
+      [data-print="docket-root"] [class*="bg-emerald"] {
+        background-color: #d1fae5 !important;
+      }
+      [data-print="docket-root"] [class*="text-emerald"] {
+        color: #065f46 !important;
+      }
+      /* Fit score badge — Medium */
+      [data-print="docket-root"] [class*="bg-amber"] {
+        background-color: #fef3c7 !important;
+      }
+      [data-print="docket-root"] [class*="text-amber"] {
+        color: #92400e !important;
+      }
+      /* Fit score badge — Low */
+      [data-print="docket-root"] [class*="bg-orange"] {
+        background-color: #fed7aa !important;
+      }
+      [data-print="docket-root"] [class*="text-orange"] {
+        color: #9a3412 !important;
+      }
+      /* Numbered accent circles */
+      [data-print="docket-root"] [class*="bg-accent"]:not([class*="bg-accent/"]) {
+        background-color: #1e3a5f !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      [data-print="docket-root"] [class*="bg-accent"]:not([class*="bg-accent/"]) span,
+      [data-print="docket-root"] [class*="bg-accent"]:not([class*="bg-accent/"]) div {
+        color: #fff !important;
+      }
+      /* Page break avoidance */
+      [data-print="docket-root"] .card {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Inject header and footer into document.body (not docket-root)
+  // so position:fixed in @media print anchors them relative to the viewport
+  const header = document.createElement("div");
+  header.id = "docket-print-header";
+  header.innerHTML = `
+    <div class="ph-title">Account Docket — ${customerName}</div>
+    <div class="ph-meta">
+      <span>Seller: ${sellerDomain}</span>
+      <span>Customer: ${customerName}</span>
+      <span>Generated: ${generatedAt}</span>
+    </div>
+  `;
+  document.body.appendChild(header);
+
+  const footer = document.createElement("div");
+  footer.id = "docket-print-footer";
+  footer.innerHTML = `
+    <span>Generated by joepeck.ai/projects/docket-builder</span>
+    <span>Confidential — for internal use only</span>
+  `;
+  document.body.appendChild(footer);
+
+  window.print();
+
+  // Clean up after print dialog closes
+  setTimeout(() => {
+    header.remove();
+    footer.remove();
+    style.remove();
+  }, 2000);
+}
+
+function extractJson(text: string): Docket | null {
+  try {
+    // Primary: extract JSON from inside the last ```json ... ``` fence
+    const fenceMatches = Array.from(text.matchAll(/```json\s*([\s\S]*?)```/g));
+    if (fenceMatches.length > 0) {
+      const last = fenceMatches[fenceMatches.length - 1];
+      return JSON.parse(last[1].trim()) as Docket;
+    }
+    // Fallback: outermost braces
+    const start = text.indexOf("{");
+    const end = text.lastIndexOf("}");
+    if (start === -1 || end === -1 || end <= start) return null;
+    return JSON.parse(text.slice(start, end + 1)) as Docket;
+  } catch {
+    return null;
+  }
+}
+
+// Extract [STATUS] lines from streamed text
+function extractStatusLines(text: string): string[] {
+  return text
+    .split("\n")
+    .filter((l) => l.trim().startsWith("[STATUS]"))
+    .map((l) => l.replace(/^\[STATUS\]\s*/, "").trim())
+    .filter(Boolean);
+}
+
+
+const fitScoreConfig: Record<string, { label: string; classes: string }> = {
+  High: { label: "High", classes: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
+  Medium: { label: "Medium", classes: "bg-amber-500/10 text-amber-400 border-amber-500/20" },
+  Low: { label: "Low", classes: "bg-orange-500/10 text-orange-400 border-orange-500/20" },
+  None: { label: "None", classes: "bg-white/05 text-white/35 border-white/10" },
+};
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function StatusFeed({ lines, done }: { lines: string[]; done?: boolean }) {
+  return (
+    <div className="space-y-2">
+      {lines.length === 0 && (
+        <div className="text-white/20 text-xs font-mono">Starting agent...</div>
+      )}
+      {lines.map((line, i) => {
+        const isLast = !done && i === lines.length - 1;
+        return (
+          <div key={i} className={`flex items-center gap-2 text-xs font-mono transition-all ${
+            isLast ? "text-white/70" : done ? "text-white/25" : "text-white/35"
+          }`}>
+            {done || !isLast ? (
+              <svg className="w-3 h-3 text-emerald-400/70 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+              </svg>
+            ) : (
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse flex-shrink-0" />
+            )}
+            {line}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function CopyButton({ json }: { json: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(json);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // clipboard not available
+    }
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 bg-white/04 hover:bg-white/08 text-white/50 hover:text-white/80 text-xs transition-all"
+    >
+      {copied ? (
+        <>
+          <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+          </svg>
+          Copied
+        </>
+      ) : (
+        <>
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+          Copy as JSON
+        </>
+      )}
+    </button>
+  );
+}
+
+function DownloadPdfButton({ docket, sellerUrl }: { docket: Docket; sellerUrl: string }) {
+  return (
+    <button
+      onClick={() => triggerPrint(docket, sellerUrl)}
+      className="no-print inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 bg-white/04 hover:bg-white/08 text-white/50 hover:text-white/80 text-xs transition-all"
+    >
+      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      Download PDF
+    </button>
+  );
+}
+
+function DocketView({ docket, rawJson, sellerUrl }: { docket: Docket; rawJson: string; sellerUrl: string }) {
+  const snap = docket.customer_snapshot;
+  const profile = docket.seller_profile;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="space-y-6"
+    >
+      {/* Header row */}
+      <div className="flex items-center justify-between flex-wrap gap-3" data-print="hide">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            Docket Complete
+          </span>
+          {docket.metadata?.seller_profile_source === "INFERRED" && (
+            <span className="px-2.5 py-1 rounded-full text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              ⚠ Seller profile inferred
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <DownloadPdfButton docket={docket} sellerUrl={sellerUrl} />
+          <CopyButton json={rawJson} />
+        </div>
+      </div>
+
+      {/* Warnings */}
+      {docket.metadata?.warnings && docket.metadata.warnings.length > 0 && (
+        <div className="card p-4 border-amber-500/20 bg-amber-500/05">
+          <div className="text-amber-400 text-xs uppercase tracking-widest mb-2 font-medium">Warnings</div>
+          <ul className="space-y-1">
+            {docket.metadata.warnings.map((w, i) => (
+              <li key={i} className="text-amber-300/70 text-xs leading-relaxed flex items-start gap-2">
+                <span className="mt-0.5 flex-shrink-0">⚠</span>
+                <span>{w}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Seller Profile */}
+      {profile && (
+        <div className="card p-8">
+          <div className="text-accent text-xs uppercase tracking-widest mb-4 font-medium">Seller Profile</div>
+          {profile.company_one_liner && (
+            <p className="text-white/80 leading-relaxed mb-6">{profile.company_one_liner}</p>
+          )}
+          {profile.product_portfolio && profile.product_portfolio.length > 0 && (
+            <div className="mb-6">
+              <div className="text-white/35 text-xs uppercase tracking-wide mb-3">Products</div>
+              <div className="space-y-4">
+                {profile.product_portfolio.map((p, i) => (
+                  <div key={i} className="border-b border-white/06 pb-4 last:border-0 last:pb-0">
+                    <div className="text-white font-semibold text-sm mb-1">{p.name}</div>
+                    {p.what_it_does && <p className="text-white/55 text-xs leading-relaxed mb-1">{p.what_it_does}</p>}
+                    {p.primary_value_prop && <p className="text-accent/70 text-xs italic">{p.primary_value_prop}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {profile.top_3_differentiators && profile.top_3_differentiators.length > 0 && (
+            <div>
+              <div className="text-white/35 text-xs uppercase tracking-wide mb-2">Top Differentiators</div>
+              <ul className="space-y-1">
+                {profile.top_3_differentiators.map((d, i) => (
+                  <li key={i} className="flex items-start gap-2 text-white/55 text-xs leading-relaxed">
+                    <span className="text-accent mt-0.5 flex-shrink-0">→</span>
+                    <span>{d}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {docket.metadata && (
+            <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-white/06">
+              {docket.metadata.seller_profile_source && (
+                <span className="text-xs text-white/35">Source: <span className="text-white/55">{docket.metadata.seller_profile_source}</span></span>
+              )}
+              {docket.metadata.seller_profile_confidence && (
+                <span className="text-xs text-white/35">Confidence: <span className="text-white/55">{docket.metadata.seller_profile_confidence}</span></span>
+              )}
+              {docket.metadata.customer_research_source_count !== undefined && (
+                <span className="text-xs text-white/35">Customer sources: <span className="text-white/55">{docket.metadata.customer_research_source_count}</span></span>
+              )}
+              {docket.metadata.generated_at && (
+                <span className="text-xs text-white/20">Generated: <span className="text-white/35">{new Date(docket.metadata.generated_at).toLocaleString()}</span></span>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Customer Snapshot */}
+      {snap && (snap.name || snap.industry || snap.size_estimate || snap.location || snap.what_they_do) && (
+        <div className="card p-8">
+          <div className="text-accent text-xs uppercase tracking-widest mb-6 font-medium">Customer Snapshot</div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5">
+            {snap.name && (
+              <div><div className="text-white/35 text-xs mb-1">Company</div><div className="text-white/75 text-sm font-medium">{snap.name}</div></div>
+            )}
+            {snap.industry && (
+              <div><div className="text-white/35 text-xs mb-1">Industry</div><div className="text-white/75 text-sm">{snap.industry}</div></div>
+            )}
+            {snap.size_estimate && (
+              <div><div className="text-white/35 text-xs mb-1">Size</div><div className="text-white/75 text-sm">{snap.size_estimate}</div></div>
+            )}
+            {snap.location && (
+              <div><div className="text-white/35 text-xs mb-1">Location</div><div className="text-white/75 text-sm">{snap.location}</div></div>
+            )}
+          </div>
+          {snap.what_they_do && (
+            <p className="text-white/60 text-sm leading-relaxed">{snap.what_they_do}</p>
+          )}
+        </div>
+      )}
+
+      {/* Fit Map */}
+      {docket.fit_map && docket.fit_map.length > 0 && (
+        <div className="card p-8">
+          <div className="text-accent text-xs uppercase tracking-widest mb-6 font-medium">Product Fit Map</div>
+          <div className="space-y-5">
+            {docket.fit_map.map((entry, i) => {
+              const cfg = fitScoreConfig[entry.fit_score] ?? fitScoreConfig["None"];
+              return (
+                <div key={i} className="border-b border-white/06 pb-5 last:border-0 last:pb-0">
+                  <div className="flex items-center justify-between gap-4 mb-3 flex-wrap">
+                    <div className="text-white font-semibold text-sm">{entry.product_name}</div>
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${cfg.classes}`}>
+                      {entry.fit_score}
+                    </span>
+                  </div>
+                  <p className="text-white/60 text-xs leading-relaxed mb-3">{entry.reasoning}</p>
+                  {entry.evidence_refs && entry.evidence_refs.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {entry.evidence_refs.map((ref, j) => (
+                        <a key={j} href={ref} target="_blank" rel="noopener noreferrer"
+                          className="text-accent/50 hover:text-accent text-xs transition-colors truncate max-w-xs">
+                          {ref}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Recommended Plays */}
+      {docket.recommended_plays && (
+        <div className="card p-8">
+          <div className="text-accent text-xs uppercase tracking-widest mb-6 font-medium">Recommended Plays</div>
+
+          {docket.recommended_plays.cross_sell_opportunities && docket.recommended_plays.cross_sell_opportunities.length > 0 && (
+            <div className="mb-8">
+              <div className="text-white/35 text-xs uppercase tracking-wide mb-4">Land &amp; Expand Opportunities</div>
+              <div className="space-y-4">
+                {docket.recommended_plays.cross_sell_opportunities.map((opp, i) => (
+                  <div key={i} className="bg-white/02 border border-white/06 rounded-lg p-5">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-5 h-5 rounded-full bg-accent flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                        {opp.rank ?? i + 1}
+                      </div>
+                      <div className="text-white font-medium text-sm">{opp.product ?? ""}</div>
+                      {opp.play_type && (
+                        <span className="ml-auto px-2 py-0.5 rounded-full text-xs border border-white/10 text-white/40">{opp.play_type}</span>
+                      )}
+                    </div>
+                    {opp.summary && <p className="text-white/65 text-sm leading-relaxed mb-2">{opp.summary}</p>}
+                    {opp.why_now && <p className="text-white/40 text-xs leading-relaxed italic">{opp.why_now}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {docket.recommended_plays.talking_points && docket.recommended_plays.talking_points.length > 0 && (
+            <div className="mb-8">
+              <div className="text-white/35 text-xs uppercase tracking-wide mb-3">Talking Points</div>
+              <div className="space-y-3">
+                {docket.recommended_plays.talking_points.map((tp, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-accent/15 border border-accent/25 flex items-center justify-center text-accent text-xs font-semibold flex-shrink-0 mt-0.5">
+                      {i + 1}
+                    </div>
+                    <p className="text-white/65 text-sm leading-relaxed">{tp}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {docket.recommended_plays.discovery_questions && docket.recommended_plays.discovery_questions.length > 0 && (
+            <div>
+              <div className="text-white/35 text-xs uppercase tracking-wide mb-3">Discovery Questions</div>
+              <div className="space-y-3">
+                {docket.recommended_plays.discovery_questions.map((q, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <span className="text-accent/50 text-xs mt-1 flex-shrink-0">Q{i + 1}</span>
+                    <p className="text-white/60 text-sm leading-relaxed italic">&ldquo;{q}&rdquo;</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </motion.div>
+  );
+}
+
+// ─── Main Component ───────────────────────────────────────────────────────────
+
+export default function DocketBuilderClient() {
+  const [sellerUrl, setSellerUrl] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [streamedText, setStreamedText] = useState("");
+  const [statusLines, setStatusLines] = useState<string[]>([]);
+  const [docket, setDocket] = useState<Docket | null>(null);
+  const [rawJson, setRawJson] = useState("");
+  const [error, setError] = useState("");
+  const [jsonParseError, setJsonParseError] = useState(false);
+
+  const urlValid = isValidUrl(sellerUrl);
+  const nameValid = customerName.trim().length >= 2 && customerName.trim().length <= 200;
+  const nameClean = !containsInjection(customerName);
+  const canSubmit = urlValid && nameValid && nameClean && !isGenerating;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!canSubmit) return;
+
+    // Client-side abuse protection
+    if (containsInjection(customerName)) {
+      setError("Invalid customer name. Please enter a real company name.");
+      return;
+    }
+    if (!isValidUrl(sellerUrl)) {
+      setError("Please enter a valid, publicly accessible URL.");
+      return;
+    }
+
+    setIsGenerating(true);
+    setStreamedText("");
+    setStatusLines([]);
+    setDocket(null);
+    setRawJson("");
+    setError("");
+    setJsonParseError(false);
+
+    let res: Response;
+    try {
+      res = await fetch("/api/docket-builder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sellerUrl: sellerUrl.trim(), customerName: customerName.trim() }),
+      });
+    } catch {
+      setError("Network error — please check your connection and try again.");
+      setIsGenerating(false);
+      return;
+    }
+
+    if (!res.ok) {
+      let errMsg = "Something went wrong. Please try again.";
+      try {
+        const data = await res.json();
+        if (res.status === 429) {
+          errMsg = data.error ?? "RATE_LIMIT";
+        } else {
+          errMsg = data.error ?? errMsg;
+        }
+      } catch { /* ignore parse error */ }
+      setError(errMsg);
+      setIsGenerating(false);
+      return;
+    }
+
+    const reader = res.body!.getReader();
+    const decoder = new TextDecoder();
+    let accumulated = "";
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        accumulated += decoder.decode(value, { stream: true });
+        setStreamedText(accumulated);
+        const lines = extractStatusLines(accumulated);
+        setStatusLines(lines);
+      }
+    } catch {
+      setError("Stream interrupted. The response may be incomplete — scroll down to see what was generated.");
+      setIsGenerating(false);
+    }
+
+    setIsGenerating(false);
+
+    // Extract the Phase 4 JSON block from the streamed output
+    // Primary: prefer content inside the last ```json ... ``` fence
+    const fenceMatches = Array.from(accumulated.matchAll(/```json\s*([\s\S]*?)```/g));
+    let jsonStr = "";
+    if (fenceMatches.length > 0) {
+      jsonStr = fenceMatches[fenceMatches.length - 1][1].trim();
+    } else {
+      // Fallback: outermost braces
+      const jsonStart = accumulated.indexOf("{");
+      const jsonEnd = accumulated.lastIndexOf("}");
+      if (jsonStart !== -1 && jsonEnd > jsonStart) {
+        jsonStr = accumulated.slice(jsonStart, jsonEnd + 1);
+      }
+    }
+    if (jsonStr) {
+      setRawJson(jsonStr);
+      const parsed = extractJson(accumulated);
+      if (parsed) {
+        // Inject real timestamp client-side — never trust agent-generated dates
+        if (parsed.metadata) {
+          parsed.metadata.generated_at = new Date().toISOString();
+        } else {
+          parsed.metadata = { generated_at: new Date().toISOString() };
+        }
+        setDocket(parsed);
+      } else {
+        setJsonParseError(true);
+      }
+    } else {
+      setJsonParseError(true);
+    }
+  };
+
+  const handleReset = () => {
+    setDocket(null);
+    setStreamedText("");
+    setStatusLines([]);
+    setRawJson("");
+    setError("");
+    setJsonParseError(false);
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto">
+      {/* Form card */}
+      <div className="card p-8 mb-8 print:hidden">
+        <form onSubmit={handleSubmit} noValidate>
+          {/* Seller URL */}
+          <div className="mb-6">
+            <label
+              htmlFor="seller-url"
+              className="block text-sm font-medium text-white/70 uppercase tracking-wide mb-2"
+            >
+              Seller Website URL <span className="text-accent">*</span>
+            </label>
+            <input
+              id="seller-url"
+              type="url"
+              value={sellerUrl}
+              onChange={(e) => setSellerUrl(e.target.value)}
+              placeholder="https://www.example.com"
+              required
+              disabled={isGenerating}
+              autoComplete="off"
+              spellCheck={false}
+              className="w-full bg-white/04 border border-white/08 rounded-lg px-4 py-3 text-white placeholder-white/25 text-sm focus:outline-none focus:border-accent/50 focus:bg-white/06 transition-all font-mono disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+            <p className="mt-2 text-white/35 text-xs leading-relaxed">
+              The company doing the selling. The agent will learn their products from this website.
+            </p>
+            {sellerUrl.length > 0 && !urlValid && (
+              <p className="mt-1.5 text-red-400 text-xs">Please enter a valid URL including https://</p>
+            )}
+          </div>
+
+          {/* Customer Name */}
+          <div className="mb-8">
+            <label
+              htmlFor="customer-name"
+              className="block text-sm font-medium text-white/70 uppercase tracking-wide mb-2"
+            >
+              Customer Name <span className="text-accent">*</span>
+            </label>
+            <input
+              id="customer-name"
+              type="text"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              placeholder="Acme Corporation"
+              required
+              minLength={2}
+              maxLength={200}
+              disabled={isGenerating}
+              className="w-full bg-white/04 border border-white/08 rounded-lg px-4 py-3 text-white placeholder-white/25 text-sm focus:outline-none focus:border-accent/50 focus:bg-white/06 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+            <div className="flex items-center justify-between mt-2">
+              <p className="text-white/35 text-xs leading-relaxed">
+                The end customer being researched.
+              </p>
+              <span className="text-white/25 text-xs flex-shrink-0 ml-4">
+                {customerName.length}/200
+              </span>
+            </div>
+            {customerName.length > 0 && customerName.trim().length < 2 && (
+              <p className="mt-1.5 text-red-400 text-xs">Name must be at least 2 characters</p>
+            )}
+            {customerName.length > 0 && !nameClean && (
+              <p className="mt-1.5 text-red-400 text-xs">Please enter a real company name.</p>
+            )}
+          </div>
+
+          {/* Submit row */}
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <p className="text-white/25 text-xs">
+              Agent runs in phases · typically 60–90 seconds
+            </p>
+            <div className="flex items-center gap-3">
+              {(docket || jsonParseError) && !isGenerating && (
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-white/10 bg-white/04 hover:bg-white/08 text-white/50 hover:text-white/80 text-sm transition-all"
+                >
+                  Run again
+                </button>
+              )}
+              <button
+                type="submit"
+                disabled={!canSubmit}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-accent hover:bg-accent-light disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-accent/25"
+              >
+                {isGenerating ? (
+                  <>
+                    <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    Generate Docket
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {error && error !== "RATE_LIMIT" && (
+            <div className="mt-4 p-3 rounded-lg bg-red-500/08 border border-red-500/20 flex items-start gap-3">
+              <span className="text-red-400 text-sm flex-shrink-0 mt-0.5">⚠</span>
+              <p className="text-red-400 text-sm">{error}</p>
+            </div>
+          )}
+          {error === "RATE_LIMIT" && (
+            <div className="mt-4 p-4 rounded-lg bg-white/03 border border-white/10 text-center">
+              <p className="text-white/70 text-sm mb-2">
+                You’ve reached the demo limit for today.
+              </p>
+              <p className="text-white/45 text-sm">
+                If you’re seriously evaluating this for your team, let’s talk:{" "}
+                <a
+                  href="https://calendly.com/joseph-p-peck"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:text-accent-light underline"
+                >
+                  https://calendly.com/joseph-p-peck
+                </a>
+              </p>
+            </div>
+          )}
+        </form>
+      </div>
+
+      {/* Output region */}
+      <AnimatePresence mode="wait">
+        {/* Streaming / loading state */}
+        {isGenerating && (
+          <motion.div
+            key="generating"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="card p-6 mb-6"
+          >
+            <StatusFeed lines={statusLines} />
+          </motion.div>
+        )}
+
+        {/* JSON parse error fallback — show raw output */}
+        {!isGenerating && jsonParseError && !docket && (
+          <motion.div
+            key="parse-error"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="card p-6 mb-6"
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-amber-400 text-sm">⚠</span>
+              <span className="text-amber-400 text-sm font-medium">Rendering issue — showing raw output</span>
+            </div>
+            <p className="text-white/40 text-xs mb-4">
+              The agent completed its run but the Phase 4 JSON could not be parsed for display. The full output is below.
+            </p>
+            <pre className="text-white/55 text-xs font-mono leading-relaxed whitespace-pre-wrap overflow-auto max-h-[32rem] p-4 bg-white/02 rounded-lg border border-white/06">
+              {streamedText}
+            </pre>
+            {rawJson && <div className="mt-4"><CopyButton json={rawJson} /></div>}
+          </motion.div>
+        )}
+
+        {/* Assembled docket */}
+        {!isGenerating && docket && (
+          <motion.div key="docket" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            {statusLines.length > 0 && (
+              <div className="mb-6 print:hidden">
+                <StatusFeed lines={statusLines} done />
+              </div>
+            )}
+            <div data-print="docket-root">
+              <DocketView docket={docket} rawJson={rawJson} sellerUrl={sellerUrl} />
+            </div>
+          </motion.div>
+        )}
+
+        {/* Empty state */}
+        {!isGenerating && !docket && !jsonParseError && !error && (
+          <motion.div
+            key="empty"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="card p-12 text-center"
+          >
+            <div className="w-16 h-16 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center mx-auto mb-6">
+              <svg className="w-8 h-8 text-accent/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 className="text-white/70 font-semibold text-lg mb-2">Your docket will appear here</h3>
+            <p className="text-white/30 text-sm leading-relaxed max-w-sm mx-auto mb-8">
+              Enter a seller website and customer name above, then click Generate Docket.
+              The agent streams results in real time across five phases.
+            </p>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {["Seller Profile", "Customer Research", "Decision-Maker Discovery", "Product Fit Map", "Recommended Plays"].map((label) => (
+                <span key={label} className="px-3 py-1.5 rounded-full text-xs border border-white/08 text-white/25 bg-white/02">
+                  {label}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}

@@ -80,6 +80,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Product, market, and stage are required." }, { status: 400 });
   }
 
+  // Pre-flight: ensure API key is configured
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json(
+      { error: "Configuration error: API key not set." },
+      { status: 500 }
+    );
+  }
+
   const result = streamText({
     model: anthropic("claude-opus-4-5-20251101"),
     maxOutputTokens: 3000,
@@ -99,5 +107,28 @@ Sales Motion: ${motion || "Not specified"}`,
     ],
   });
 
-  return result.toTextStreamResponse();
+  // Eagerly read first chunk so auth errors return a proper status
+  const encoder = new TextEncoder();
+  try {
+    const reader = result.textStream.getReader();
+    const { done, value } = await reader.read();
+    const firstChunk = done ? "" : (value ?? "");
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          if (firstChunk) controller.enqueue(encoder.encode(firstChunk));
+          while (true) {
+            const { done: d, value: v } = await reader.read();
+            if (d) break;
+            controller.enqueue(encoder.encode(v ?? ""));
+          }
+        } catch (err) { controller.error(err); }
+        finally { controller.close(); }
+      },
+    });
+    return new Response(stream, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Upstream API error";
+    return NextResponse.json({ error: `Agent error: ${message}` }, { status: 502 });
+  }
 }

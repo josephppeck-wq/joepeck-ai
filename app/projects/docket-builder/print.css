@@ -1,0 +1,85 @@
+/* ── Docket Builder Print Stylesheet ────────────────────────────────────────── */
+/* This file handles page setup and hides via data-print attribute.              */
+/* Color overrides are injected dynamically via <style> tag in triggerPrint()    */
+/* so they win the specificity battle against Tailwind compiled utilities.        */
+
+@media print {
+
+  /* Page margins */
+  @page {
+    size: letter portrait;
+    margin: 0.6in 0.7in 0.7in 0.7in;
+  }
+
+  /* Base body for print */
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Safety net: anything tagged data-print="hide" is hidden */
+  [data-print="hide"] {
+    display: none !important;
+  }
+
+  /* Ensure print:hidden Tailwind utility is active
+     (Tailwind v3 generates this, but belt-and-suspenders) */
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /*
+   * Running header/footer on every printed page.
+   * position: fixed in @media print IS supported by Chrome and renders
+   * on every page of the PDF output. This is the only reliable cross-browser
+   * approach — CSS Paged Media @top-left margin boxes are NOT supported by
+   * Chrome's PDF engine.
+   */
+  #docket-print-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-bottom: 1.5pt solid #111;
+    padding: 6pt 0 8pt 0;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    z-index: 9999;
+  }
+
+  #docket-print-header .ph-title {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 2pt 0;
+  }
+
+  #docket-print-header .ph-meta {
+    font-size: 7.5pt;
+    color: #555;
+    display: flex;
+    gap: 16pt;
+  }
+
+  #docket-print-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1pt solid #ccc;
+    padding: 5pt 0 4pt 0;
+    font-size: 7.5pt;
+    color: #888;
+    display: flex;
+    justify-content: space-between;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  /* Push docket content down/up to avoid overlap with fixed header/footer */
+  [data-print="docket-root"] {
+    padding-top: 52pt;
+    padding-bottom: 28pt;
+  }
+}

@@ -69,6 +69,17 @@ const projects = [
     metricLabel: "not quarters, to actionable strategy",
     gradient: "from-rose-600/20 to-pink-600/10",
   },
+  {
+    slug: "docket-builder",
+    title: "Account Docket Builder",
+    subtitle: "AI agent that learns any seller's product portfolio from their website, then builds a fit-mapped docket for any customer.",
+    category: "Account Intelligence",
+    status: "live",
+    description: "Paste a seller website URL and a customer name. The agent learns the seller's products, researches the customer, maps fit, surfaces decision-makers, and streams a structured sales-ready docket.",
+    metric: "< 2 min",
+    metricLabel: "to a fully researched, fit-mapped account docket",
+    gradient: "from-amber-600/20 to-yellow-600/10",
+  },
 ];
 
 const categoryColors: Record<string, string> = {
@@ -78,6 +89,7 @@ const categoryColors: Record<string, string> = {
   "Autonomous Agents": "bg-orange-500/10 text-orange-400 border-orange-500/20",
   "Forecasting": "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
   "Revenue Intelligence": "bg-rose-500/10 text-rose-400 border-rose-500/20",
+  "Account Intelligence": "bg-amber-500/10 text-amber-400 border-amber-500/20",
 };
 
 export const metadata = {
@@ -105,7 +117,7 @@ export default function ProjectsPage() {
         {/* Stats bar */}
         <div className="flex flex-wrap gap-8 mb-16 py-8 border-y border-white/06">
           {[
-            { value: "6", label: "Live Tools" },
+            { value: "7", label: "Live Tools" },
             { value: "4", label: "Powered by Claude Opus" },
             { value: "~30s", label: "Average response time" },
             { value: "Free", label: "No account required" },
