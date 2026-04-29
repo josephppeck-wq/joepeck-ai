@@ -118,35 +118,40 @@ Seller research (deep — this is the core of the demo):
   consensus to infer profile. Set seller_profile_source to
   INFERRED.
 
-Customer research (lightweight — 3 sources max):
-- Customer's own website (homepage, about)
-- One recent news item or funding record if available
-- One job posting signal if available
-- Do not exceed 3 sources. Focus on what they do and their size.
+Customer research (lightweight):
+- Hard cap: 3 web sources total
+- Priority: customer's own website, one news source, one
+  industry/financial source
+- Goal: enough context to reason about product fit and concrete
+  plays. NOT a full account brief.
 
 Fit map:
-- One entry per product in product_portfolio
-- fit_score: High / Medium / Low / None
-- reasoning must cite specific customer evidence, not generic logic
-- Never invent product names. Only include products found on the
-  seller's actual website.
+- One entry per seller product
+- Score High/Medium/Low/None with 2-3 sentence reasoning
+- Reasoning MUST cite specific evidence from customer research
+- No generic fit logic. No "this would be useful for any company"
 
 Recommended plays:
-- Top 3 cross-sell/land opportunities ranked by fit and timing
-- 3 talking points specific to this customer (not generic)
-- 3 discovery questions the rep should ask on the first call
+- 3 cross_sell_opportunities ranked by priority. Each ties to
+  a specific product from the fit map and includes why_now (a
+  concrete trigger or reason this is the right time)
+- 3 talking_points that are specific to this customer, not
+  generic seller pitch language
+- 3 discovery_questions that surface real pain or stakeholder
+  dynamics
 
 ==============================================================
 OUTPUT RULES (strict)
 ==============================================================
 
 - Only [STATUS] lines and one final JSON code block. Nothing else.
-- No markdown headers (##, ###) anywhere in output.
-- No prose paragraphs.
+- No markdown headers, prose paragraphs, or tables outside the JSON.
 - The JSON must be valid and parseable on first attempt.
-- Never invent product names. Only include products confirmed
-  from the seller website crawl.
-- generated_at must use today's actual date in ISO8601 format.`;
+- generated_at must use the actual current date in ISO8601 format.
+- Never invent product names. If unsure, set seller_profile_source
+  to INFERRED and add a warning.
+- No outbound message drafts, no email templates, no LinkedIn copy.
+  Intelligence only.`;
 
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") || "unknown";
