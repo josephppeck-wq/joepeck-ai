@@ -31,19 +31,9 @@ export default function GamutBriefPage() {
         return;
       }
 
-      // Stream the response
-      const reader = res.body!.getReader();
-      const decoder = new TextDecoder();
-      let accumulated = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        accumulated += decoder.decode(value, { stream: true });
-        setOutput(accumulated);
-        // Scroll output into view as it streams
-        outputRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      }
+      const data = await res.json();
+      setOutput(data.brief ?? "");
+      outputRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     } catch {
       setError("Network error — please check your connection and try again.");
     } finally {
