@@ -194,9 +194,14 @@ export default function GamutBriefPage() {
                 color: "#d8d8d8",
                 fontFamily: "'Courier New', Courier, monospace",
               }}
-            >
-              {output}
-            </div>
+              dangerouslySetInnerHTML={{
+                __html: output
+                  .replace(/&/g, "&amp;")
+                  .replace(/</g, "&lt;")
+                  .replace(/>/g, "&gt;")
+                  .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+              }}
+            />
           </div>
         )}
 
