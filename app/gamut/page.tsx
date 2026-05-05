@@ -100,9 +100,7 @@ export default function GamutBriefPage() {
               id="deals"
               value={deals}
               onChange={(e) => setDeals(e.target.value)}
-              placeholder={
-                "Paste deals here — one per block. Include: Advertiser, Show, Deal Size, Stage, Last Activity, AE Owner, Notes"
-              }
+              placeholder={"Deal 1:\nAdvertiser:\nShow:\nSize: $\nStage:\nLast touch:\nAE:\nNotes:\n\n---\n\nDeal 2:\nAdvertiser:\nShow:\nSize: $\nStage:\nLast touch:\nAE:\nNotes:"}
               rows={14}
               disabled={loading}
               style={{
