@@ -51,7 +51,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="max-w-2xl mx-auto text-lg lg:text-xl text-white/55 leading-relaxed mb-12"
         >
-          20 years scaling SaaS organizations from first dollar to $415M+ in revenue. 400+ sellers hired, coached, and led. Co-founded an ML company (acquired). I bring AI fluency to every growth challenge — not as theory, but as working systems I build myself.
+          20 years scaling SaaS organizations from first dollar to $415M+ in revenue. 400+ sellers hired, coached, and led. Co-founded an ML company (acquired). I bring AI fluency to every growth challenge - not as theory, but as working systems I build myself.
         </motion.p>
 
         {/* CTAs */}
