@@ -22,9 +22,9 @@ export default function About() {
 
             </div>
             <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight mb-8 leading-tight">
-              From Scaling Sales Teams
+              How I Think About
               <br />
-              <span className="accent-text">to Scaling Intelligence</span>
+              <span className="accent-text">Building Revenue Organizations</span>
             </h2>
 
             <div className="space-y-5">
@@ -32,7 +32,7 @@ export default function About() {
                 "I've spent two decades building SaaS revenue organizations — from zero to 400+ sellers, from first dollar to $415M+, at companies like Groupon, DocuSign, and CloudKitchens.",
                 "But here's what makes my background different: I didn't just discover AI last year. In 2013, I co-founded SimpleRelevance, a machine-learning SaaS platform that sold predictive analytics to Fortune 500 clients in Financial Services, Media, and Retail. We were acquired by Rise Interactive in 2015. I've been building at the intersection of AI and revenue since before it was a buzzword.",
                 "Today, I combine that deep operating experience with hands-on AI development. I build autonomous agents, AI-powered prospecting systems, and intelligent forecasting tools — not as demos, but as working systems that give revenue teams a real competitive edge.",
-                "Whether you're a startup trying to find product-market fit or an enterprise looking to transform your GTM motion, I bring something rare: a leader who has scaled massive sales organizations AND who builds the technology to make them better.",
+                "I've operated at every stage — from zero-revenue startups to $400M+ enterprises — and I build the AI tools my teams actually use. That combination of operating experience and technical fluency is rare at the leadership level.",
               ].map((para, i) => (
                 <motion.p
                   key={i}

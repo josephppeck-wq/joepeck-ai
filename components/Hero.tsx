@@ -29,7 +29,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-6"
         >
-          <span className="tag">AI Strategist · Sales Leader · Builder</span>
+          <span className="tag">Sales Leader · AI Builder · Operator</span>
         </motion.div>
 
         {/* Headline */}
@@ -39,9 +39,9 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[1.05] mb-8"
         >
-          <span className="gradient-text">The Sales Leader</span>
+          <span className="gradient-text">I Build</span>
           <br />
-          <span className="accent-text">Who Builds AI.</span>
+          <span className="accent-text">Revenue Machines.</span>
         </motion.h1>
 
         {/* Subtext */}
@@ -51,8 +51,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="max-w-2xl mx-auto text-lg lg:text-xl text-white/55 leading-relaxed mb-12"
         >
-          20 years scaling SaaS teams to $415M+ in revenue. Co-founded an ML company (acquired).
-          Now I build the AI tools and strategies that give revenue teams a structural competitive advantage.
+          20 years scaling SaaS organizations from first dollar to $415M+ in revenue. 400+ sellers hired, coached, and led. Co-founded an ML company (acquired). I bring AI fluency to every growth challenge — not as theory, but as working systems I build myself.
         </motion.p>
 
         {/* CTAs */}
@@ -63,10 +62,10 @@ export default function Hero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <a
-            href="#services"
+            href="#track-record"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-light text-white font-semibold text-base transition-all duration-300 hover:shadow-xl hover:shadow-accent/30 hover:-translate-y-0.5 group"
           >
-            See How I Can Help
+            See My Track Record
             <svg
               className="w-4 h-4 group-hover:translate-x-1 transition-transform"
               fill="none"
@@ -86,6 +85,14 @@ export default function Hero() {
             className="inline-flex items-center gap-2 px-8 py-4 rounded-xl border border-white/12 hover:border-white/25 text-white/80 hover:text-white font-semibold text-base transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/04"
           >
             Read My Thinking
+          </a>
+          <a
+            href="https://calendly.com/joseph-p-peck"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl border border-white/12 hover:border-white/25 text-white/80 hover:text-white font-semibold text-base transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/04"
+          >
+            Let&apos;s Connect
           </a>
         </motion.div>
 

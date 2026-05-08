@@ -2,7 +2,7 @@ import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import CredibilityBar from "@/components/CredibilityBar";
 import About from "@/components/About";
-import Services from "@/components/Services";
+import WhatIBring from "@/components/WhatIBring";
 import ProjectsTeaser from "@/components/ProjectsTeaser";
 import LeadMagnet from "@/components/LeadMagnet";
 import Insights from "@/components/Insights";
@@ -18,7 +18,7 @@ export default function Home() {
       <CredibilityBar />
       <About />
       <div className="divider" />
-      <Services />
+      <WhatIBring />
       <div className="divider" />
       <ProjectsTeaser />
       <div className="divider" />

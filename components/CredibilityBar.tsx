@@ -9,6 +9,7 @@ const companies = [
   "Prokeep",
   "CareerBuilder",
   "SpringCM",
+  "SimpleRelevance",
 ];
 
 export default function CredibilityBar() {
@@ -16,7 +17,7 @@ export default function CredibilityBar() {
     <section className="py-16 border-y border-white/06 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <p className="text-center text-xs tracking-widest uppercase text-white/25 mb-10">
-          Organizations I&apos;ve Scaled
+          Where I&apos;ve Built
         </p>
         <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
           {companies.map((company, i) => (
