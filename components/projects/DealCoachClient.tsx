@@ -124,7 +124,7 @@ export default function DealCoachClient() {
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          placeholder="Paste your deal notes here — call summaries, CRM notes, email context, anything you know about the deal..."
+          placeholder="Paste your deal notes here - call summaries, CRM notes, email context, anything you know about the deal..."
           rows={8}
           maxLength={2000}
           className="w-full bg-white/04 border border-white/08 rounded-lg px-4 py-3 text-white placeholder-white/25 text-sm focus:outline-none focus:border-accent/50 focus:bg-white/06 transition-all resize-none font-mono"

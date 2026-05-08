@@ -15,7 +15,7 @@ const categoryColors: Record<string, string> = {
 };
 
 export const metadata = {
-  title: "Insights — Joe Peck",
+  title: "Insights - Joe Peck",
   description: "Thinking on AI, sales leadership, and the future of revenue organizations.",
 };
 

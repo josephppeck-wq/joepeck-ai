@@ -3,7 +3,7 @@ import Services from "@/components/Services";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "Advisory & Consulting — Joe Peck",
+  title: "Advisory & Consulting - Joe Peck",
   description:
     "Fractional CRO leadership, AI-powered GTM strategy, and sales organization design. Three ways to work together.",
 };
@@ -20,7 +20,7 @@ export default function AdvisoryPage() {
           </h1>
           <p className="text-white/50 text-lg max-w-2xl">
             Three engagement models for companies that want senior sales leadership
-            and AI-native operating systems — without a full-time hire.
+            and AI-native operating systems - without a full-time hire.
           </p>
         </div>
       </div>

@@ -2,7 +2,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "The Autonomous SDR Agent — Joe Peck",
+  title: "The Autonomous SDR Agent - Joe Peck",
   description: "A fully autonomous outbound sales agent. Architecture, walkthrough, and sample outputs.",
 };
 
@@ -12,29 +12,29 @@ const steps = [
   { num: "03", title: "Stakeholder Mapping", desc: "Identifies likely decision-makers and champions by role, seniority, and tenure. Prioritizes by ICP fit score." },
   { num: "04", title: "Sequence Generation", desc: "Drafts a personalized 5-touch email + LinkedIn sequence for each target. Tailored to account context, not templates." },
   { num: "05", title: "CRM Logging", desc: "All outputs logged to Google Sheets or CRM automatically. Full audit trail with timestamps and confidence scores." },
-  { num: "06", title: "Scheduled Execution", desc: "Runs on a schedule — daily, weekly, or triggered by events. No human intervention required." },
+  { num: "06", title: "Scheduled Execution", desc: "Runs on a schedule - daily, weekly, or triggered by events. No human intervention required." },
 ];
 
 const sampleOutputs = [
   {
     company: "Acme Corp",
     contact: "Sarah Chen, VP Revenue Ops",
-    subject: "Your Q1 forecast gap — a different approach",
-    opener: "Sarah — saw Acme's expansion into the Southeast and noticed you brought on 3 new AE territories in Q4. The forecast complexity that creates is exactly what we help companies like yours solve. Worth 20 minutes?",
+    subject: "Your Q1 forecast gap - a different approach",
+    opener: "Sarah - saw Acme's expansion into the Southeast and noticed you brought on 3 new AE territories in Q4. The forecast complexity that creates is exactly what we help companies like yours solve. Worth 20 minutes?",
     score: 87,
   },
   {
     company: "Velocity Inc",
     contact: "Marcus Webb, CRO",
-    subject: "DocuSign multi-product adoption went from 8% to 41% — here's how",
-    opener: "Marcus — I led the multi-product motion at DocuSign that moved adoption from 8% to 41%. I noticed Velocity launched two new product lines this year. The GTM coordination challenge is real. I have a playbook that might be relevant.",
+    subject: "DocuSign multi-product adoption went from 8% to 41% - here's how",
+    opener: "Marcus - I led the multi-product motion at DocuSign that moved adoption from 8% to 41%. I noticed Velocity launched two new product lines this year. The GTM coordination challenge is real. I have a playbook that might be relevant.",
     score: 94,
   },
   {
     company: "NexaHQ",
     contact: "Priya Nair, VP Sales",
     subject: "Re: Series B → scaling your sales motion",
-    opener: "Priya — congrats on the Series B close. The next 90 days are where most companies either nail the scale or create tech debt in their GTM. I've been through this transition at 4 companies. Happy to share what actually works.",
+    opener: "Priya - congrats on the Series B close. The next 90 days are where most companies either nail the scale or create tech debt in their GTM. I've been through this transition at 4 companies. Happy to share what actually works.",
     score: 91,
   },
 ];
@@ -57,7 +57,7 @@ export default function AutonomousSDRPage() {
             </h1>
             <p className="text-xl text-accent mb-4">Outbound at scale. Zero manual research.</p>
             <p className="text-white/55 text-lg leading-relaxed">
-              What if your best SDR never slept, never had a bad day, and could research 50 accounts before your team finishes their morning coffee? I built that agent. It&apos;s running on a Mac Mini in my home office. This is where outbound sales is headed — and I can show you exactly how it works.
+              What if your best SDR never slept, never had a bad day, and could research 50 accounts before your team finishes their morning coffee? I built that agent. It&apos;s running on a Mac Mini in my home office. This is where outbound sales is headed - and I can show you exactly how it works.
             </p>
           </div>
         </div>

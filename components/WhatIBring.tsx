@@ -6,17 +6,17 @@ const pillars = [
   {
     label: "Revenue Architecture",
     heading: "REVENUE ARCHITECTURE",
-    body: "I don't parachute in with a playbook. I diagnose the specific bottlenecks in your pipeline, pricing, team structure, and process — then build the systems to fix them. At Groupon, that meant scaling from 0 to 400+ sellers across 23 markets. At DocuSign, it meant driving multi-product adoption from 8% to 41%.",
+    body: "I don't parachute in with a playbook. I diagnose the specific bottlenecks in your pipeline, pricing, team structure, and process - then build the systems to fix them. At Groupon, that meant scaling from 0 to 400+ sellers across 23 markets. At DocuSign, it meant driving multi-product adoption from 8% to 41%.",
   },
   {
     label: "AI as an Operating Advantage",
     heading: "AI AS AN OPERATING ADVANTAGE",
-    body: "I build autonomous agents, AI-powered prospecting systems, and intelligent forecasting tools — not demos, but working systems that create measurable competitive advantage for revenue teams.",
+    body: "I build autonomous agents, AI-powered prospecting systems, and intelligent forecasting tools - not demos, but working systems that create measurable competitive advantage for revenue teams.",
   },
   {
     label: "Team Building & Coaching",
     heading: "TEAM BUILDING & COACHING",
-    body: "The best sales organizations aren't hired — they're built. I design hiring profiles, comp plans, enablement programs, and performance frameworks that turn good sellers into great ones and great ones into leaders.",
+    body: "The best sales organizations aren't hired - they're built. I design hiring profiles, comp plans, enablement programs, and performance frameworks that turn good sellers into great ones and great ones into leaders.",
   },
 ];
 

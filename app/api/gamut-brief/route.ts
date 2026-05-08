@@ -18,7 +18,7 @@ CONTEXT ON GAMUT'S SALES MOTION:
 - A stalled deal in podcast ad sales usually means: wrong show match, advertiser budget uncertainty, or AE hasn't created urgency around flight dates
 - The CRO's highest value is: closing deals where a senior voice accelerates the buyer, or redirecting AE time away from dead deals
 
-OUTPUT FORMAT — produce exactly four sections:
+OUTPUT FORMAT - produce exactly four sections:
 
 DEALS THAT NEED YOU THIS WEEK
 List each flagged deal with: Deal name/advertiser, one sentence on why the CRO's involvement changes the outcome, and one specific coaching question to ask the AE in their 1:1.
@@ -27,7 +27,7 @@ DEALS TO SKIP THIS WEEK
 List deals the CRO should not spend time on, with a one-line reason the AE can hear directly.
 
 THE ONE DEAL TO CLOSE PERSONALLY
-Identify the single highest-leverage deal where the CRO getting on a call with the buyer — not the AE — is the right move. Explain why in two sentences.
+Identify the single highest-leverage deal where the CRO getting on a call with the buyer - not the AE - is the right move. Explain why in two sentences.
 
 WEEK ASSESSMENT
 Two to three sentences on the overall health of this pipeline snapshot and what it means for the CRO's priorities this week.

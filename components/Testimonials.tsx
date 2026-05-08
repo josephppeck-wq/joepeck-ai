@@ -4,25 +4,25 @@ import { motion } from "framer-motion";
 
 const testimonials = [
   {
-    quote: "Joe is the rare sales leader who combines elite-level operational instincts with genuine strategic vision. He built the most productive SDR organization I've ever seen — from scratch, in under 90 days.",
+    quote: "Joe is the rare sales leader who combines elite-level operational instincts with genuine strategic vision. He built the most productive SDR organization I've ever seen - from scratch, in under 90 days.",
     name: "Coming soon",
     title: "Former Colleague",
     company: "DocuSign",
-    initials: "—",
+    initials: "-",
   },
   {
-    quote: "I've worked with a lot of consultants. Joe is different. He doesn't give you frameworks — he gets in the trenches and builds with you. Our forecast accuracy improved 40% in two months.",
+    quote: "I've worked with a lot of consultants. Joe is different. He doesn't give you frameworks - he gets in the trenches and builds with you. Our forecast accuracy improved 40% in two months.",
     name: "Coming soon",
     title: "Former Colleague",
     company: "Groupon",
-    initials: "—",
+    initials: "-",
   },
   {
-    quote: "Joe took our AI anxiety and turned it into a competitive strategy. He didn't just advise us — he built tools our team actually uses every day. Genuinely transformative.",
+    quote: "Joe took our AI anxiety and turned it into a competitive strategy. He didn't just advise us - he built tools our team actually uses every day. Genuinely transformative.",
     name: "Coming soon",
     title: "Former Colleague",
     company: "CloudKitchens",
-    initials: "—",
+    initials: "-",
   },
 ];
 

@@ -10,7 +10,7 @@ const services = [
       </svg>
     ),
     title: "AI-Powered GTM Strategy",
-    description: "I design go-to-market strategies that leverage AI for smarter prospecting, personalized outreach, pipeline forecasting, and deal intelligence. Not theory — executable playbooks your team can run tomorrow.",
+    description: "I design go-to-market strategies that leverage AI for smarter prospecting, personalized outreach, pipeline forecasting, and deal intelligence. Not theory - executable playbooks your team can run tomorrow.",
   },
   {
     icon: (
@@ -56,7 +56,7 @@ const engagements = [
   {
     name: "AI Revenue Transformation",
     duration: "Custom",
-    description: "End-to-end design and deployment of AI-powered sales systems — from agent builds to workflow automation to team enablement. I build the tools, train the team, measure the results.",
+    description: "End-to-end design and deployment of AI-powered sales systems - from agent builds to workflow automation to team enablement. I build the tools, train the team, measure the results.",
     deliverable: "Custom scope: tools, training, and measurable outcomes",
     ideal: "Organizations ready to make AI a competitive advantage",
     color: "border-violet-500/20",

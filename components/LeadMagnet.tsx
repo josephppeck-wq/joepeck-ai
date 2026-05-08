@@ -90,7 +90,7 @@ export default function LeadMagnet() {
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold mb-3">You&apos;re on the list.</h3>
-                <p className="text-white/55 text-sm leading-relaxed">Check your inbox — the playbook is on its way. I&apos;ll follow up with more frameworks like this.</p>
+                <p className="text-white/55 text-sm leading-relaxed">Check your inbox - the playbook is on its way. I&apos;ll follow up with more frameworks like this.</p>
               </div>
             ) : (
               <div className="card p-8">

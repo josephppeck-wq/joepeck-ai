@@ -20,7 +20,7 @@ const projects = [
     subtitle: "Full account briefs in 30 seconds, not 45 minutes.",
     category: "Prospecting",
     status: "live",
-    description: "An AI agent that produces complete account research briefs — company context, stakeholder mapping, pain points, and personalized outreach angles — instantly.",
+    description: "An AI agent that produces complete account research briefs - company context, stakeholder mapping, pain points, and personalized outreach angles - instantly.",
     metric: "45 min → 30s",
     metricLabel: "research time reduction",
     gradient: "from-emerald-600/20 to-teal-600/10",
@@ -42,7 +42,7 @@ const projects = [
     subtitle: "Outbound at scale. Zero manual research.",
     category: "Autonomous Agents",
     status: "live",
-    description: "A fully autonomous agent that researches accounts, identifies decision-makers, drafts personalized sequences, and logs everything to a CRM — without human intervention.",
+    description: "A fully autonomous agent that researches accounts, identifies decision-makers, drafts personalized sequences, and logs everything to a CRM - without human intervention.",
     metric: "50 sequences",
     metricLabel: "produced in 12 minutes",
     gradient: "from-orange-600/20 to-red-600/10",
@@ -53,7 +53,7 @@ const projects = [
     subtitle: "Stop guessing. Start knowing.",
     category: "Forecasting",
     status: "live",
-    description: "AI pipeline scoring that analyzes behavioral signals — not rep opinions — to produce a confidence-weighted forecast that's demonstrably more accurate than traditional methods.",
+    description: "AI pipeline scoring that analyzes behavioral signals - not rep opinions - to produce a confidence-weighted forecast that's demonstrably more accurate than traditional methods.",
     metric: "73%",
     metricLabel: "of slips identified before reps flagged them",
     gradient: "from-cyan-600/20 to-blue-600/10",
@@ -93,8 +93,8 @@ const categoryColors: Record<string, string> = {
 };
 
 export const metadata = {
-  title: "AI Projects — Joe Peck",
-  description: "Real AI tools built for revenue teams. Not demos — production-grade applications.",
+  title: "AI Projects - Joe Peck",
+  description: "Real AI tools built for revenue teams. Not demos - production-grade applications.",
 };
 
 export default function ProjectsPage() {

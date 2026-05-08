@@ -33,7 +33,7 @@
    * Running header/footer on every printed page.
    * position: fixed in @media print IS supported by Chrome and renders
    * on every page of the PDF output. This is the only reliable cross-browser
-   * approach — CSS Paged Media @top-left margin boxes are NOT supported by
+   * approach - CSS Paged Media @top-left margin boxes are NOT supported by
    * Chrome's PDF engine.
    */
   #docket-print-header {

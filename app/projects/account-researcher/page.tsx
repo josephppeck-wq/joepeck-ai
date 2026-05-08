@@ -3,7 +3,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "The AI Account Researcher — Joe Peck",
+  title: "The AI Account Researcher - Joe Peck",
   description: "Full account research briefs in 30 seconds. Powered by Claude Opus.",
 };
 
@@ -26,7 +26,7 @@ export default function AccountResearcherPage() {
             </h1>
             <p className="text-xl text-accent mb-4">Full account briefs in 30 seconds, not 45 minutes.</p>
             <p className="text-white/55 text-lg leading-relaxed">
-              Your reps spend 30–40% of their day researching accounts instead of selling. I built an AI agent that delivers a full account brief — complete with pain points, decision-maker mapping, and personalized talk tracks — in under a minute. Select a company below to see it in action.
+              Your reps spend 30–40% of their day researching accounts instead of selling. I built an AI agent that delivers a full account brief - complete with pain points, decision-maker mapping, and personalized talk tracks - in under a minute. Select a company below to see it in action.
             </p>
           </div>
         </div>

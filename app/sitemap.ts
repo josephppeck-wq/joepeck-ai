@@ -7,12 +7,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: "https://joepeck.ai", lastModified: now, changeFrequency: "monthly", priority: 1.0 },
     { url: "https://joepeck.ai/blog", lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: "https://joepeck.ai/projects", lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    // Blog posts — 2026
+    // Blog posts - 2026
     { url: "https://joepeck.ai/blog/ai-agents-will-outnumber-sellers", lastModified: new Date("2026-03-28"), changeFrequency: "monthly", priority: 1.0 },
     { url: "https://joepeck.ai/blog/what-changed-in-ai-sales-2025", lastModified: new Date("2026-03-01"), changeFrequency: "monthly", priority: 0.9 },
     { url: "https://joepeck.ai/blog/fractional-cro-model", lastModified: new Date("2026-02-01"), changeFrequency: "monthly", priority: 0.9 },
     { url: "https://joepeck.ai/blog/ai-agent-budget-experiment", lastModified: new Date("2026-01-01"), changeFrequency: "monthly", priority: 0.8 },
-    // Blog posts — 2025
+    // Blog posts - 2025
     { url: "https://joepeck.ai/blog/5-ai-tools-every-sales-leader", lastModified: new Date("2025-03-01"), changeFrequency: "monthly", priority: 0.8 },
     { url: "https://joepeck.ai/blog/why-your-forecast-is-wrong", lastModified: new Date("2025-02-01"), changeFrequency: "monthly", priority: 0.8 },
     { url: "https://joepeck.ai/blog/autonomous-ai-agent-lessons", lastModified: new Date("2025-01-01"), changeFrequency: "monthly", priority: 0.8 },

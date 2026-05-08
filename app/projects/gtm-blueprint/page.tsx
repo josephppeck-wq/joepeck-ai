@@ -3,7 +3,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "The GTM Blueprint Generator — Joe Peck",
+  title: "The GTM Blueprint Generator - Joe Peck",
   description: "20 years of GTM knowledge. Instant output. Generate your go-to-market plan.",
 };
 
@@ -26,7 +26,7 @@ export default function GTMBlueprintPage() {
             </h1>
             <p className="text-xl text-accent mb-4">20 years of GTM knowledge. Instant output.</p>
             <p className="text-white/55 text-lg leading-relaxed">
-              I&apos;ve built GTM strategies for startups, scale-ups, and public companies. The frameworks live in my head — so I taught them to an AI. This tool won&apos;t replace a seasoned GTM leader, but it&apos;ll give you a smarter starting point than most consultants deliver in week one. Fill in the form below.
+              I&apos;ve built GTM strategies for startups, scale-ups, and public companies. The frameworks live in my head - so I taught them to an AI. This tool won&apos;t replace a seasoned GTM leader, but it&apos;ll give you a smarter starting point than most consultants deliver in week one. Fill in the form below.
             </p>
           </div>
         </div>
@@ -54,7 +54,7 @@ export default function GTMBlueprintPage() {
         <div className="border-t border-white/06">
           <div className="max-w-3xl mx-auto px-6 lg:px-8 py-16 text-center">
             <h3 className="text-2xl font-bold mb-4">Want a custom GTM strategy?</h3>
-            <p className="text-white/55 mb-8">This tool gives you the framework. I can give you the implementation — with hands-on execution support.</p>
+            <p className="text-white/55 mb-8">This tool gives you the framework. I can give you the implementation - with hands-on execution support.</p>
             <a href="https://calendly.com/joseph-p-peck" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-light text-white font-semibold transition-all hover:shadow-xl hover:shadow-accent/30">Let&apos;s Talk</a>
           </div>
         </div>

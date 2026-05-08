@@ -209,7 +209,7 @@ async function preCrawlSellerProducts(
   // Step 2: all external links
   const externalLinks = extractAllExternalLinks(homepageHtml, sellerHostname);
 
-  // Step 3: match nav products to external URLs — only keep those with matches
+  // Step 3: match nav products to external URLs - only keep those with matches
   const matched = matchNavProductsToExternalUrls(navProducts, externalLinks);
   const confirmedNavProducts = matched.filter(({ url }) => url !== null) as Array<{ name: string; url: string }>;
 
@@ -257,11 +257,11 @@ product-to-customer fit analysis with concrete recommended plays.
 You will receive:
  1. SELLER_WEBSITE_URL
  2. CUSTOMER_NAME
- 3. CONFIRMED_SELLER_PRODUCTS — pre-verified, authoritative list
+ 3. CONFIRMED_SELLER_PRODUCTS - pre-verified, authoritative list
 
 Your output must follow this exact pattern:
 
-PART 1 — STATUS UPDATES (text)
+PART 1 - STATUS UPDATES (text)
 Emit short status updates as you progress, prefixed with [STATUS].
 Keep each line under 80 characters. Do NOT produce any other prose,
 headers, or markdown. Examples:
@@ -273,7 +273,7 @@ headers, or markdown. Examples:
 [STATUS] Generating recommended plays
 [STATUS] Assembling docket
 
-PART 2 — FINAL JSON (single fenced code block at the very end)
+PART 2 - FINAL JSON (single fenced code block at the very end)
 After research is complete, emit a SINGLE JSON object wrapped
 in a triple-backtick json code block. Nothing before or after.
 
@@ -283,7 +283,7 @@ in a triple-backtick json code block. Nothing before or after.
     "company_one_liner": "string, 1 sentence",
     "product_portfolio": [
       {
-        "name": "string — use name EXACTLY as given in CONFIRMED_SELLER_PRODUCTS",
+        "name": "string - use name EXACTLY as given in CONFIRMED_SELLER_PRODUCTS",
         "what_it_does": "string, 1-2 sentences from visiting the product URL",
         "primary_user": "string",
         "primary_value_prop": "string, 1 sentence"
@@ -305,7 +305,7 @@ in a triple-backtick json code block. Nothing before or after.
   },
   "fit_map": [
     {
-      "product_name": "string — must match a name from product_portfolio exactly",
+      "product_name": "string - must match a name from product_portfolio exactly",
       "fit_score": "High | Medium | Low | None",
       "reasoning": "string, 2-3 sentences citing specific customer evidence",
       "evidence_refs": ["string (URL)"]
@@ -334,7 +334,7 @@ in a triple-backtick json code block. Nothing before or after.
 \`\`\`
 
 ==============================================================
-RESEARCH METHODOLOGY (internal — never narrate)
+RESEARCH METHODOLOGY (internal - never narrate)
 ==============================================================
 
 Seller product research:
@@ -442,7 +442,7 @@ export async function POST(req: NextRequest) {
   let userMessage = `SELLER_WEBSITE_URL: ${sellerUrl.trim()}\nCUSTOMER_NAME: ${customerName.trim()}\n`;
 
   if (confirmedProducts.length > 0) {
-    userMessage += `\nCONFIRMED_SELLER_PRODUCTS (pre-verified — use EXACTLY these, no additions or omissions):\n`;
+    userMessage += `\nCONFIRMED_SELLER_PRODUCTS (pre-verified - use EXACTLY these, no additions or omissions):\n`;
     for (const p of confirmedProducts) {
       userMessage += `- ${p.name} (${p.url})\n`;
     }

@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import "./print.css";
 
 export const metadata = {
-  title: "Account Docket Builder — Joe Peck",
+  title: "Account Docket Builder - Joe Peck",
   description:
     "Paste a seller website and a customer name. Get a sales-ready, fit-mapped account docket in under two minutes.",
 };
@@ -31,12 +31,12 @@ export default function DocketBuilderPage() {
               Paste your company URL and a customer name. Get a sales-ready account docket in under two minutes.
             </p>
             <p className="text-white/55 text-lg leading-relaxed">
-              Good account research takes 45 minutes of tab-juggling — if you even do it. Most reps walk in cold. This agent reads the seller&apos;s product portfolio from their own website, researches the target customer, maps product fit, surfaces decision-makers, and builds a structured docket with talking points and discovery questions. Try it yourself.
+              Good account research takes 45 minutes of tab-juggling - if you even do it. Most reps walk in cold. This agent reads the seller&apos;s product portfolio from their own website, researches the target customer, maps product fit, surfaces decision-makers, and builds a structured docket with talking points and discovery questions. Try it yourself.
             </p>
           </div>
         </div>
 
-        {/* Problem / Approach / Impact — hidden in print */}
+        {/* Problem / Approach / Impact - hidden in print */}
         <div className="border-t border-white/06 print:hidden">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-0">
             <div className="grid md:grid-cols-3 gap-8">
@@ -45,7 +45,7 @@ export default function DocketBuilderPage() {
                   The Problem
                 </div>
                 <p className="text-white/65 text-sm leading-relaxed">
-                  Reps spend 45+ minutes on account research — or skip it entirely. Either way, they go into calls without a clear fit hypothesis, wasting the buyer&apos;s time and their own.
+                  Reps spend 45+ minutes on account research - or skip it entirely. Either way, they go into calls without a clear fit hypothesis, wasting the buyer&apos;s time and their own.
                 </p>
               </div>
               <div className="card p-6">
@@ -61,14 +61,14 @@ export default function DocketBuilderPage() {
                   The Impact
                 </div>
                 <p className="text-white/65 text-sm leading-relaxed">
-                  Every rep walks into every call with a structured, evidence-backed account docket — regardless of how much prep time they had. No hardcoded product knowledge required.
+                  Every rep walks into every call with a structured, evidence-backed account docket - regardless of how much prep time they had. No hardcoded product knowledge required.
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Interactive Demo — NOT hidden in print; docket content lives here */}
+        {/* Interactive Demo - NOT hidden in print; docket content lives here */}
         <div className="border-t border-white/06">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
             <DocketBuilderClient />
@@ -80,7 +80,7 @@ export default function DocketBuilderPage() {
           <div className="max-w-3xl mx-auto px-6 lg:px-8 py-16 text-center">
             <h3 className="text-2xl font-bold mb-4">Want this running for your team?</h3>
             <p className="text-white/55 mb-8">
-              This agent can be trained on your specific product portfolio, integrated with your CRM, and deployed across your entire revenue team — customized for your ICP and methodology.
+              This agent can be trained on your specific product portfolio, integrated with your CRM, and deployed across your entire revenue team - customized for your ICP and methodology.
             </p>
             <a
               href="https://calendly.com/joseph-p-peck"

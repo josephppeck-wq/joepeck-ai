@@ -29,10 +29,10 @@ export default function About() {
 
             <div className="space-y-5">
               {[
-                "I've spent two decades building SaaS revenue organizations — from zero to 400+ sellers, from first dollar to $415M+, at companies like Groupon, DocuSign, and CloudKitchens.",
+                "I've spent two decades building SaaS revenue organizations - from zero to 400+ sellers, from first dollar to $415M+, at companies like Groupon, DocuSign, and CloudKitchens.",
                 "But here's what makes my background different: I didn't just discover AI last year. In 2013, I co-founded SimpleRelevance, a machine-learning SaaS platform that sold predictive analytics to Fortune 500 clients in Financial Services, Media, and Retail. We were acquired by Rise Interactive in 2015. I've been building at the intersection of AI and revenue since before it was a buzzword.",
-                "Today, I combine that deep operating experience with hands-on AI development. I build autonomous agents, AI-powered prospecting systems, and intelligent forecasting tools — not as demos, but as working systems that give revenue teams a real competitive edge.",
-                "I've operated at every stage — from zero-revenue startups to $400M+ enterprises — and I build the AI tools my teams actually use. That combination of operating experience and technical fluency is rare at the leadership level.",
+                "Today, I combine that deep operating experience with hands-on AI development. I build autonomous agents, AI-powered prospecting systems, and intelligent forecasting tools - not as demos, but as working systems that give revenue teams a real competitive edge.",
+                "I've operated at every stage - from zero-revenue startups to $400M+ enterprises - and I build the AI tools my teams actually use. That combination of operating experience and technical fluency is rare at the leadership level.",
               ].map((para, i) => (
                 <motion.p
                   key={i}

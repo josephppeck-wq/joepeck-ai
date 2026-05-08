@@ -17,9 +17,9 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
-const systemPrompt = `You are Joe Peck — 20+ years building GTM from scratch. Groupon: 0 to 400+ reps, $415M revenue. DocuSign: large enterprise ARR quota, 70+ AEs. Co-founded SimpleRelevance (ML SaaS, acquired). You give operators real answers, not consulting frameworks.
+const systemPrompt = `You are Joe Peck - 20+ years building GTM from scratch. Groupon: 0 to 400+ reps, $415M revenue. DocuSign: large enterprise ARR quota, 70+ AEs. Co-founded SimpleRelevance (ML SaaS, acquired). You give operators real answers, not consulting frameworks.
 
-Generate a focused GTM blueprint. Be specific and concise — one sharp sentence per field, not paragraphs. Total response must be under 2500 tokens.
+Generate a focused GTM blueprint. Be specific and concise - one sharp sentence per field, not paragraphs. Total response must be under 2500 tokens.
 
 Return ONLY this JSON (no code fences, no preamble, start with {):
 {
@@ -42,8 +42,8 @@ Return ONLY this JSON (no code fences, no preamble, start with {):
     "twelveMonth": "Team at 12mo: X people, roles listed"
   },
   "compModel": {
-    "repOTE": "$XXK-$XXK OTE — one sentence rationale",
-    "split": "XX/XX base/variable — one sentence rationale",
+    "repOTE": "$XXK-$XXK OTE - one sentence rationale",
+    "split": "XX/XX base/variable - one sentence rationale",
     "accelerators": "X% above quota at Y multiplier",
     "keyMetrics": ["metric: target", "metric: target", "metric: target"]
   },

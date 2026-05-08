@@ -83,7 +83,7 @@ export async function generateMetadata({
   if (!post) return {};
 
   const url = `https://joepeck.ai/blog/${slug}`;
-  const ogTitle = `${post.title} — Joe Peck`;
+  const ogTitle = `${post.title} - Joe Peck`;
   const keywords = post.keywords?.length
     ? post.keywords
     : [post.category, "B2B Sales", "AI Strategy", "Sales Leadership"];

@@ -169,7 +169,7 @@ body {
   background: linear-gradient(135deg, rgba(37,99,235,0.2) 0%, rgba(17,17,17,0.8) 100%);
 }
 
-/* Reveal animations — CSS only, no JS dependency */
+/* Reveal animations - CSS only, no JS dependency */
 .reveal {
   opacity: 0;
   transform: translateY(24px);
@@ -181,7 +181,7 @@ body {
   transform: translateY(0);
 }
 
-/* Framer Motion override — ensure content is never permanently hidden */
+/* Framer Motion override - ensure content is never permanently hidden */
 [data-framer-component-type] {
   will-change: transform, opacity;
 }
@@ -193,7 +193,7 @@ body {
   .stat-number { font-size: clamp(2rem, 8vw, 3rem) !important; }
 }
 
-/* ─── Form inputs — force dark styling across all browsers/devices ─── */
+/* ─── Form inputs - force dark styling across all browsers/devices ─── */
 input[type="text"],
 input[type="email"],
 input[type="number"],
@@ -210,7 +210,7 @@ select {
   appearance: none;
 }
 
-/* Autofill override — iOS/Chrome fill the background white otherwise */
+/* Autofill override - iOS/Chrome fill the background white otherwise */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,

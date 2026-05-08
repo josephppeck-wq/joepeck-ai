@@ -22,7 +22,7 @@ const posts = [
   {
     slug: "ai-agent-budget-experiment",
     title: "I Gave My AI Agent a Budget. Here's What Happened.",
-    excerpt: "I gave my autonomous agent $50 and told it to generate pipeline. What it did — and what it couldn't do — taught me more than any conference keynote.",
+    excerpt: "I gave my autonomous agent $50 and told it to generate pipeline. What it did - and what it couldn't do - taught me more than any conference keynote.",
     category: "Tools & Workflows",
     readTime: "7 min read",
     date: "Jan 2026",

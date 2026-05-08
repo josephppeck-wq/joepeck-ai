@@ -64,7 +64,7 @@ export default function Contact() {
             Let&apos;s Talk
           </h2>
           <p className="text-white/55 text-lg leading-relaxed">
-            Whether you&apos;re looking to hire a sales leader, need help building your AI strategy, or want to collaborate — I&apos;d love to connect.
+            Whether you&apos;re looking to hire a sales leader, need help building your AI strategy, or want to collaborate - I&apos;d love to connect.
           </p>
           <div className="inline-flex items-center gap-2 mt-6 px-4 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
             <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />

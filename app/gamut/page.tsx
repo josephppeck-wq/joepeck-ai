@@ -35,7 +35,7 @@ export default function GamutBriefPage() {
       setOutput(data.brief ?? "");
       outputRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     } catch {
-      setError("Network error — please check your connection and try again.");
+      setError("Network error - please check your connection and try again.");
     } finally {
       setLoading(false);
     }

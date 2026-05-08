@@ -3,7 +3,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "The Win/Loss Analyzer — Joe Peck",
+  title: "The Win/Loss Analyzer - Joe Peck",
   description: "Paste your deal summaries. Get AI-powered pattern analysis and playbook recommendations.",
 };
 
@@ -26,7 +26,7 @@ export default function WinLossPage() {
             </h1>
             <p className="text-xl text-accent mb-4">Your closed deals are a goldmine. Mine them.</p>
             <p className="text-white/55 text-lg leading-relaxed">
-              Every company I&apos;ve led has had the data to understand why they win and lose. Almost none of them analyzed it systematically. Paste your win/loss summaries below and get structured pattern analysis — why you win, why you lose, what to change in your playbook.
+              Every company I&apos;ve led has had the data to understand why they win and lose. Almost none of them analyzed it systematically. Paste your win/loss summaries below and get structured pattern analysis - why you win, why you lose, what to change in your playbook.
             </p>
           </div>
         </div>
@@ -54,7 +54,7 @@ export default function WinLossPage() {
         <div className="border-t border-white/06">
           <div className="max-w-3xl mx-auto px-6 lg:px-8 py-16 text-center">
             <h3 className="text-2xl font-bold mb-4">Want this run against your real pipeline data?</h3>
-            <p className="text-white/55 mb-8">I can connect this to your CRM and run systematic win/loss analysis on your full historical dataset — not just a paste.</p>
+            <p className="text-white/55 mb-8">I can connect this to your CRM and run systematic win/loss analysis on your full historical dataset - not just a paste.</p>
             <a href="https://calendly.com/joseph-p-peck" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-accent hover:bg-accent-light text-white font-semibold transition-all hover:shadow-xl hover:shadow-accent/30">Let&apos;s Talk</a>
           </div>
         </div>

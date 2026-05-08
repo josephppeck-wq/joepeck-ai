@@ -177,7 +177,7 @@ export default function ForecastDashboard() {
               {selectedDeal.aiRisk === "High"
                 ? `This deal needs immediate manager attention. ${selectedDeal.daysSinceActivity} days since last activity and key qualification gaps suggest this is unlikely to close on ${selectedDeal.closeDate}. Schedule a deal review this week.`
                 : selectedDeal.aiRisk === "Medium"
-                ? `Deal shows moderate confidence. Address the flagged gaps — particularly around multi-threading and paper process — to increase close probability before the forecast date.`
+                ? `Deal shows moderate confidence. Address the flagged gaps - particularly around multi-threading and paper process - to increase close probability before the forecast date.`
                 : `Deal is tracking well. Maintain current velocity and ensure legal/procurement momentum doesn't stall in the final stages.`}
             </p>
           </div>

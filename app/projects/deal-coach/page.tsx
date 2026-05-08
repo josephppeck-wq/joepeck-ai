@@ -3,7 +3,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "The Deal Coach — Joe Peck",
+  title: "The Deal Coach - Joe Peck",
   description: "AI-powered MEDDPICC deal analysis. Paste your deal notes, get instant coaching.",
 };
 
@@ -45,7 +45,7 @@ export default function DealCoachPage() {
               <div className="card p-6">
                 <div className="text-accent text-xs uppercase tracking-widest mb-3 font-medium">The Approach</div>
                 <p className="text-white/65 text-sm leading-relaxed">
-                  Claude Opus analyzes deal notes against each MEDDPICC element, scores qualification gaps, and returns specific next actions — in under 30 seconds.
+                  Claude Opus analyzes deal notes against each MEDDPICC element, scores qualification gaps, and returns specific next actions - in under 30 seconds.
                 </p>
               </div>
               <div className="card p-6">
